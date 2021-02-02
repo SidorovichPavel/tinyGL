@@ -19,12 +19,14 @@ namespace tgl {
 		win::LRESULT WinProc(win::HWND, win::UINT, win::WPARAM, win::LPARAM) noexcept;
 		static win::LRESULT CALLBACK SWinProc(win::HWND, win::UINT, win::WPARAM, win::LPARAM) noexcept;
 		
+		void init_opengl();
+		
 		bool isOpen;
 		win::HWND handle;
-
+		win::HDC device_content;
+	protected:
 		void create();
 		void destroy();
-	
 	public:
 		View(const int width, const int height, const std::wstring& title, const Style& style = Style());
 		View(const View& _Right) = delete;
@@ -32,6 +34,7 @@ namespace tgl {
 		~View();
 		
 		bool is_open() noexcept;
+		void swap_buffers() noexcept;
 	};
 
 

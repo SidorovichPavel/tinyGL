@@ -5,18 +5,30 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="src\View">
+      <UniqueIdentifier>{f1a0050f-6ec5-45bb-a9d5-a6845c8bb76e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Style">
+      <UniqueIdentifier>{bc09db45-b9b0-426c-923a-52b3c56f7880}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\tinyGL.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\View\View.cpp">
-      <Filter>src</Filter>
+      <Filter>src\View</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\tinyGL.h" />
-    <ClInclude Include="src\style\style.h" />
-    <ClInclude Include="src\View\View.h" />
+    <ClInclude Include="src\style\style.h">
+      <Filter>src\Style</Filter>
+    </ClInclude>
+    <ClInclude Include="src\View\View.h">
+      <Filter>src\View</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tinyGL.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
