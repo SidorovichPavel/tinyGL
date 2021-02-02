@@ -31,10 +31,12 @@ namespace tgl::gl
 	extern PFNGLDELETEPROGRAMPROC deleteProgram;
 	extern PFNGLCREATESHADERPROC createShader;
 	extern PFNGLSHADERSOURCEPROC shaderSource;
+	extern PFNGLCOMPILESHADERPROC compileShader;
 	extern PFNGLGETSHADERIVPROC getShaderiv;
 	extern PFNGLATTACHSHADERPROC attachShader;
 	extern PFNGLLINKPROGRAMPROC linkProgram;
 	extern PFNGLUSEPROGRAMPROC useProgram;
+	extern PFNGLDELETESHADERPROC deleteShader;
 	extern PFNGLGETSHADERINFOLOGPROC getShaderInfoLog;
 	extern PFNGLBINDATTRIBLOCATIONPROC bindAttribLocation;
 	//program end

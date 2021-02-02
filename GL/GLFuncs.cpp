@@ -18,10 +18,12 @@ namespace tgl::gl
 	PFNGLDELETEPROGRAMPROC deleteProgram = nullptr;
 	PFNGLCREATESHADERPROC createShader = nullptr;
 	PFNGLSHADERSOURCEPROC shaderSource = nullptr;
+	PFNGLCOMPILESHADERPROC compileShader = nullptr;
 	PFNGLGETSHADERIVPROC getShaderiv = nullptr;
 	PFNGLATTACHSHADERPROC attachShader = nullptr;
 	PFNGLLINKPROGRAMPROC linkProgram = nullptr;
 	PFNGLUSEPROGRAMPROC useProgram = nullptr;
+	PFNGLDELETESHADERPROC deleteShader = nullptr;
 	PFNGLGETSHADERINFOLOGPROC getShaderInfoLog = nullptr;
 	PFNGLBINDATTRIBLOCATIONPROC bindAttribLocation = nullptr;
 }

@@ -78,10 +78,12 @@ namespace tgl
 		gl::deleteProgram = gl::LoadFunction<gl::PFNGLDELETEPROGRAMPROC>("glDeleteProgram");
 		gl::createShader = gl::LoadFunction<gl::PFNGLCREATESHADERPROC>("glCreateShader");
 		gl::shaderSource = gl::LoadFunction<gl::PFNGLSHADERSOURCEPROC>("glShaderSource");
+		gl::compileShader = gl::LoadFunction<gl::PFNGLCOMPILESHADERPROC>("glCompileShader");
 		gl::getShaderiv = gl::LoadFunction<gl::PFNGLGETSHADERIVPROC>("glGetShaderiv");
 		gl::attachShader = gl::LoadFunction<gl::PFNGLATTACHSHADERPROC>("glAttachShader");
 		gl::linkProgram = gl::LoadFunction<gl::PFNGLLINKPROGRAMPROC>("glLinkProgram");
 		gl::useProgram = gl::LoadFunction<gl::PFNGLUSEPROGRAMPROC>("glUseProgram");
+		gl::deleteShader = gl::LoadFunction<gl::PFNGLDELETESHADERPROC>("glDeleteShader");
 		gl::getShaderInfoLog = gl::LoadFunction<gl::PFNGLGETSHADERINFOLOGPROC>("glGetShaderInfoLog");
 		gl::bindAttribLocation = gl::LoadFunction<gl::PFNGLBINDATTRIBLOCATIONPROC>("glBindAttribLocation");
 
@@ -89,7 +91,6 @@ namespace tgl
 
 		wglDeleteContext(gl_rc);
 		DestroyWindow(handle);
-
 #else
 
 #endif

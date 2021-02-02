@@ -13,6 +13,7 @@ unsigned tgl::Shader::load_shader(const std::string& path, gl::GLenum shader_typ
 
 	const char* c = shader_code.c_str();
 	gl::shaderSource(shader, 1, &c, nullptr);
+	gl::compileShader(shader);
 
 	int status;
 	gl::getShaderiv(shader, GL_COMPILE_STATUS, &status);
@@ -28,8 +29,8 @@ unsigned tgl::Shader::load_shader(const std::string& path, gl::GLenum shader_typ
 tgl::Shader::Shader(const std::string& name)
 {
 	mProgram = gl::createProgram();
-	mVertexShader = load_shader("res/glsl/" + name + ".vsh", GL_VERTEX_SHADER);
-	mFragmentShader = load_shader("res/glsl/" + name + ".fsh", GL_FRAGMENT_SHADER);
+	mVertexShader = load_shader("res/glsl/" + name + ".vert", GL_VERTEX_SHADER);
+	mFragmentShader = load_shader("res/glsl/" + name + ".frag", GL_FRAGMENT_SHADER);
 }
 
 void tgl::Shader::link()
@@ -38,6 +39,9 @@ void tgl::Shader::link()
 	gl::attachShader(mProgram, mFragmentShader);
 
 	gl::linkProgram(mProgram);
+
+	gl::deleteShader(mVertexShader);
+	gl::deleteShader(mFragmentShader);
 }
 
 void tgl::Shader::bind_attribute(unsigned index, const std::string& name)
