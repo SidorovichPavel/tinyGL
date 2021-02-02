@@ -1,0 +1,27 @@
+#include "GLFuncs.h"
+
+namespace tgl::gl
+{
+	PFNGLGENBUFFERSPROC genBuffers = nullptr;
+	PFNGLBINDBUFFERPROC bindBuffer = nullptr;
+	PFNGLBUFFERDATAPROC bufferData = nullptr;
+	PFNGLDELETEBUFFERSPROC deleteBuffers = nullptr;
+
+	PFNGLGENVERTEXARRAYSPROC genVertexArrays = nullptr;
+	PFNGLVERTEXATTRIBPOINTERPROC vertexArrtibPointer = nullptr;
+	PFNGLBINDVERTEXARRAYPROC bindVertexArray = nullptr;
+	PFNGLENABLEVERTEXATTRIBARRAYPROC enableVertexAttribArray = nullptr;
+	PFNGLDISABLEVERTEXATTRIBARRAYPROC disableVertexAttribArray = nullptr;
+	PFNGLDELETEVERTEXARRAYSPROC deleteVertexArrays = nullptr;
+
+	PFNGLCREATEPROGRAMPROC createProgram = nullptr;
+	PFNGLDELETEPROGRAMPROC deleteProgram = nullptr;
+	PFNGLCREATESHADERPROC createShader = nullptr;
+	PFNGLSHADERSOURCEPROC shaderSource = nullptr;
+	PFNGLGETSHADERIVPROC getShaderiv = nullptr;
+	PFNGLATTACHSHADERPROC attachShader = nullptr;
+	PFNGLLINKPROGRAMPROC linkProgram = nullptr;
+	PFNGLUSEPROGRAMPROC useProgram = nullptr;
+	PFNGLGETSHADERINFOLOGPROC getShaderInfoLog = nullptr;
+	PFNGLBINDATTRIBLOCATIONPROC bindAttribLocation = nullptr;
+}

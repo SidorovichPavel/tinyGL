@@ -1,9 +1,7 @@
 ﻿#pragma once
 
 #include <string>
-
-#include "../style/style.h"
-
+#include <src/style/style.h>
 
 namespace tgl {
 
@@ -22,8 +20,9 @@ namespace tgl {
 		void init_opengl();
 		
 		bool isOpen;
-		win::HWND handle;
-		win::HDC device_content;
+		win::HWND mHandle;
+		win::HDC mDevice_content;
+		win::HGLRC mGL_resource_content;
 	protected:
 		void create();
 		void destroy();

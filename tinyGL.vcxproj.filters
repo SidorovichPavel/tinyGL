@@ -11,6 +11,15 @@
     <Filter Include="src\Style">
       <UniqueIdentifier>{bc09db45-b9b0-426c-923a-52b3c56f7880}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GL">
+      <UniqueIdentifier>{bcd44663-d7f8-463c-a017-48e9537f25b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GL\VAO">
+      <UniqueIdentifier>{ce2e103a-12ea-4bab-932e-bc195641d12b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GL\Shader">
+      <UniqueIdentifier>{95f54f6c-1c9a-4079-bcc7-ddd9db79383b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\tinyGL.cpp">
@@ -18,6 +27,15 @@
     </ClCompile>
     <ClCompile Include="src\View\View.cpp">
       <Filter>src\View</Filter>
+    </ClCompile>
+    <ClCompile Include="GL\GLFuncs.cpp">
+      <Filter>GL</Filter>
+    </ClCompile>
+    <ClCompile Include="GL\VAO\VAO.cpp">
+      <Filter>GL\VAO</Filter>
+    </ClCompile>
+    <ClCompile Include="GL\Shader\Shader.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -30,5 +48,27 @@
     <ClInclude Include="src\tinyGL.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="GL\wglext.h">
+      <Filter>GL</Filter>
+    </ClInclude>
+    <ClInclude Include="GL\glcorearb.h">
+      <Filter>GL</Filter>
+    </ClInclude>
+    <ClInclude Include="GL\glext.h">
+      <Filter>GL</Filter>
+    </ClInclude>
+    <ClInclude Include="GL\glxext.h">
+      <Filter>GL</Filter>
+    </ClInclude>
+    <ClInclude Include="GL\wgl.h">
+      <Filter>GL</Filter>
+    </ClInclude>
+    <ClInclude Include="GL\GLFuncs.h">
+      <Filter>GL</Filter>
+    </ClInclude>
+    <ClInclude Include="GL\VAO\VAO.h">
+      <Filter>GL\VAO</Filter>
+    </ClInclude>
+    <ClInclude Include="GL\Shader\Shader.h" />
   </ItemGroup>
 </Project>

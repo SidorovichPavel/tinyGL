@@ -1,6 +1,14 @@
 #include "View.h"
 #include <stdexcept>
-#include <gl/GL.h>
+
+namespace tgl
+{
+	#ifdef _WIN32
+		#include <gl/GL.h>
+		#include <GL/glext.h>
+	#endif
+}
+
 
 namespace tgl
 {
@@ -25,7 +33,7 @@ namespace tgl
 
 		if (pWinView)
 		{
-			pWinView->handle = hWnd;
+			pWinView->mHandle = hWnd;
 			return pWinView->WinProc(hWnd, uMsg, wParam, lParam);
 		}
 
@@ -39,7 +47,7 @@ namespace tgl
 
 	void View::swap_buffers() noexcept
 	{
-		SwapBuffers(device_content);
+		SwapBuffers(mDevice_content);
 	}
 
 	void View::init_opengl()
@@ -64,18 +72,15 @@ namespace tgl
 			0, 0, 0
 		};
 
-		int pixel_format = ChoosePixelFormat(device_content, &pfd);
+		int pixel_format = ChoosePixelFormat(mDevice_content, &pfd);
 		if (!pixel_format)
 			throw std::runtime_error("tinyGL[Win32] -> feiled wile pixel format choose");
 
-		if (!SetPixelFormat(device_content, pixel_format, &pfd))
+		if (!SetPixelFormat(mDevice_content, pixel_format, &pfd))
 			throw std::runtime_error("tinyGL[Win32] -> failed wile set pixel format");
 
-		HGLRC context = wglCreateContext(device_content);
-		wglMakeCurrent(device_content, context);
-
-		
-
+		mGL_resource_content = wglCreateContext(mDevice_content);
+		wglMakeCurrent(mDevice_content, mGL_resource_content);
 	}
 
 	void View::create()
@@ -119,12 +124,12 @@ namespace tgl
 		if (!RegisterClassEx(&wc))
 			throw std::runtime_error("class register error!");
 
-		handle = CreateWindowEx(0, wc.lpszClassName, title.c_str(), WS_OVERLAPPEDWINDOW, 0, 0, width, height, 0, 0, 0, this);
-		if (isOpen = static_cast<bool>(handle))
+		mHandle = CreateWindowEx(0, wc.lpszClassName, title.c_str(), WS_OVERLAPPEDWINDOW, 0, 0, width, height, 0, 0, 0, this);
+		if (isOpen = static_cast<bool>(mHandle))
 		{
-			UpdateWindow(handle);
-			ShowWindow(handle, SW_SHOWDEFAULT);
-			device_content = GetDC(handle);
+			UpdateWindow(mHandle);
+			ShowWindow(mHandle, SW_SHOWDEFAULT);
+			mDevice_content = GetDC(mHandle);
 		}
 		else
 			throw std::runtime_error("window create failed!");
@@ -134,17 +139,18 @@ namespace tgl
 
 	View::View(View&& _Right) noexcept
 	{
-		std::swap(this->handle, _Right.handle);
+		std::swap(this->mHandle, _Right.mHandle);
 		std::swap(this->isOpen, _Right.isOpen);
-		std::swap(this->device_content, _Right.device_content);
-		auto tpWinView = GetWindowLongPtr(this->handle, GWLP_USERDATA);
-		auto rpWinView = GetWindowLongPtr(_Right.handle, GWLP_USERDATA);
-		SetWindowLongPtr(this->handle, GWLP_USERDATA, rpWinView);
-		SetWindowLongPtr(_Right.handle, GWLP_USERDATA, tpWinView);
+		std::swap(this->mDevice_content, _Right.mDevice_content);
+		auto tpWinView = GetWindowLongPtr(this->mHandle, GWLP_USERDATA);
+		auto rpWinView = GetWindowLongPtr(_Right.mHandle, GWLP_USERDATA);
+		SetWindowLongPtr(this->mHandle, GWLP_USERDATA, rpWinView);
+		SetWindowLongPtr(_Right.mHandle, GWLP_USERDATA, tpWinView);
 	}
 
 	View::~View()
 	{
+		wglDeleteContext(mGL_resource_content);
 		if (isOpen)
 			destroy();
 	}
