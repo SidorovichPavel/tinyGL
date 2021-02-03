@@ -86,6 +86,8 @@ namespace tgl
 		gl::deleteShader = gl::LoadFunction<gl::PFNGLDELETESHADERPROC>("glDeleteShader");
 		gl::getShaderInfoLog = gl::LoadFunction<gl::PFNGLGETSHADERINFOLOGPROC>("glGetShaderInfoLog");
 		gl::bindAttribLocation = gl::LoadFunction<gl::PFNGLBINDATTRIBLOCATIONPROC>("glBindAttribLocation");
+		gl::getUniformLocation = gl::LoadFunction<gl::PFNGLGETUNIFORMLOCATIONPROC>("glGetUniformLocation");
+
 
 		std::cout << "Done" << std::endl;
 

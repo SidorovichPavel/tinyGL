@@ -26,4 +26,6 @@ namespace tgl::gl
 	PFNGLDELETESHADERPROC deleteShader = nullptr;
 	PFNGLGETSHADERINFOLOGPROC getShaderInfoLog = nullptr;
 	PFNGLBINDATTRIBLOCATIONPROC bindAttribLocation = nullptr;
+	PFNGLGETUNIFORMLOCATIONPROC getUniformLocation = nullptr;
+	PFNGLUNIFORM1IPROC uniform1i = nullptr;
 }

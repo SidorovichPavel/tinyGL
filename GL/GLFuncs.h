@@ -39,6 +39,7 @@ namespace tgl::gl
 	extern PFNGLDELETESHADERPROC deleteShader;
 	extern PFNGLGETSHADERINFOLOGPROC getShaderInfoLog;
 	extern PFNGLBINDATTRIBLOCATIONPROC bindAttribLocation;
+	extern PFNGLGETUNIFORMLOCATIONPROC getUniformLocation;
 	//program end
 
 	template<class T>
