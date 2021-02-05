@@ -81,16 +81,19 @@ namespace tgl
 
 		mGL_resource_content = wglCreateContext(mDevice_content);
 		wglMakeCurrent(mDevice_content, mGL_resource_content);
+
+		glViewport(0, 0, mWidth, mHeight);
 	}
 
-	void View::create()
-	{
-	}
+	void View::create()	{}
 
-	void View::destroy()
+	void View::destroy() {}
+
+	void View::size(int width, int height) {}
+
+	void View::key_down(__int64 virtual_code, __int64 state)
 	{
-		this->isOpen = false;
-		PostQuitMessage(EXIT_SUCCESS);
+
 	}
 
 	LRESULT View::WinProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
@@ -100,8 +103,16 @@ namespace tgl
 		case WM_CREATE:
 			create();
 			break;
+		case WM_SIZE:
+			size(static_cast<int>(LOWORD(lParam)), static_cast<int>(HIWORD(lParam)));
+			break;
 		case WM_DESTROY:
 			destroy();
+			this->isOpen = false;
+			PostQuitMessage(EXIT_SUCCESS);
+			break;
+		case WM_KEYDOWN:
+			key_down(static_cast<__int64>(wParam), static_cast<__int64>(lParam));
 			break;
 		default:
 			return DefWindowProc(hWnd, uMsg, wParam, lParam);
@@ -110,7 +121,9 @@ namespace tgl
 		return 0;
 	}
 
-	View::View(const int width, const int height, const std::wstring& title, const Style& style)
+	View::View(const int width, const int height, const std::wstring& title, const Style& style) :
+		mWidth(width),
+		mHeight(height)
 	{
 		WNDCLASSEX wc = { sizeof(wc) };
 		wc.hbrBackground = reinterpret_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
@@ -139,9 +152,12 @@ namespace tgl
 
 	View::View(View&& _Right) noexcept
 	{
+		mGL_resource_content = nullptr;
 		std::swap(this->mHandle, _Right.mHandle);
 		std::swap(this->isOpen, _Right.isOpen);
 		std::swap(this->mDevice_content, _Right.mDevice_content);
+		std::swap(this->mWidth, _Right.mWidth);
+		std::swap(this->mHeight, _Right.mHeight);
 		auto tpWinView = GetWindowLongPtr(this->mHandle, GWLP_USERDATA);
 		auto rpWinView = GetWindowLongPtr(_Right.mHandle, GWLP_USERDATA);
 		SetWindowLongPtr(this->mHandle, GWLP_USERDATA, rpWinView);

@@ -10,8 +10,6 @@ namespace tgl
 		unsigned mVAO;
 		std::vector<unsigned> mBuffers;
 
-
-		void add_vertex_buffer_object(void* _Data, size_t _Count);
 	public:
 		VAO();
 		VAO(const VAO& _Right) = delete;
@@ -22,6 +20,7 @@ namespace tgl
 		static void unbind();
 		void draw(size_t count);
 
+		void add_vertex_buffer_object(void* _Data, size_t _Count);
 		template<size_t N>
 		void push_vbo(std::array<float, N>& _Data)
 		{

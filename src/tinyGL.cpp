@@ -10,7 +10,7 @@ namespace tgl
 	{
 	#ifdef _WIN32
 		win::MSG msg;
-		while (win::PeekMessage(&msg, nullptr, 0, 0, PM_NOREMOVE))
+		if (win::PeekMessage(&msg, nullptr, 0, 0, PM_NOREMOVE))
 		{
 			win::GetMessage(&msg, nullptr, 0, 0);
 			win::TranslateMessage(&msg);
@@ -19,6 +19,9 @@ namespace tgl
 	#else
 		//TODO
 	#endif
+
+		gl::glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		gl::glClearColor(0.f, 0.f, 0.f, 1.f);
 	}
 
 	void Init()

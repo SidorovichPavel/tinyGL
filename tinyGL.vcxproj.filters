@@ -35,7 +35,7 @@
       <Filter>GL\VAO</Filter>
     </ClCompile>
     <ClCompile Include="GL\Shader\Shader.cpp">
-      <Filter>src</Filter>
+      <Filter>GL\Shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +69,8 @@
     <ClInclude Include="GL\VAO\VAO.h">
       <Filter>GL\VAO</Filter>
     </ClInclude>
-    <ClInclude Include="GL\Shader\Shader.h" />
+    <ClInclude Include="GL\Shader\Shader.h">
+      <Filter>GL\Shader</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

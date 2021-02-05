@@ -23,9 +23,13 @@ namespace tgl {
 		win::HWND mHandle;
 		win::HDC mDevice_content;
 		win::HGLRC mGL_resource_content;
+
+		int mWidth, mHeight;
 	protected:
-		void create();
-		void destroy();
+		virtual void create();
+		virtual void destroy();
+		virtual void size(int width, int height);
+		virtual void key_down(__int64 virtual_code, __int64 state);
 	public:
 		View(const int width, const int height, const std::wstring& title, const Style& style = Style());
 		View(const View& _Right) = delete;
