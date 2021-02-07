@@ -6,12 +6,14 @@
 
 namespace tgl
 {
-	unsigned Shader::load_shader(const std::string& path, gl::GLenum shader_type)
+	unsigned Shader::load_shader(const std::string& shader_file_name, gl::GLenum shader_type)
 	{
 		unsigned shader = gl::createShader(shader_type);
-		std::ifstream fin(path);
+		std::ifstream fin(shader_file_name);
+		if (!fin.is_open())
+			throw std::runtime_error("file \"" + shader_file_name + "\" not found!");
 
-		std::string shader_code{ std::istreambuf_iterator<char>(fin), std::istreambuf_iterator<char>() };
+		std::string shader_code = std::string(std::istreambuf_iterator<char>(fin), std::istreambuf_iterator<char>());
 
 		const char* c = shader_code.c_str();
 		gl::shaderSource(shader, 1, &c, nullptr);
@@ -28,11 +30,12 @@ namespace tgl
 			throw std::runtime_error(log);
 	}
 
-	Shader::Shader(const std::string& name)
+	Shader::Shader(const std::string& shader_pack_name)
 	{
 		mProgram = gl::createProgram();
-		mVertexShader = load_shader("res/glsl/" + name + ".vert", GL_VERTEX_SHADER);
-		mFragmentShader = load_shader("res/glsl/" + name + ".frag", GL_FRAGMENT_SHADER);
+		mVertexShader = load_shader("res/glsl/" + shader_pack_name + ".vert", GL_VERTEX_SHADER);
+		mFragmentShader = load_shader("res/glsl/" + shader_pack_name + ".frag", GL_FRAGMENT_SHADER);
+		//auto GeometryShader = compile_shader(gsh_code, GL_GEOMETRY_SHADER);
 	}
 
 	void Shader::link()
@@ -41,9 +44,6 @@ namespace tgl
 		gl::attachShader(mProgram, mFragmentShader);
 
 		gl::linkProgram(mProgram);
-
-		gl::deleteShader(mVertexShader);
-		gl::deleteShader(mFragmentShader);
 	}
 
 	void Shader::bind_attribute(unsigned index, const std::string& name)
@@ -58,6 +58,16 @@ namespace tgl
 
 	Shader::~Shader()
 	{
+		gl::detachShader(mProgram, mVertexShader);
+		gl::detachShader(mProgram, mFragmentShader);
+		gl::deleteShader(mVertexShader);
+		gl::deleteShader(mFragmentShader);
 		gl::deleteProgram(mProgram);
+	}
+
+	void Shader::uniform_matrix4f(const std::string &name, void *ptr)
+	{
+		auto matrix_loc = gl::getUniformLocation(mProgram, name.c_str());
+		gl::uniformMatrix4fv(matrix_loc, 1, GL_FALSE, (const gl::GLfloat *)ptr);
 	}
 }

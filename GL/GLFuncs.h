@@ -37,9 +37,11 @@ namespace tgl::gl
 	extern PFNGLLINKPROGRAMPROC linkProgram;
 	extern PFNGLUSEPROGRAMPROC useProgram;
 	extern PFNGLDELETESHADERPROC deleteShader;
+	extern PFNGLDETACHSHADERPROC detachShader;
 	extern PFNGLGETSHADERINFOLOGPROC getShaderInfoLog;
 	extern PFNGLBINDATTRIBLOCATIONPROC bindAttribLocation;
 	extern PFNGLGETUNIFORMLOCATIONPROC getUniformLocation;
+	extern PFNGLUNIFORMMATRIX4FVPROC uniformMatrix4fv;
 	//program end
 
 	template<class T>

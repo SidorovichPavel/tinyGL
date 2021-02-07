@@ -1,17 +1,18 @@
 #include "VAO.h"
 #include <GL/GLFuncs.h>
 #include <iostream>
-
+#include <assert.h>
 namespace tgl
 {
 	VAO::VAO()
 	{
-		tgl::gl::genVertexArrays(1, &mVAO);
+		gl::genVertexArrays(1, &mVAO);
 	}
 
 	VAO::~VAO()
 	{
-		gl::deleteBuffers(mBuffers.size(), mBuffers.data());
+		gl::deleteBuffers((gl::GLsizei)mBuffers.size(), mBuffers.data());
+		gl::deleteBuffers(1, &mIndicesBuffer);
 		gl::deleteVertexArrays(1, &mVAO);
 	}
 
@@ -25,27 +26,41 @@ namespace tgl
 		gl::bindVertexArray(0);
 	}
 
-	void VAO::draw(size_t count)
+	void VAO::draw(size_t type)
 	{
 		bind();
 		for (auto i = 0; i < mBuffers.size(); ++i) gl::enableVertexAttribArray(i);
-		gl::glDrawArrays(GL_TRIANGLES, 0, count);
+		assert(mIndicesBuffer != 0);
+		gl::bindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndicesBuffer);
+		gl::glDrawElements(type, mIndicesCount, GL_UNSIGNED_INT, nullptr);
 		for (auto i = 0; i < mBuffers.size(); ++i) gl::enableVertexAttribArray(i);
+		unbind();
 	}
 
 	void VAO::push_vbo(std::vector<float>& _Data)
 	{
-		add_vertex_buffer_object(_Data.data(), _Data.size());
+		add_vertex_buffer(_Data.data(), _Data.size());
 	}
 	
-	void VAO::add_vertex_buffer_object(void* _Data, size_t _Count)
+	void VAO::add_vertex_buffer(void* _Data, size_t _Count)
 	{
 		bind();
 		unsigned vbo;
-		tgl::gl::genBuffers(1, &vbo);
-		tgl::gl::bindBuffer(GL_ARRAY_BUFFER, vbo);
-		tgl::gl::bufferData(GL_ARRAY_BUFFER, _Count * sizeof(float), _Data, GL_STATIC_DRAW);
-		tgl::gl::vertexArrtibPointer(mBuffers.size(), 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+		gl::genBuffers(1, &vbo);
+		gl::bindBuffer(GL_ARRAY_BUFFER, vbo);
+		gl::bufferData(GL_ARRAY_BUFFER, _Count * sizeof(float), _Data, GL_STATIC_DRAW);
+		gl::vertexArrtibPointer((gl::GLsizei)mBuffers.size(), 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 		mBuffers.push_back(vbo);
+		unbind();
+	}
+	void VAO::add_indices_buffer(void* _Data, size_t _Count)
+	{
+		assert(mIndicesBuffer == 0);
+		mIndicesCount = _Count;
+		bind();
+		tgl::gl::genBuffers(1, &mIndicesBuffer);
+		tgl::gl::bindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndicesBuffer);
+		tgl::gl::bufferData(GL_ELEMENT_ARRAY_BUFFER, _Count * sizeof(unsigned), _Data, GL_STATIC_DRAW);
+		unbind();
 	}
 }

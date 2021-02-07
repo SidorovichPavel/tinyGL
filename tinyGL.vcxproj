@@ -21,9 +21,11 @@
   <ItemGroup>
     <ClCompile Include="GL\GLFuncs.cpp" />
     <ClCompile Include="GL\Shader\Shader.cpp" />
+    <ClCompile Include="src\App\App.cpp" />
     <ClCompile Include="src\tinyGL.cpp" />
     <ClCompile Include="src\View\View.cpp" />
     <ClCompile Include="GL\VAO\VAO.cpp" />
+    <ClCompile Include="src\Timer\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GL\glcorearb.h" />
@@ -33,10 +35,12 @@
     <ClInclude Include="GL\wglext.h" />
     <ClInclude Include="GL\GLFuncs.h" />
     <ClInclude Include="GL\Shader\Shader.h" />
+    <ClInclude Include="src\App\App.h" />
     <ClInclude Include="src\style\style.h" />
     <ClInclude Include="src\tinyGL.h" />
     <ClInclude Include="src\View\View.h" />
     <ClInclude Include="GL\VAO\VAO.h" />
+    <ClInclude Include="src\Timer\Timer.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

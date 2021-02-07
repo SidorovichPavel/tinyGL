@@ -7,7 +7,9 @@ namespace tgl
 {
 	class VAO
 	{
-		unsigned mVAO;
+		unsigned mVAO{};
+		unsigned mIndicesBuffer{};
+		size_t mIndicesCount{};
 		std::vector<unsigned> mBuffers;
 
 	public:
@@ -18,13 +20,14 @@ namespace tgl
 
 		void bind();
 		static void unbind();
-		void draw(size_t count);
+		void draw(size_t type);
 
-		void add_vertex_buffer_object(void* _Data, size_t _Count);
+		void add_vertex_buffer(void* _Data, size_t _Count);
+		void add_indices_buffer(void* _Data, size_t _Count);
 		template<size_t N>
 		void push_vbo(std::array<float, N>& _Data)
 		{
-			add_vertex_buffer_object(_Data.data(), _Data.size());
+			add_vertex_buffer(_Data.data(), _Data.size());
 		}
 		void push_vbo(std::vector<float>& _Data);
 	};

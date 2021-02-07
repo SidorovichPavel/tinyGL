@@ -8,13 +8,14 @@ namespace tgl
 {
 	class Shader
 	{
-		unsigned mProgram,
+		unsigned 
+			mProgram,
 			mVertexShader,
 			mFragmentShader;
 
-		unsigned load_shader(const std::string& path, gl::GLenum shader_type);
+		unsigned load_shader(const std::string& code, gl::GLenum shader_type);
 	public:
-		Shader(const std::string&);
+		Shader(const std::string& shader_pack_name);
 		~Shader();
 		Shader(const Shader&) = default;
 		Shader(Shader&&) = default;
@@ -23,7 +24,7 @@ namespace tgl
 		void bind_attribute(unsigned index, const std::string& name);
 		void use();
 
-
+		void uniform_matrix4f(const std::string &name, void *ptr);
 	};
 
 

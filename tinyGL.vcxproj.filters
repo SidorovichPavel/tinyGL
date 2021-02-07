@@ -37,6 +37,12 @@
     <ClCompile Include="GL\Shader\Shader.cpp">
       <Filter>GL\Shader</Filter>
     </ClCompile>
+    <ClCompile Include="src\Timer\Timer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\App\App.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\style\style.h">
@@ -72,5 +78,7 @@
     <ClInclude Include="GL\Shader\Shader.h">
       <Filter>GL\Shader</Filter>
     </ClInclude>
+    <ClInclude Include="src\Timer\Timer.h" />
+    <ClInclude Include="src\App\App.h" />
   </ItemGroup>
 </Project>

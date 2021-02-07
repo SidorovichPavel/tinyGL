@@ -19,9 +19,6 @@ namespace tgl
 	#else
 		//TODO
 	#endif
-
-		gl::glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		gl::glClearColor(0.f, 0.f, 0.f, 1.f);
 	}
 
 	void Init()
@@ -86,11 +83,12 @@ namespace tgl
 		gl::attachShader = gl::LoadFunction<gl::PFNGLATTACHSHADERPROC>("glAttachShader");
 		gl::linkProgram = gl::LoadFunction<gl::PFNGLLINKPROGRAMPROC>("glLinkProgram");
 		gl::useProgram = gl::LoadFunction<gl::PFNGLUSEPROGRAMPROC>("glUseProgram");
+		gl::detachShader = gl::LoadFunction<gl::PFNGLDETACHSHADERPROC>("glDetachShader");
 		gl::deleteShader = gl::LoadFunction<gl::PFNGLDELETESHADERPROC>("glDeleteShader");
 		gl::getShaderInfoLog = gl::LoadFunction<gl::PFNGLGETSHADERINFOLOGPROC>("glGetShaderInfoLog");
 		gl::bindAttribLocation = gl::LoadFunction<gl::PFNGLBINDATTRIBLOCATIONPROC>("glBindAttribLocation");
+		gl::uniformMatrix4fv = gl::LoadFunction<gl::PFNGLUNIFORMMATRIX4FVPROC>("glUniformMatrix4fv");
 		gl::getUniformLocation = gl::LoadFunction<gl::PFNGLGETUNIFORMLOCATIONPROC>("glGetUniformLocation");
-
 
 		std::cout << "Done" << std::endl;
 
