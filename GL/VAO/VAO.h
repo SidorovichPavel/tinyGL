@@ -9,7 +9,7 @@ namespace tgl
 	{
 		unsigned mVAO{};
 		unsigned mIndicesBuffer{};
-		size_t mIndicesCount{};
+		int mIndicesCount{};
 		std::vector<unsigned> mBuffers;
 
 	public:
@@ -20,7 +20,7 @@ namespace tgl
 
 		void bind();
 		static void unbind();
-		void draw(size_t type);
+		void draw(int type);
 
 		void add_vertex_buffer(void* _Data, size_t _Count);
 		void add_indices_buffer(void* _Data, size_t _Count);

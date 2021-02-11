@@ -1,11 +1,11 @@
-#include "View.h"
+#include <src/View/View.h>
 #include <stdexcept>
 
 namespace tgl
 {
 	#ifdef _WIN32
-		#include <gl/GL.h>
-		#include <GL/glext.h>
+	#include <gl/GL.h>
+	#include <GL/glext.h>
 	#endif
 }
 
@@ -13,7 +13,7 @@ namespace tgl
 namespace tgl
 {
 
-#ifdef _WIN32
+	#ifdef _WIN32
 	using namespace win;
 
 	View::View(const int width, const int height, const std::wstring& title, const Style& style) :
@@ -32,7 +32,19 @@ namespace tgl
 		if (!RegisterClassEx(&wc))
 			throw std::runtime_error("class register error!");
 
-		mHandle = CreateWindowEx(0, wc.lpszClassName, title.c_str(), WS_OVERLAPPEDWINDOW, 0, 0, width, height, 0, 0, 0, this);
+		mWinSize = { 0,0,width,height };
+		win::AdjustWindowRect(&mWinSize, WS_OVERLAPPEDWINDOW, 0);
+		mHandle = CreateWindowEx(0,
+								 wc.lpszClassName,
+								 title.c_str(),
+								 WS_OVERLAPPEDWINDOW,
+								 0,
+								 0,
+								 mWinSize.right - mWinSize.left,
+								 mWinSize.bottom - mWinSize.top,
+								 0, 0, 0,
+								 this);
+
 		if (mIsOpen = static_cast<bool>(mHandle))
 		{
 			UpdateWindow(mHandle);
@@ -44,10 +56,11 @@ namespace tgl
 
 		init_opengl();
 	}
-	
+
 	View::View(View&& _Right) noexcept
 	{
-		mGL_resource_content = nullptr;
+		std::swap(mWinSize, _Right.mWinSize);
+		std::swap(mGL_resource_content, _Right.mGL_resource_content);
 		std::swap(this->mHandle, _Right.mHandle);
 		std::swap(this->mIsOpen, _Right.mIsOpen);
 		std::swap(this->mDevice_context, _Right.mDevice_context);
@@ -58,7 +71,7 @@ namespace tgl
 		SetWindowLongPtr(this->mHandle, GWLP_USERDATA, rpWinView);
 		SetWindowLongPtr(_Right.mHandle, GWLP_USERDATA, tpWinView);
 	}
-	
+
 	View::~View()
 	{
 		wglDeleteContext(mGL_resource_content);
@@ -115,7 +128,7 @@ namespace tgl
 			//move(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 			break;
 		case WM_MOVING:
-			
+
 			break;
 		default:
 			return DefWindowProc(hWnd, uMsg, wParam, lParam);
@@ -123,7 +136,7 @@ namespace tgl
 		}
 		return 0;
 	}
-	
+
 	win::HWND View::get_handle() noexcept
 	{
 		return mHandle;
@@ -177,7 +190,7 @@ namespace tgl
 		mGL_resource_content = wglCreateContext(mDevice_context);
 	}
 
-	void View::create()	{}
+	void View::create() {}
 
 	void View::destroy() {}
 
@@ -187,10 +200,10 @@ namespace tgl
 
 	void View::mouse_move(int x, int y, __int64 virtual_code) {}
 
-	void View::moving(win::RECT* pRect){}
+	void View::moving(win::RECT* pRect) {}
 
-#elif 
+	#elif 
 
-#endif // _WIN32
+	#endif // _WIN32
 
 }

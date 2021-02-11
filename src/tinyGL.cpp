@@ -25,7 +25,7 @@ namespace tgl
 	{
 #ifdef _WIN32
 		using namespace win;
-		HWND handle = CreateWindowEx(0, L"button", L"", WS_POPUP, 0, 0, 10, 10, 0, 0, 0, 0);
+		HWND handle = CreateWindowEx(0, L"button", L"", WS_POPUP, 0, 0, 0, 0, 0, 0, 0, 0);
 		if (!handle)
 			throw std::runtime_error("tinyGL[Win32] -> init failed -> failed wile window init");
 
@@ -59,7 +59,7 @@ namespace tgl
 
 		HGLRC gl_rc = wglCreateContext(dc);
 		wglMakeCurrent(dc, gl_rc);
-
+		
 		std::cout << "Loading OpenGL extentions..." << std::endl;
 
 		gl::genVertexArrays = gl::LoadFunction<gl::PFNGLGENVERTEXARRAYSPROC>("glGenVertexArrays");

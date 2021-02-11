@@ -1,4 +1,4 @@
-#include "Shader.h"
+#include <GL/Shader/Shader.h>
 
 #include <fstream>
 #include <iterator>

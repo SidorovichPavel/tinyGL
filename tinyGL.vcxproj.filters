@@ -20,6 +20,12 @@
     <Filter Include="GL\Shader">
       <UniqueIdentifier>{95f54f6c-1c9a-4079-bcc7-ddd9db79383b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Timer">
+      <UniqueIdentifier>{a5c55c2f-7b11-4da2-ad6c-79ac7b28b8a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\App">
+      <UniqueIdentifier>{38b76ae9-edc1-4c6d-a084-3f8bfaf41bf2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\tinyGL.cpp">
@@ -38,10 +44,10 @@
       <Filter>GL\Shader</Filter>
     </ClCompile>
     <ClCompile Include="src\Timer\Timer.cpp">
-      <Filter>src</Filter>
+      <Filter>src\Timer</Filter>
     </ClCompile>
     <ClCompile Include="src\App\App.cpp">
-      <Filter>src</Filter>
+      <Filter>src\App</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -78,7 +84,11 @@
     <ClInclude Include="GL\Shader\Shader.h">
       <Filter>GL\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="src\Timer\Timer.h" />
-    <ClInclude Include="src\App\App.h" />
+    <ClInclude Include="src\Timer\Timer.h">
+      <Filter>src\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\App\App.h">
+      <Filter>src\App</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

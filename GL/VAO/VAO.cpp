@@ -1,7 +1,8 @@
-#include "VAO.h"
+#include <GL/VAO/VAO.h>
 #include <GL/GLFuncs.h>
 #include <iostream>
 #include <assert.h>
+
 namespace tgl
 {
 	VAO::VAO()
@@ -26,7 +27,7 @@ namespace tgl
 		gl::bindVertexArray(0);
 	}
 
-	void VAO::draw(size_t type)
+	void VAO::draw(int type)
 	{
 		bind();
 		for (auto i = 0; i < mBuffers.size(); ++i) gl::enableVertexAttribArray(i);
@@ -56,7 +57,12 @@ namespace tgl
 	void VAO::add_indices_buffer(void* _Data, size_t _Count)
 	{
 		assert(mIndicesBuffer == 0);
-		mIndicesCount = _Count;
+		#pragma push_macro("max")
+		#undef max
+		assert(_Count <= static_cast<size_t>(std::numeric_limits<int>::max()));
+		#pragma pop_macro("max")
+
+		mIndicesCount = static_cast<int>(_Count);
 		bind();
 		tgl::gl::genBuffers(1, &mIndicesBuffer);
 		tgl::gl::bindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndicesBuffer);

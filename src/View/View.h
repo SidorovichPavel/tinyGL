@@ -11,6 +11,7 @@ namespace tgl {
 	{
 		#include <Windows.h>
 		#include <windowsx.h>
+		#include <WinUser.h>
 	}
 
 	class View
@@ -25,7 +26,7 @@ namespace tgl {
 		win::HWND mHandle;
 		win::HDC mDevice_context;
 		win::HGLRC mGL_resource_content;
-
+		win::RECT mWinSize;
 	protected:
 		int mWidth, mHeight;
 		virtual void create();

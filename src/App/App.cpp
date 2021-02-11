@@ -1,6 +1,6 @@
-#include "App.h"
+#include <src/App/App.h>
+#include <assert.h>
 
-#include<assert.h>
 
 namespace tgl
 {
@@ -11,7 +11,7 @@ namespace tgl
 
 	int App::Run(std::function<void(void)> _Fn)
 	{
-#ifdef _WIN32
+		#ifdef _WIN32
 		win::MSG msg;
 		size_t nextUpdate{};
 		size_t fpsLock{ 1000 / 120 };
@@ -39,7 +39,7 @@ namespace tgl
 				nextUpdate = ms + fpsLock;
 				_Fn();
 			}
-			
+
 			assert((wait & 0xffff0000) == 0);
 			if (win::MsgWaitForMultipleObjects(0, nullptr, FALSE, (unsigned)wait, QS_ALLEVENTS) == WAIT_TIMEOUT)
 			{
@@ -48,6 +48,6 @@ namespace tgl
 			}
 
 		}
-#endif
+		#endif
 	}
 }
