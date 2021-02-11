@@ -26,6 +26,9 @@
     <Filter Include="src\App">
       <UniqueIdentifier>{38b76ae9-edc1-4c6d-a084-3f8bfaf41bf2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Event">
+      <UniqueIdentifier>{fde7d0d6-237d-4797-9e9c-e7300bfe359f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\tinyGL.cpp">
@@ -48,6 +51,9 @@
     </ClCompile>
     <ClCompile Include="src\App\App.cpp">
       <Filter>src\App</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Event\Event.cpp">
+      <Filter>src\Event</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -89,6 +95,9 @@
     </ClInclude>
     <ClInclude Include="src\App\App.h">
       <Filter>src\App</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Event\Event.h">
+      <Filter>src\Event</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

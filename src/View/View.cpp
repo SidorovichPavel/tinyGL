@@ -76,7 +76,7 @@ namespace tgl
 	{
 		wglDeleteContext(mGL_resource_content);
 		if (mIsOpen)
-			destroy();
+			DestroyWindow(mHandle);
 	}
 
 	LRESULT View::SWinProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
@@ -108,27 +108,26 @@ namespace tgl
 		switch (uMsg)
 		{
 		case WM_CREATE:
-			create();
+			create_event();
 			break;
 		case WM_SIZE:
-			size(static_cast<int>(LOWORD(lParam)), static_cast<int>(HIWORD(lParam)));
+			size_event(static_cast<int>(LOWORD(lParam)), static_cast<int>(HIWORD(lParam)));
 			break;
 		case WM_DESTROY:
-			destroy();
+			destroy_event();
 			this->mIsOpen = false;
 			PostQuitMessage(EXIT_SUCCESS);
 			break;
 		case WM_KEYDOWN:
-			key_down(static_cast<__int64>(wParam), static_cast<__int64>(lParam));
+			key_down_event(static_cast<__int64>(wParam), static_cast<__int64>(lParam));
 			break;
 		case WM_MOUSEMOVE:
-			mouse_move(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), static_cast<__int64>(wParam));
+			mouse_move_event(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), static_cast<__int64>(wParam));
 			break;
 		case WM_MOVE:
 			//move(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 			break;
 		case WM_MOVING:
-
 			break;
 		default:
 			return DefWindowProc(hWnd, uMsg, wParam, lParam);
@@ -140,6 +139,11 @@ namespace tgl
 	win::HWND View::get_handle() noexcept
 	{
 		return mHandle;
+	}
+
+	void View::set_title(const std::wstring& title)
+	{
+		win::SetWindowText(mHandle, title.c_str());
 	}
 
 	bool View::is_open() noexcept
@@ -189,18 +193,6 @@ namespace tgl
 
 		mGL_resource_content = wglCreateContext(mDevice_context);
 	}
-
-	void View::create() {}
-
-	void View::destroy() {}
-
-	void View::size(int width, int height) {}
-
-	void View::key_down(__int64 virtual_code, __int64 state) {}
-
-	void View::mouse_move(int x, int y, __int64 virtual_code) {}
-
-	void View::moving(win::RECT* pRect) {}
 
 	#elif 
 

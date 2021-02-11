@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Event\Event.cpp" />
     <ClCompile Include="GL\GLFuncs.cpp" />
     <ClCompile Include="GL\Shader\Shader.cpp" />
     <ClCompile Include="src\App\App.cpp" />
@@ -28,6 +29,7 @@
     <ClCompile Include="src\Timer\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Event\Event.h" />
     <ClInclude Include="GL\glcorearb.h" />
     <ClInclude Include="GL\glext.h" />
     <ClInclude Include="GL\glxext.h" />
