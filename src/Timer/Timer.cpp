@@ -2,11 +2,10 @@
 
 namespace tgl
 {
-
 	void Timer::STimerProc(win::HWND _Wnd, win::UINT _Msg, win::UINT_PTR _Handle, win::DWORD _Ms)
 	{
 		auto pTimer = reinterpret_cast<Timer*>(_Handle);
-		(*pTimer)();
+		(*pTimer).booom();
 	}
 
 	Timer::Timer(win::HWND _Win, unsigned _Delay) :
@@ -14,11 +13,6 @@ namespace tgl
 		mHandle(reinterpret_cast<win::UINT_PTR>(this))
 	{
 		win::SetTimer(_Win, mHandle, _Delay, Timer::STimerProc);
-	}
-
-	void Timer::operator()()
-	{
-		mCheck = true;
 	}
 
 	bool Timer::check()

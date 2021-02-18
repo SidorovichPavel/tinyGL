@@ -1,8 +1,8 @@
 #include <GL/Shader/Shader.h>
 
-#include <fstream>
 #include <iterator>
 #include <stdexcept>
+#include <fstream>
 
 namespace tgl
 {
@@ -65,9 +65,19 @@ namespace tgl
 		gl::deleteProgram(mProgram);
 	}
 
-	void Shader::uniform_matrix4f(const std::string &name, void *ptr)
+	void Shader::uniform_matrix4f(const std::string& name, void* ptr)
 	{
 		auto matrix_loc = gl::getUniformLocation(mProgram, name.c_str());
-		gl::uniformMatrix4fv(matrix_loc, 1, GL_FALSE, (const gl::GLfloat *)ptr);
+		gl::uniformMatrix4fv(matrix_loc, 1, GL_FALSE, (const gl::GLfloat*)ptr);
+	}
+	void Shader::uniform_vector4f(const std::string& name, void* ptr)
+	{
+		auto loc = gl::getUniformLocation(mProgram, name.c_str());
+		gl::uniformVector4fv(loc, 1, (const gl::GLfloat*)ptr);
+	}
+	void Shader::uniform_vector3f(const std::string& name, void* ptr)
+	{
+		auto loc = gl::getUniformLocation(mProgram, name.c_str());
+		gl::uniformVector3fv(loc, 1, (const gl::GLfloat*)ptr);
 	}
 }

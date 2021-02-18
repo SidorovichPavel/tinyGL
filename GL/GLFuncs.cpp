@@ -28,6 +28,8 @@ namespace tgl::gl
 	PFNGLGETSHADERINFOLOGPROC getShaderInfoLog = nullptr;
 	PFNGLBINDATTRIBLOCATIONPROC bindAttribLocation = nullptr;
 	PFNGLGETUNIFORMLOCATIONPROC getUniformLocation = nullptr;
+	PFNGLUNIFORM3FVPROC uniformVector3fv = nullptr;
+	PFNGLUNIFORM4FVPROC uniformVector4fv = nullptr;
 	PFNGLUNIFORMMATRIX4FVPROC uniformMatrix4fv = nullptr;
 	PFNGLUNIFORM1IPROC uniform1i = nullptr;
 }

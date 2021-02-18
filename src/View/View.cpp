@@ -1,5 +1,6 @@
 #include <src/View/View.h>
 #include <stdexcept>
+#include <iostream>
 
 namespace tgl
 {
@@ -12,7 +13,6 @@ namespace tgl
 
 namespace tgl
 {
-
 	#ifdef _WIN32
 	using namespace win;
 
@@ -32,18 +32,11 @@ namespace tgl
 		if (!RegisterClassEx(&wc))
 			throw std::runtime_error("class register error!");
 
-		mWinSize = { 0,0,width,height };
-		win::AdjustWindowRect(&mWinSize, WS_OVERLAPPEDWINDOW, 0);
-		mHandle = CreateWindowEx(0,
-								 wc.lpszClassName,
-								 title.c_str(),
-								 WS_OVERLAPPEDWINDOW,
-								 0,
-								 0,
-								 mWinSize.right - mWinSize.left,
-								 mWinSize.bottom - mWinSize.top,
-								 0, 0, 0,
-								 this);
+		mWinGlobalSize = { 0,0,width,height };
+		AdjustWindowRect(&mWinGlobalSize, WS_OVERLAPPEDWINDOW, 0);
+		mHandle = CreateWindowEx(0, wc.lpszClassName, title.c_str(), WS_OVERLAPPEDWINDOW,
+								 0, 0, mWinGlobalSize.right - mWinGlobalSize.left, mWinGlobalSize.bottom - mWinGlobalSize.top,
+								 0, 0, 0, this);
 
 		if (mIsOpen = static_cast<bool>(mHandle))
 		{
@@ -59,7 +52,7 @@ namespace tgl
 
 	View::View(View&& _Right) noexcept
 	{
-		std::swap(mWinSize, _Right.mWinSize);
+		std::swap(mWinGlobalSize, _Right.mWinGlobalSize);
 		std::swap(mGL_resource_content, _Right.mGL_resource_content);
 		std::swap(this->mHandle, _Right.mHandle);
 		std::swap(this->mIsOpen, _Right.mIsOpen);
@@ -111,29 +104,84 @@ namespace tgl
 			create_event();
 			break;
 		case WM_SIZE:
-			size_event(static_cast<int>(LOWORD(lParam)), static_cast<int>(HIWORD(lParam)));
+			win::GetWindowRect(mHandle, &mWinGlobalSize);
+			size_event(mWidth = LOWORD(lParam), mHeight = HIWORD(lParam));
 			break;
 		case WM_DESTROY:
-			destroy_event();
 			this->mIsOpen = false;
 			PostQuitMessage(EXIT_SUCCESS);
 			break;
 		case WM_KEYDOWN:
 			key_down_event(static_cast<__int64>(wParam), static_cast<__int64>(lParam));
 			break;
+		case WM_KEYUP:
+			key_up_event(static_cast<__int64>(wParam), static_cast<__int64>(lParam));
+			break;
 		case WM_MOUSEMOVE:
 			mouse_move_event(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), static_cast<__int64>(wParam));
 			break;
 		case WM_MOVE:
-			//move(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+			win::GetWindowRect(mHandle, &mWinGlobalSize);
+			move_event(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 			break;
-		case WM_MOVING:
+		case WM_MOUSEWHEEL:
+			mouse_wheel_event(GET_KEYSTATE_WPARAM(wParam), GET_WHEEL_DELTA_WPARAM(wParam),
+							  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 			break;
+		case WM_INPUT:
+		{
+			UINT size = 0;
+			HRAWINPUT ri = (HRAWINPUT)lParam;
+
+			GetRawInputData(ri, RID_INPUT, NULL, &size, sizeof(RAWINPUTHEADER));
+			uint8_t* data = new uint8_t[size];
+
+			if (GetRawInputData(ri, RID_INPUT, data, &size, sizeof(RAWINPUTHEADER)) != size)
+				break;
+			
+			RAWINPUT* raw = reinterpret_cast<RAWINPUT*>(data);
+
+			switch (raw->header.dwType)
+			{
+			case RIM_TYPEMOUSE:
+				if (!mMouseRawInput)
+					break;
+			
+				if (raw->data.mouse.usFlags & MOUSE_MOVE_ABSOLUTE)
+					mVirtualMouse = std::make_pair(raw->data.mouse.lLastX, raw->data.mouse.lLastY);
+				else
+					mVirtualMouse += std::make_pair(raw->data.mouse.lLastX, raw->data.mouse.lLastY);
+
+				mouse_raw_input_event(mVirtualMouse.dx(), mVirtualMouse.dy());
+				break;
+			}
+
+			delete[] data;
+		}
+		break;
 		default:
 			return DefWindowProc(hWnd, uMsg, wParam, lParam);
 			break;
 		}
 		return 0;
+	}
+
+	void View::enable_mouse_raw_input()
+	{
+		mMouseRawInput = true;
+		RAWINPUTDEVICE rid = { 0x01,0x02,0,mHandle };
+
+		if (!RegisterRawInputDevices(&rid, 1, sizeof(rid)))
+			throw std::runtime_error("failed while enable raw input device");
+	}
+
+	void View::disable_mouse_raw_input()
+	{
+		mMouseRawInput = false;
+		RAWINPUTDEVICE rid = { 0x01,0x02,RIDEV_REMOVE,nullptr };
+
+		if (!RegisterRawInputDevices(&rid, 1, sizeof(rid)))
+			throw std::runtime_error("failed while disable raw input device");
 	}
 
 	win::HWND View::get_handle() noexcept
@@ -160,6 +208,46 @@ namespace tgl
 	{
 		wglMakeCurrent(mDevice_context, mGL_resource_content);
 		glViewport(0, 0, mWidth, mHeight);
+	}
+
+	void View::destroy() noexcept
+	{
+		win::DestroyWindow(mHandle);
+	}
+
+	void View::show_cursor(bool mode)
+	{
+		win::ShowCursor(static_cast<int>(mode));
+		if (!mode)
+		{
+			enable_mouse_raw_input();
+			win::RECT coords{ mWinGlobalSize.left + 50, mWinGlobalSize.top + 50,
+				mWinGlobalSize.right - 50,mWinGlobalSize.bottom - 50 };
+			win::ClipCursor(&coords);
+		}
+		else
+		{
+			win::ClipCursor(nullptr);
+			disable_mouse_raw_input();
+		}
+	}
+
+	void View::center_cursour()
+	{
+		auto x = mWinGlobalSize.right + mWinGlobalSize.left;
+		x /= 2;
+		auto y = mWinGlobalSize.bottom + mWinGlobalSize.top;
+		y /= 2;
+		SetCursorPos(x, y);
+	}
+
+	std::pair<int, int> View::get_global_center()
+	{
+		auto x = mWinGlobalSize.right + mWinGlobalSize.left;
+		x /= 2;
+		auto y = mWinGlobalSize.bottom + mWinGlobalSize.top;
+		y /= 2;
+		return { x,y };
 	}
 
 	void View::init_opengl()

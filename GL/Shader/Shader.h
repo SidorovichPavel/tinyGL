@@ -7,7 +7,7 @@ namespace tgl
 {
 	class Shader
 	{
-		unsigned 
+		unsigned
 			mProgram,
 			mVertexShader,
 			mFragmentShader;
@@ -23,7 +23,9 @@ namespace tgl
 		void bind_attribute(unsigned index, const std::string& name);
 		void use();
 
-		void uniform_matrix4f(const std::string &name, void *ptr);
+		void uniform_matrix4f(const std::string& name, void* ptr);
+		void uniform_vector4f(const std::string& name, void* ptr);
+		void uniform_vector3f(const std::string& name, void* ptr);
 	};
 
 

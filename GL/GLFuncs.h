@@ -46,6 +46,8 @@ namespace tgl
 		extern PFNGLGETSHADERINFOLOGPROC getShaderInfoLog;
 		extern PFNGLBINDATTRIBLOCATIONPROC bindAttribLocation;
 		extern PFNGLGETUNIFORMLOCATIONPROC getUniformLocation;
+		extern PFNGLUNIFORM3FVPROC uniformVector3fv;
+		extern PFNGLUNIFORM4FVPROC uniformVector4fv;
 		extern PFNGLUNIFORMMATRIX4FVPROC uniformMatrix4fv;
 		//extern PFNGLGETSHADERSOURCEPROC getShaderSource;
 		//program end

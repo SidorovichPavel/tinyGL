@@ -24,9 +24,11 @@
     <ClCompile Include="GL\Shader\Shader.cpp" />
     <ClCompile Include="src\App\App.cpp" />
     <ClCompile Include="src\tinyGL.cpp" />
+    <ClCompile Include="src\View\Mouse.cpp" />
     <ClCompile Include="src\View\View.cpp" />
     <ClCompile Include="GL\VAO\VAO.cpp" />
     <ClCompile Include="src\Timer\Timer.cpp" />
+    <ClCompile Include="GL\Texture\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Event\Event.h" />
@@ -40,9 +42,11 @@
     <ClInclude Include="src\App\App.h" />
     <ClInclude Include="src\style\style.h" />
     <ClInclude Include="src\tinyGL.h" />
+    <ClInclude Include="src\View\Mouse.h" />
     <ClInclude Include="src\View\View.h" />
     <ClInclude Include="GL\VAO\VAO.h" />
     <ClInclude Include="src\Timer\Timer.h" />
+    <ClInclude Include="GL\Texture\Texture.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -178,13 +182,14 @@
       <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CallingConvention>FastCall</CallingConvention>
     </ClCompile>
     <Link>
       <SubSystem>
