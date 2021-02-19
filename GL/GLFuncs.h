@@ -51,6 +51,9 @@ namespace tgl
 		extern PFNGLUNIFORMMATRIX4FVPROC uniformMatrix4fv;
 		//extern PFNGLGETSHADERSOURCEPROC getShaderSource;
 		//program end
+		//texture
+		extern PFNGLGENERATEMIPMAPPROC generateMipmap;
+		//end texture
 
 		template<class T>
 		T LoadFunction(const char* _Func_Name)

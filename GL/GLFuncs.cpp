@@ -32,4 +32,6 @@ namespace tgl::gl
 	PFNGLUNIFORM4FVPROC uniformVector4fv = nullptr;
 	PFNGLUNIFORMMATRIX4FVPROC uniformMatrix4fv = nullptr;
 	PFNGLUNIFORM1IPROC uniform1i = nullptr;
+
+	PFNGLGENERATEMIPMAPPROC generateMipmap = nullptr;
 }

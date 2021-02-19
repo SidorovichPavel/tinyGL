@@ -21,14 +21,14 @@
   <ItemGroup>
     <ClCompile Include="src\Event\Event.cpp" />
     <ClCompile Include="GL\GLFuncs.cpp" />
-    <ClCompile Include="GL\Shader\Shader.cpp" />
+    <ClCompile Include="src\Shader\Shader.cpp" />
     <ClCompile Include="src\App\App.cpp" />
     <ClCompile Include="src\tinyGL.cpp" />
     <ClCompile Include="src\View\Mouse.cpp" />
     <ClCompile Include="src\View\View.cpp" />
-    <ClCompile Include="GL\VAO\VAO.cpp" />
+    <ClCompile Include="src\Mesh\Mesh.cpp" />
     <ClCompile Include="src\Timer\Timer.cpp" />
-    <ClCompile Include="GL\Texture\Texture.cpp" />
+    <ClCompile Include="src\Texture\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Event\Event.h" />
@@ -38,15 +38,15 @@
     <ClInclude Include="GL\wgl.h" />
     <ClInclude Include="GL\wglext.h" />
     <ClInclude Include="GL\GLFuncs.h" />
-    <ClInclude Include="GL\Shader\Shader.h" />
+    <ClInclude Include="src\Shader\Shader.h" />
     <ClInclude Include="src\App\App.h" />
     <ClInclude Include="src\style\style.h" />
     <ClInclude Include="src\tinyGL.h" />
     <ClInclude Include="src\View\Mouse.h" />
     <ClInclude Include="src\View\View.h" />
-    <ClInclude Include="GL\VAO\VAO.h" />
+    <ClInclude Include="src\Mesh\Mesh.h" />
     <ClInclude Include="src\Timer\Timer.h" />
-    <ClInclude Include="GL\Texture\Texture.h" />
+    <ClInclude Include="src\Texture\Texture.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -165,7 +165,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\SOIL\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -173,8 +173,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Windows\System32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Windows\System32;$(ProjectDir)..\SOIL\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -188,7 +188,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\SOIL\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CallingConvention>FastCall</CallingConvention>
     </ClCompile>
     <Link>
@@ -199,8 +199,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Windows\System32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Windows\System32;$(ProjectDir)..\SOIL\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

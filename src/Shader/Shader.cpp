@@ -1,4 +1,4 @@
-#include <GL/Shader/Shader.h>
+#include <src/Shader/Shader.h>
 
 #include <iterator>
 #include <stdexcept>

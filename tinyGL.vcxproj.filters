@@ -14,23 +14,23 @@
     <Filter Include="GL">
       <UniqueIdentifier>{bcd44663-d7f8-463c-a017-48e9537f25b6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GL\VAO">
-      <UniqueIdentifier>{ce2e103a-12ea-4bab-932e-bc195641d12b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GL\Shader">
-      <UniqueIdentifier>{95f54f6c-1c9a-4079-bcc7-ddd9db79383b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Timer">
-      <UniqueIdentifier>{a5c55c2f-7b11-4da2-ad6c-79ac7b28b8a9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\App">
       <UniqueIdentifier>{38b76ae9-edc1-4c6d-a084-3f8bfaf41bf2}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Event">
       <UniqueIdentifier>{fde7d0d6-237d-4797-9e9c-e7300bfe359f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GL\Texture">
+    <Filter Include="src\Timer">
+      <UniqueIdentifier>{a5c55c2f-7b11-4da2-ad6c-79ac7b28b8a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Texture">
       <UniqueIdentifier>{674b8723-5bb7-4a0c-85b7-f3fdd561f79c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Shader">
+      <UniqueIdentifier>{95f54f6c-1c9a-4079-bcc7-ddd9db79383b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Mesh">
+      <UniqueIdentifier>{ce2e103a-12ea-4bab-932e-bc195641d12b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -42,12 +42,6 @@
     </ClCompile>
     <ClCompile Include="GL\GLFuncs.cpp">
       <Filter>GL</Filter>
-    </ClCompile>
-    <ClCompile Include="GL\VAO\VAO.cpp">
-      <Filter>GL\VAO</Filter>
-    </ClCompile>
-    <ClCompile Include="GL\Shader\Shader.cpp">
-      <Filter>GL\Shader</Filter>
     </ClCompile>
     <ClCompile Include="src\Timer\Timer.cpp">
       <Filter>src\Timer</Filter>
@@ -61,8 +55,14 @@
     <ClCompile Include="src\View\Mouse.cpp">
       <Filter>src\View</Filter>
     </ClCompile>
-    <ClCompile Include="GL\Texture\Texture.cpp">
-      <Filter>GL\Texture</Filter>
+    <ClCompile Include="src\Shader\Shader.cpp">
+      <Filter>src\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Texture\Texture.cpp">
+      <Filter>src\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mesh\Mesh.cpp">
+      <Filter>src\Mesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -93,12 +93,6 @@
     <ClInclude Include="GL\GLFuncs.h">
       <Filter>GL</Filter>
     </ClInclude>
-    <ClInclude Include="GL\VAO\VAO.h">
-      <Filter>GL\VAO</Filter>
-    </ClInclude>
-    <ClInclude Include="GL\Shader\Shader.h">
-      <Filter>GL\Shader</Filter>
-    </ClInclude>
     <ClInclude Include="src\Timer\Timer.h">
       <Filter>src\Timer</Filter>
     </ClInclude>
@@ -111,8 +105,14 @@
     <ClInclude Include="src\View\Mouse.h">
       <Filter>src\View</Filter>
     </ClInclude>
-    <ClInclude Include="GL\Texture\Texture.h">
-      <Filter>GL\Texture</Filter>
+    <ClInclude Include="src\Shader\Shader.h">
+      <Filter>src\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Texture\Texture.h">
+      <Filter>src\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mesh\Mesh.h">
+      <Filter>src\Mesh</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

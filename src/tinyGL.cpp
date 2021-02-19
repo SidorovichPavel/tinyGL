@@ -92,6 +92,8 @@ namespace tgl
 		gl::uniformMatrix4fv = gl::LoadFunction<gl::PFNGLUNIFORMMATRIX4FVPROC>("glUniformMatrix4fv");
 		gl::getUniformLocation = gl::LoadFunction<gl::PFNGLGETUNIFORMLOCATIONPROC>("glGetUniformLocation");
 
+		gl::generateMipmap = gl::LoadFunction<gl::PFNGLGENERATEMIPMAPPROC>("glGenerateMipmap");
+
 		std::cout << "Done" << std::endl;
 
 		wglDeleteContext(gl_rc);
