@@ -64,6 +64,9 @@
     <ClCompile Include="src\Mesh\Mesh.cpp">
       <Filter>src\Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="src\Texture\TextureAtlas.cpp">
+      <Filter>src\Texture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\style\style.h">
@@ -113,6 +116,9 @@
     </ClInclude>
     <ClInclude Include="src\Mesh\Mesh.h">
       <Filter>src\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Texture\TextureAtlas.h">
+      <Filter>src\Texture</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

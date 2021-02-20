@@ -29,6 +29,7 @@
     <ClCompile Include="src\Mesh\Mesh.cpp" />
     <ClCompile Include="src\Timer\Timer.cpp" />
     <ClCompile Include="src\Texture\Texture.cpp" />
+    <ClCompile Include="src\Texture\TextureAtlas.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Event\Event.h" />
@@ -47,6 +48,7 @@
     <ClInclude Include="src\Mesh\Mesh.h" />
     <ClInclude Include="src\Timer\Timer.h" />
     <ClInclude Include="src\Texture\Texture.h" />
+    <ClInclude Include="src\Texture\TextureAtlas.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

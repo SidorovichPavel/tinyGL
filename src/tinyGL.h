@@ -4,6 +4,7 @@
 #include <src/Mesh/Mesh.h>
 #include <src/Shader/Shader.h>
 #include <src/Texture/Texture.h>
+#include <src/Texture/TextureAtlas.h>
 #include <src/Timer/Timer.h>
 #include <src/App/App.h>
 #include <GL/GLFuncs.h>
