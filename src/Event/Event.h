@@ -62,7 +62,13 @@ namespace tgl
 		{
 			mReciversF.push_back(_Fn);
 		}
-
+		size_t detach_all()
+		{
+			size_t result = mReciversM.size() + mReciversF.size();
+			mReciversM.clear();
+			mReciversF.clear();
+			return result;
+		}
 		Ret operator()(Args... args)
 		{
 			if constexpr (std::is_same<Ret, void>::value)

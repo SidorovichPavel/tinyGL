@@ -65,7 +65,7 @@ namespace tgl
 					}
 
 			#ifdef _DEBUG
-			SOIL_save_image("res/atlas.bmp", SOIL_SAVE_TYPE_BMP, finalWidth, finalHeight, 3, result.data());
+			//SOIL_save_image("res/atlas.bmp", SOIL_SAVE_TYPE_BMP, finalWidth, finalHeight, 3, result.data());
 			#endif
 
 			bind();
