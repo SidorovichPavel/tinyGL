@@ -70,7 +70,7 @@ namespace tgl
 
 			bind();
 			gl::glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, finalWidth, finalHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, result.data());
-			gl::generateMipmap(GL_TEXTURE_2D);
+			gl::GenerateMipmap(GL_TEXTURE_2D);
 			for (auto& im : images)
 				SOIL_free_image_data(im);
 			unbind();

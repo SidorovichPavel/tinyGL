@@ -11,14 +11,14 @@ namespace tgl
 		mIndicesCount(0),
 		mBuffer(0)
 	{
-		gl::genVertexArrays(1, &mVAO);
+		gl::GenVertexArrays(1, &mVAO);
 	}
 
 	Mesh::~Mesh()
 	{
-		gl::deleteBuffers(1, &mBuffer);
-		gl::deleteBuffers(1, &mIndicesBuffer);
-		gl::deleteVertexArrays(1, &mVAO);
+		gl::DeleteBuffers(1, &mBuffer);
+		gl::DeleteBuffers(1, &mIndicesBuffer);
+		gl::DeleteVertexArrays(1, &mVAO);
 	}
 
 	void Mesh::draw(uint32_t _GLType)
@@ -31,18 +31,18 @@ namespace tgl
 	void Mesh::toggle_attribut(uint32_t _Count, bool _Enable)
 	{
 		_Enable
-			? gl::enableVertexAttribArray(_Count)
-			: gl::disableVertexAttribArray(_Count);
+			? gl::EnableVertexAttribArray(_Count)
+			: gl::DisableVertexAttribArray(_Count);
 	}
 
 	void Mesh::bind()
 	{
-		gl::bindVertexArray(mVAO);
+		gl::BindVertexArray(mVAO);
 	}
 
 	void Mesh::unbind()
 	{
-		gl::bindVertexArray(0);
+		gl::BindVertexArray(0);
 	}
 
 	void Mesh::set_indices(size_t _Count, uint32_t* _Elems)
@@ -52,9 +52,9 @@ namespace tgl
 
 		bind();
 
-		gl::genBuffers(1, &mIndicesBuffer);
-		gl::bindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndicesBuffer);
-		gl::bufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32_t) * mIndicesCount, _Elems, GL_DYNAMIC_DRAW);
+		gl::GenBuffers(1, &mIndicesBuffer);
+		gl::BindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndicesBuffer);
+		gl::BufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32_t) * mIndicesCount, _Elems, GL_STATIC_DRAW);
 
 		unbind();
 	}

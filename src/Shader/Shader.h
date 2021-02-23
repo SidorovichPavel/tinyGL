@@ -26,6 +26,8 @@ namespace tgl
 		void uniform_matrix4f(const std::string& name, void* ptr);
 		void uniform_vector4f(const std::string& name, void* ptr);
 		void uniform_vector3f(const std::string& name, void* ptr);
+
+		void uniform_int(const std::string& name, int _Value);
 	};
 
 

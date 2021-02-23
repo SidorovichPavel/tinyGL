@@ -18,7 +18,7 @@ namespace tgl
 		gl::glGenTextures(1, &mHandle);
 		gl::glBindTexture(GL_TEXTURE_2D, mHandle);
 		gl::glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mWidth, mHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-		gl::generateMipmap(GL_TEXTURE_2D);
+		gl::GenerateMipmap(GL_TEXTURE_2D);
 
 		SOIL_free_image_data(image);
 		gl::glBindTexture(GL_TEXTURE_2D, 0);

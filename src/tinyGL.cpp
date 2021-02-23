@@ -62,38 +62,46 @@ namespace tgl
 		
 		std::cout << "Loading OpenGL extentions..." << std::endl;
 
-		gl::genVertexArrays = gl::LoadFunction<gl::PFNGLGENVERTEXARRAYSPROC>("glGenVertexArrays");
-		gl::vertexArrtibPointer = gl::LoadFunction<gl::PFNGLVERTEXATTRIBPOINTERPROC>("glVertexAttribPointer");
-		gl::bindVertexArray = gl::LoadFunction<gl::PFNGLBINDVERTEXARRAYPROC>("glBindVertexArray");
-		gl::enableVertexAttribArray = gl::LoadFunction<gl::PFNGLENABLEVERTEXATTRIBARRAYPROC>("glEnableVertexAttribArray");
-		gl::disableVertexAttribArray = gl::LoadFunction<gl::PFNGLDISABLEVERTEXATTRIBARRAYPROC>("glDisableVertexAttribArray");
-		gl::deleteVertexArrays = gl::LoadFunction<gl::PFNGLDELETEVERTEXARRAYSPROC>("glDeleteVertexArrays");
+		#define GL_INIT_FUNC(name, type, gl_name) name = gl::tgl_func<type>::LoadFunction(#gl_name)
+		#define GL_INIT(type, name) GL_INIT_FUNC(gl::name, gl::type, gl##name)
 
-		gl::genBuffers = gl::LoadFunction<gl::PFNGLGENBUFFERSPROC>("glGenBuffers");
-		gl::bindBuffer = gl::LoadFunction<gl::PFNGLBINDBUFFERPROC>("glBindBuffer");
-		gl::bufferData = gl::LoadFunction<gl::PFNGLBUFFERDATAPROC>("glBufferData");
-		gl::deleteBuffers = gl::LoadFunction<gl::PFNGLDELETEBUFFERSPROC>("glDeleteBuffers");
+		GL_INIT(PFNGLGENBUFFERSPROC, GenBuffers);
+		GL_INIT(PFNGLBINDBUFFERPROC, BindBuffer);
+		GL_INIT(PFNGLBUFFERDATAPROC, BufferData);
+		GL_INIT(PFNGLDELETEBUFFERSPROC, DeleteBuffers);
 
-		gl::createProgram = gl::LoadFunction<gl::PFNGLCREATEPROGRAMPROC>("glCreateProgram");
-		gl::deleteProgram = gl::LoadFunction<gl::PFNGLDELETEPROGRAMPROC>("glDeleteProgram");
-		gl::createShader = gl::LoadFunction<gl::PFNGLCREATESHADERPROC>("glCreateShader");
-		gl::shaderSource = gl::LoadFunction<gl::PFNGLSHADERSOURCEPROC>("glShaderSource");
-		gl::compileShader = gl::LoadFunction<gl::PFNGLCOMPILESHADERPROC>("glCompileShader");
-		gl::getShaderiv = gl::LoadFunction<gl::PFNGLGETSHADERIVPROC>("glGetShaderiv");
-		gl::attachShader = gl::LoadFunction<gl::PFNGLATTACHSHADERPROC>("glAttachShader");
-		gl::linkProgram = gl::LoadFunction<gl::PFNGLLINKPROGRAMPROC>("glLinkProgram");
-		gl::useProgram = gl::LoadFunction<gl::PFNGLUSEPROGRAMPROC>("glUseProgram");
-		gl::detachShader = gl::LoadFunction<gl::PFNGLDETACHSHADERPROC>("glDetachShader");
-		gl::deleteShader = gl::LoadFunction<gl::PFNGLDELETESHADERPROC>("glDeleteShader");
-		gl::getShaderInfoLog = gl::LoadFunction<gl::PFNGLGETSHADERINFOLOGPROC>("glGetShaderInfoLog");
-		gl::bindAttribLocation = gl::LoadFunction<gl::PFNGLBINDATTRIBLOCATIONPROC>("glBindAttribLocation");
-		gl::uniformVector3fv = gl::LoadFunction<gl::PFNGLUNIFORM3FVPROC>("glUniform3fv");
-		gl::uniformVector4fv = gl::LoadFunction<gl::PFNGLUNIFORM4FVPROC>("glUniform4fv");
-		gl::uniformMatrix4fv = gl::LoadFunction<gl::PFNGLUNIFORMMATRIX4FVPROC>("glUniformMatrix4fv");
-		gl::getUniformLocation = gl::LoadFunction<gl::PFNGLGETUNIFORMLOCATIONPROC>("glGetUniformLocation");
+		GL_INIT(PFNGLGENVERTEXARRAYSPROC, GenVertexArrays);
+		GL_INIT(PFNGLVERTEXATTRIBPOINTERPROC, VertexAttribPointer);
+		GL_INIT(PFNGLBINDVERTEXARRAYPROC, BindVertexArray);
+		GL_INIT(PFNGLENABLEVERTEXATTRIBARRAYPROC, EnableVertexAttribArray);
+		GL_INIT(PFNGLDISABLEVERTEXATTRIBARRAYPROC, DisableVertexAttribArray);
+		GL_INIT(PFNGLDELETEVERTEXARRAYSPROC, DeleteVertexArrays);
 
-		gl::generateMipmap = gl::LoadFunction<gl::PFNGLGENERATEMIPMAPPROC>("glGenerateMipmap");
+		GL_INIT(PFNGLCREATEPROGRAMPROC, CreateProgram);
+		GL_INIT(PFNGLDELETEPROGRAMPROC, DeleteProgram);
+		GL_INIT(PFNGLCREATESHADERPROC, CreateShader);
+		GL_INIT(PFNGLSHADERSOURCEPROC, ShaderSource);
+		GL_INIT(PFNGLCOMPILESHADERPROC, CompileShader);
+		GL_INIT(PFNGLGETSHADERIVPROC, GetShaderiv);
+		GL_INIT(PFNGLATTACHSHADERPROC, AttachShader);
+		GL_INIT(PFNGLLINKPROGRAMPROC, LinkProgram);
+		GL_INIT(PFNGLUSEPROGRAMPROC, UseProgram);
+		GL_INIT(PFNGLDELETESHADERPROC, DeleteShader);
+		GL_INIT(PFNGLDETACHSHADERPROC, DetachShader);
+		GL_INIT(PFNGLGETSHADERINFOLOGPROC, GetShaderInfoLog);
+		GL_INIT(PFNGLBINDATTRIBLOCATIONPROC, BindAttribLocation);
+		GL_INIT(PFNGLGETUNIFORMLOCATIONPROC, GetUniformLocation);
 
+		GL_INIT(PFNGLUNIFORMMATRIX4FVPROC, UniformMatrix4fv);
+		GL_INIT(PFNGLUNIFORM4FVPROC, Uniform4fv);
+		GL_INIT(PFNGLUNIFORM3FVPROC, Uniform3fv);
+		GL_INIT(PFNGLUNIFORM1IPROC, Uniform1i);
+
+		GL_INIT(PFNGLACTIVETEXTUREPROC, ActiveTexture);
+		GL_INIT(PFNGLGENERATEMIPMAPPROC, GenerateMipmap);
+
+		GL_INIT(PFNGLDEBUGMESSAGECALLBACKPROC, DebugMessageCallback);
+		
 		std::cout << "Done" << std::endl;
 
 		wglDeleteContext(gl_rc);

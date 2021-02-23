@@ -54,20 +54,24 @@ namespace tgl
 		template<size_t... _Args>
 		void add_attribut(size_t _Count, const float* _Data)
 		{
-			gl::genBuffers(1, &mBuffer);
-			gl::bindBuffer(GL_ARRAY_BUFFER, mBuffer);
-			gl::bufferData(GL_ARRAY_BUFFER, int64_t(_Count * sizeof(float)), _Data, GL_DYNAMIC_DRAW);
+			bind();
+
+			gl::GenBuffers(1, &mBuffer);
+			gl::BindBuffer(GL_ARRAY_BUFFER, mBuffer);
+			gl::BufferData(GL_ARRAY_BUFFER, int64_t(_Count * sizeof(float)), _Data, GL_STATIC_DRAW);
 
 			mVertexSize = sizeof(float) * hide::unpack_sequence<_Args...>::get_sum();
 			auto offset = 0;
 			for (auto i = 0; i < sizeof...(_Args); ++i)
 			{
 				auto elem = hide::unpack_sequence<_Args...>::get(i);
-				gl::vertexArrtibPointer(i, (int32_t)elem, GL_FLOAT, GL_FALSE, (uint32_t)mVertexSize, reinterpret_cast<const void*>(offset));
-				gl::enableVertexAttribArray(i);
+				gl::VertexAttribPointer(i, (int32_t)elem, GL_FLOAT, GL_FALSE, (uint32_t)mVertexSize, reinterpret_cast<const void*>(offset));
+				gl::EnableVertexAttribArray(i);
 
 				offset += static_cast<uint32_t>(sizeof(float) * elem);
 			}
+
+			unbind();
 		}
 
 	};
