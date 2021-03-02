@@ -11,6 +11,8 @@ namespace tgl
 	public:
 		int32_t x, lastX;
 		int32_t y, lastY;
+		bool lb_press;
+		bool rb_press;
 
 		Mouse(int32_t _x = 0, int32_t _y = 0);
 		Mouse(const Mouse&) = delete;
@@ -19,6 +21,8 @@ namespace tgl
 
 		int32_t dx() noexcept;
 		int32_t dy() noexcept;
+
+		//bool lb_down();
 
 		Mouse& operator=(const Mouse&) = default;
 		Mouse& operator=(const std::pair<int32_t, int32_t>& _Right);

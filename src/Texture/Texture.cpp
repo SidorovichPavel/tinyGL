@@ -29,6 +29,25 @@ namespace tgl
 		gl::glDeleteTextures(1, &mHandle);
 	}
 
+	Texture2D::Texture2D(Texture2D&& _Other) noexcept
+		:
+		mHandle(0),
+		mWidth(0),
+		mHeight(0)
+	{
+		std::swap(this->mHandle, _Other.mHandle);
+		std::swap(this->mWidth, _Other.mWidth);
+		std::swap(this->mHeight, _Other.mHeight);
+	}
+
+	Texture2D& Texture2D::operator=(Texture2D&& _Right) noexcept
+	{
+		std::swap(this->mHandle, _Right.mHandle);
+		std::swap(this->mWidth, _Right.mWidth);
+		std::swap(this->mHeight, _Right.mHeight);
+		return *this;
+	}
+
 	void Texture2D::bind(int32_t _Target)
 	{
 		gl::glBindTexture(_Target, mHandle);

@@ -49,9 +49,6 @@
     <ClCompile Include="src\App\App.cpp">
       <Filter>src\App</Filter>
     </ClCompile>
-    <ClCompile Include="src\Event\Event.cpp">
-      <Filter>src\Event</Filter>
-    </ClCompile>
     <ClCompile Include="src\View\Mouse.cpp">
       <Filter>src\View</Filter>
     </ClCompile>

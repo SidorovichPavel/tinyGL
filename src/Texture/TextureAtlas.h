@@ -75,9 +75,6 @@ namespace tgl
 				SOIL_free_image_data(im);
 			unbind();
 		}
-
-
-
 	};
 
 }

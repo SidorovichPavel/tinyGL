@@ -6,7 +6,9 @@ namespace tgl
 	Mouse::Mouse(int32_t _x, int32_t _y)
 		:
 		x(_x), lastX(0),
-		y(_y), lastY(0)
+		y(_y), lastY(0),
+		lb_press(false),
+		rb_press(false)
 	{}
 
 	Mouse::~Mouse()

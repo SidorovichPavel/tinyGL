@@ -26,10 +26,7 @@ namespace tgl
 		struct tgl_func<Ret(*)(Params...)>			
 		{		
 			using func_t = Ret(Params...);
-			static Ret call(Params&&... args) {	
-				genBuffers(std::forward<Params>(args)...);
-				return;								
-			}
+			
 			static std::function<Ret(Params...)> LoadFunction(const char* _Func_Name)
 			{
 				void* data = tgl::win::wglGetProcAddress(_Func_Name);

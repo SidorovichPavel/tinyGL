@@ -18,7 +18,9 @@ namespace tgl
 
 	View::View(const int width, const int height, const std::wstring& title, const Style& style) :
 		mWidth(width),
-		mHeight(height)
+		mHeight(height),
+		mGL_resource_content(0),
+		mMouseRawInput(false)
 	{
 		WNDCLASSEX wc = { sizeof(wc) };
 		wc.hbrBackground = reinterpret_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
@@ -46,23 +48,6 @@ namespace tgl
 		}
 		else
 			throw std::runtime_error("window create failed!");
-
-		init_opengl();
-	}
-
-	View::View(View&& _Right) noexcept
-	{
-		std::swap(mWinGlobalSize, _Right.mWinGlobalSize);
-		std::swap(mGL_resource_content, _Right.mGL_resource_content);
-		std::swap(this->mHandle, _Right.mHandle);
-		std::swap(this->mIsOpen, _Right.mIsOpen);
-		std::swap(this->mDevice_context, _Right.mDevice_context);
-		std::swap(this->mWidth, _Right.mWidth);
-		std::swap(this->mHeight, _Right.mHeight);
-		auto tpWinView = GetWindowLongPtr(this->mHandle, GWLP_USERDATA);
-		auto rpWinView = GetWindowLongPtr(_Right.mHandle, GWLP_USERDATA);
-		SetWindowLongPtr(this->mHandle, GWLP_USERDATA, rpWinView);
-		SetWindowLongPtr(_Right.mHandle, GWLP_USERDATA, tpWinView);
 	}
 
 	View::~View()
@@ -101,7 +86,7 @@ namespace tgl
 		switch (uMsg)
 		{
 		case WM_CREATE:
-			create_event();
+			create_event(hWnd);
 			break;
 		case WM_SIZE:
 			win::GetWindowRect(mHandle, &mWinGlobalSize);
@@ -128,18 +113,36 @@ namespace tgl
 			mouse_wheel_event(GET_KEYSTATE_WPARAM(wParam), GET_WHEEL_DELTA_WPARAM(wParam),
 							  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 			break;
+		case WM_LBUTTONDOWN:
+			mouse_lbutton_down(static_cast<int64_t>(wParam),
+							   GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+			break;
+		case WM_LBUTTONUP:
+			mouse_lbutton_up(static_cast<int64_t>(wParam),
+							   GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+			break;
+		case WM_RBUTTONDOWN:
+			mouse_rbutton_down(static_cast<int64_t>(wParam),
+							   GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+			break;
+		case WM_RBUTTONUP:
+			mouse_rbutton_up(static_cast<int64_t>(wParam),
+							   GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+			break;
 		case WM_INPUT:
 		{
 			UINT size = 0;
 			HRAWINPUT ri = (HRAWINPUT)lParam;
 
 			GetRawInputData(ri, RID_INPUT, NULL, &size, sizeof(RAWINPUTHEADER));
-			uint8_t* data = new uint8_t[size];
+			std::vector<uint8_t> data(size);
 
-			if (GetRawInputData(ri, RID_INPUT, data, &size, sizeof(RAWINPUTHEADER)) != size)
+			if (GetRawInputData(ri, RID_INPUT, data.data(), &size, sizeof(RAWINPUTHEADER)) != size)
 				break;
 			
-			RAWINPUT* raw = reinterpret_cast<RAWINPUT*>(data);
+			RAWINPUT* raw = reinterpret_cast<RAWINPUT*>(data.data());
+
+			raw_input_event(raw);
 
 			switch (raw->header.dwType)
 			{
@@ -155,8 +158,6 @@ namespace tgl
 				mouse_raw_input_event(mVirtualMouse.dx(), mVirtualMouse.dy());
 				break;
 			}
-
-			delete[] data;
 		}
 		break;
 		default:
@@ -217,9 +218,9 @@ namespace tgl
 
 	void View::show_cursor(bool mode)
 	{
-		win::ShowCursor(static_cast<int>(mode));
 		if (!mode)
 		{
+			win::ShowCursor(FALSE);
 			enable_mouse_raw_input();
 			win::RECT coords{ mWinGlobalSize.left + 50, mWinGlobalSize.top + 50,
 				mWinGlobalSize.right - 50,mWinGlobalSize.bottom - 50 };
@@ -227,6 +228,7 @@ namespace tgl
 		}
 		else
 		{
+			win::ShowCursor(TRUE);
 			win::ClipCursor(nullptr);
 			disable_mouse_raw_input();
 		}

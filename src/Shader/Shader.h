@@ -16,8 +16,10 @@ namespace tgl
 	public:
 		Shader(const std::string& shader_pack_name);
 		~Shader();
-		Shader(const Shader&) = default;
+		Shader(const Shader&) = delete;
+		Shader& operator=(const Shader&) = delete;
 		Shader(Shader&&) = default;
+		Shader& operator=(Shader&&) = default;
 
 		void link();
 		void bind_attribute(unsigned index, const std::string& name);

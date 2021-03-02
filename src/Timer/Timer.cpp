@@ -1,5 +1,8 @@
 #include <src/Timer/Timer.h>
 
+
+#pragma warning(disable:26495)
+
 namespace tgl
 {
 	void Timer::STimerProc(win::HWND _Wnd, win::UINT _Msg, win::UINT_PTR _Handle, win::DWORD _Ms)
@@ -9,20 +12,22 @@ namespace tgl
 	}
 
 	Timer::Timer(win::HWND _Win, unsigned _Delay) :
-		mCheck(false),
 		mHandle(reinterpret_cast<win::UINT_PTR>(this))
 	{
 		win::SetTimer(_Win, mHandle, _Delay, Timer::STimerProc);
 	}
 
-	bool Timer::check()
+	Timer::Timer(Timer&& _Other) noexcept
 	{
-		return mCheck;
+		this->mHandle = _Other.mHandle;
+		booom.swap(&_Other.booom);
 	}
 
-	void Timer::reset()
+	Timer& Timer::operator=(Timer&& _Right) noexcept
 	{
-		mCheck = false;
+		this->mHandle = _Right.mHandle;
+		booom.swap(&_Right.booom);
+		return *this;
 	}
 
 	Timer::~Timer()

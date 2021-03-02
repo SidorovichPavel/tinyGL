@@ -1,12 +1,12 @@
 ﻿#pragma once
 
+#include <atomic>
 #include <string>
 #include <src/style/style.h>
 #include <src/Event/Event.h>
 #include <src/View/Mouse.h>
 
 namespace tgl {
-
 	#ifdef _WIN32
 	namespace win
 	{
@@ -14,8 +14,6 @@ namespace tgl {
 		#include <Windows.h>
 		#include <windowsx.h>
 		#include <WinUser.h>
-
-		constexpr unsigned MSG_GETRIBUFFER = WM_USER + 1;
 	}
 
 	class View final
@@ -24,6 +22,7 @@ namespace tgl {
 		win::HDC mDevice_context;
 		win::HGLRC mGL_resource_content;
 		win::LRESULT WinProc(win::HWND, win::UINT, win::WPARAM, win::LPARAM) noexcept;
+
 		static win::LRESULT CALLBACK SWinProc(win::HWND, win::UINT, win::WPARAM, win::LPARAM) noexcept;
 
 		bool mIsOpen;
@@ -31,7 +30,10 @@ namespace tgl {
 		
 		Mouse mVirtualMouse;
 	public:
-		Event<void()> create_event;
+		/*desc
+		* window handel for you)
+		*/
+		Event<void(const win::HWND)> create_event;
 		/*desc
 		* x, y
 		*/
@@ -68,20 +70,45 @@ namespace tgl {
 		*/
 		Event<void(int32_t, int32_t)>move_event;
 
-		Event<void(void)> raw_input_event;
+		Event<void(const win::RAWINPUT*)> raw_input_event;
 
 		Event<void(win::RECT*)> moving_event;
 
 		Event<void(int32_t, int32_t)> mouse_raw_input_event;
+		/*desc
+		* first - additional flags. read msdn
+		* second x position
+		* thirt y positon
+		*/
+		Event<void(int64_t, int32_t, int32_t)> mouse_lbutton_down;
+		/*desc
+		* first - additional flags. read msdn
+		* second x position
+		* thirt y positon
+		*/
+		Event<void(int64_t, int32_t, int32_t)> mouse_lbutton_up;
+		/*desc
+		* first - additional flags. read msdn
+		* second x position
+		* thirt y positon
+		*/
+		Event<void(int64_t, int32_t, int32_t)> mouse_rbutton_down;
+		/*desc
+		* first - additional flags. read msdn
+		* second x position
+		* thirt y positon
+		*/
+		Event<void(int64_t, int32_t, int32_t)> mouse_rbutton_up;
 
 		int mWidth, mHeight;
 		win::RECT mWinGlobalSize;
 
 		View(const int width, const int height, const std::wstring& title, const Style& style = Style());
 		View(const View& _Right) = delete;
-		View(View&& _Right) noexcept;
+		View(View&& _Right) = delete;
 		~View();
 
+		void init_opengl();
 		win::HWND get_handle() noexcept;
 		void enable_mouse_raw_input();
 		void disable_mouse_raw_input();
@@ -92,10 +119,7 @@ namespace tgl {
 		bool is_open() noexcept;
 		void swap_buffers() noexcept;
 		void enale_opengl_context() noexcept;
-		void destroy() noexcept;
-
-	private:
-		void init_opengl();
+		void destroy() noexcept;	
 	};
 
 

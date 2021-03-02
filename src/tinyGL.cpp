@@ -6,6 +6,8 @@
 
 namespace tgl
 {
+	std::atomic<bool> opengl_is_init = false;
+
 	void event_pool() noexcept
 	{
 	#ifdef _WIN32
@@ -24,6 +26,8 @@ namespace tgl
 	void Init()
 	{
 #ifdef _WIN32
+		if (opengl_is_init)
+			return;
 		using namespace win;
 		HWND handle = CreateWindowEx(0, L"button", L"", WS_POPUP, 0, 0, 0, 0, 0, 0, 0, 0);
 		if (!handle)
@@ -106,10 +110,56 @@ namespace tgl
 
 		wglDeleteContext(gl_rc);
 		DestroyWindow(handle);
+
+		opengl_is_init = true;
 #else
 
 #endif
 	}
 	
+	void callback(uint32_t source, uint32_t type, uint32_t id, uint32_t severity, int32_t length, char const* message, void const* user_param)
+	{
+		auto source_str = [source] () -> std::string {
+			switch (source)
+			{
+			case GL_DEBUG_SOURCE_API: return "API";
+			case GL_DEBUG_SOURCE_WINDOW_SYSTEM: return "WINDOW SYSTEM";
+			case GL_DEBUG_SOURCE_SHADER_COMPILER: return "SHADER COMPILER";
+			case GL_DEBUG_SOURCE_THIRD_PARTY:  return "THIRD PARTY";
+			case GL_DEBUG_SOURCE_APPLICATION: return "APPLICATION";
+			case GL_DEBUG_SOURCE_OTHER: return "OTHER";
+			default: return "UNKNOWN";
+			}
+		}();
 
+		auto type_str = [type] () {
+			switch (type)
+			{
+			case GL_DEBUG_TYPE_ERROR: return "ERROR";
+			case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: return "DEPRECATED_BEHAVIOR";
+			case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR: return "UNDEFINED_BEHAVIOR";
+			case GL_DEBUG_TYPE_PORTABILITY: return "PORTABILITY";
+			case GL_DEBUG_TYPE_PERFORMANCE: return "PERFORMANCE";
+			case GL_DEBUG_TYPE_MARKER:  return "MARKER";
+			case GL_DEBUG_TYPE_OTHER: return "OTHER";
+			default: return "UNKNOWN";
+			}
+		}();
+
+		auto severity_str = [severity] () {
+			switch (severity) {
+			case GL_DEBUG_SEVERITY_NOTIFICATION: return "NOTIFICATION";
+			case GL_DEBUG_SEVERITY_LOW: return "LOW";
+			case GL_DEBUG_SEVERITY_MEDIUM: return "MEDIUM";
+			case GL_DEBUG_SEVERITY_HIGH: return "HIGH";
+			default: return "UNKNOWN";
+			}
+		}();
+
+		std::cout << source_str << ", "
+			<< type_str << ", "
+			<< severity_str << ", "
+			<< id << ": "
+			<< message << std::endl;
+	}
 }
