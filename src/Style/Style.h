@@ -1,9 +1,9 @@
 namespace tgl
 {
-	class Style
+	/*class Style
 	{
 	public:
 		Style() {};
 		~Style() {};
-	};
+	};*/
 }

@@ -32,13 +32,19 @@
     <Filter Include="src\Mesh">
       <UniqueIdentifier>{ce2e103a-12ea-4bab-932e-bc195641d12b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\View\Controls">
+      <UniqueIdentifier>{040a8c68-08c9-43d8-876d-47c063d27797}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\View\Edit">
+      <UniqueIdentifier>{5877175e-8546-40b0-8a8b-2970e375b9b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\View\Font">
+      <UniqueIdentifier>{e53106d2-4667-4059-818f-9a5d8ba9a3a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\tinyGL.cpp">
       <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\View\View.cpp">
-      <Filter>src\View</Filter>
     </ClCompile>
     <ClCompile Include="GL\GLFuncs.cpp">
       <Filter>GL</Filter>
@@ -63,6 +69,15 @@
     </ClCompile>
     <ClCompile Include="src\Texture\TextureAtlas.cpp">
       <Filter>src\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="src\View\Controls\Edit\EditControl.cpp">
+      <Filter>src\View\Edit</Filter>
+    </ClCompile>
+    <ClCompile Include="src\View\Controls\Font\Font.cpp">
+      <Filter>src\View\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="src\View\ViewDetail.cpp">
+      <Filter>src\View</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -117,5 +132,18 @@
     <ClInclude Include="src\Texture\TextureAtlas.h">
       <Filter>src\Texture</Filter>
     </ClInclude>
+    <ClInclude Include="src\View\Controls\Edit\EditControl.h">
+      <Filter>src\View\Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="src\View\Controls\IControls.h">
+      <Filter>src\View\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="src\View\Controls\Font\Font.h">
+      <Filter>src\View\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="src\View\ViewDetail.h">
+      <Filter>src\View</Filter>
+    </ClInclude>
+    <ClInclude Include="src\View\ViewTypes.h" />
   </ItemGroup>
 </Project>

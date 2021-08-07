@@ -8,16 +8,22 @@ namespace tgl
 {
 	std::atomic<bool> opengl_is_init = false;
 
-	void event_pool() noexcept
+	int event_pool(void(*render_func)()) noexcept
 	{
 	#ifdef _WIN32
-		win::MSG msg;
-		if (win::PeekMessage(&msg, nullptr, 0, 0, PM_NOREMOVE))
+		win::MSG msg{};
+		for (
+			auto ok = 1; ok > 0;
+			ok = win::GetMessage(&msg, 0, 0, 0)
+			)
 		{
-			win::GetMessage(&msg, nullptr, 0, 0);
 			win::TranslateMessage(&msg);
 			win::DispatchMessage(&msg);
+
+			render_func();
 		}
+
+		return msg.wParam;
 	#else
 		//TODO
 	#endif

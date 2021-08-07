@@ -9,6 +9,17 @@ namespace tgl
 #include<Windows.h>
 	}
 #endif
+
+
+
+	class IUserData
+	{
+	public:
+		IUserData();
+		virtual ~IUserData();
+		void virtual call() = 0;
+	};
+
 	class App
 	{
 	public:

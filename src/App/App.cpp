@@ -4,6 +4,12 @@
 
 namespace tgl
 {
+	IUserData::IUserData()
+	{}
+
+	IUserData::~IUserData()
+	{}
+
 	void App::Init(int argn, char** argc)
 	{
 
@@ -14,7 +20,7 @@ namespace tgl
 		#ifdef _WIN32
 		win::MSG msg;
 		size_t nextUpdate{};
-		size_t fpsLock{ 1000 / 120 };
+		constexpr size_t fpsLock = 1000/60;
 
 		while (true)
 		{

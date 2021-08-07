@@ -23,12 +23,14 @@
     <ClCompile Include="src\Shader\Shader.cpp" />
     <ClCompile Include="src\App\App.cpp" />
     <ClCompile Include="src\tinyGL.cpp" />
+    <ClCompile Include="src\View\Controls\Edit\EditControl.cpp" />
+    <ClCompile Include="src\View\Controls\Font\Font.cpp" />
     <ClCompile Include="src\View\Mouse.cpp" />
-    <ClCompile Include="src\View\View.cpp" />
     <ClCompile Include="src\Mesh\Mesh.cpp" />
     <ClCompile Include="src\Timer\Timer.cpp" />
     <ClCompile Include="src\Texture\Texture.cpp" />
     <ClCompile Include="src\Texture\TextureAtlas.cpp" />
+    <ClCompile Include="src\View\ViewDetail.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Event\Event.h" />
@@ -42,12 +44,17 @@
     <ClInclude Include="src\App\App.h" />
     <ClInclude Include="src\style\style.h" />
     <ClInclude Include="src\tinyGL.h" />
+    <ClInclude Include="src\View\Controls\Edit\EditControl.h" />
+    <ClInclude Include="src\View\Controls\Font\Font.h" />
+    <ClInclude Include="src\View\Controls\IControls.h" />
     <ClInclude Include="src\View\Mouse.h" />
     <ClInclude Include="src\View\View.h" />
     <ClInclude Include="src\Mesh\Mesh.h" />
     <ClInclude Include="src\Timer\Timer.h" />
     <ClInclude Include="src\Texture\Texture.h" />
     <ClInclude Include="src\Texture\TextureAtlas.h" />
+    <ClInclude Include="src\View\ViewDetail.h" />
+    <ClInclude Include="src\View\ViewTypes.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -122,6 +129,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\SOIL\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -144,6 +152,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\SOIL\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -175,7 +184,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>opengl32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Windows\System32;$(SolutionDir)$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Windows\System32;$(SolutionDir)..\SOIL\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -201,7 +210,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>opengl32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Windows\System32;$(SolutionDir)$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Windows\System32;$(SolutionDir)..\SOIL\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
