@@ -23,7 +23,7 @@ namespace tgl
 		struct tgl_func {};
 
 		template<class Ret, class... Params>		
-		struct tgl_func<Ret(*)(Params...)>			
+		struct tgl_func<Ret(__stdcall*)(Params...)>			
 		{		
 			using func_t = Ret(Params...);
 			
@@ -45,7 +45,7 @@ namespace tgl
 			}
 		};
 
-		#define GL_EXTERN_DECL(type, name) extern std::function<typename tgl_func<type>::func_t> name
+		#define GL_EXTERN_DECL(type, name) extern std::function<typename tgl_func< type >::func_t> name
 
 		GL_EXTERN_DECL(PFNGLGENBUFFERSPROC, GenBuffers);
 		GL_EXTERN_DECL(PFNGLBINDBUFFERPROC, BindBuffer);

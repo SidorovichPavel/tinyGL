@@ -10,15 +10,7 @@
 #include <src/View/ViewDetail.h>
 
 namespace tgl {
-	#ifdef _WIN32
-	namespace win
-	{
-		#define WIN32_LEAN_AND_MEAN
-		#include <Windows.h>
-		#include <windowsx.h>
-		#include <WinUser.h>
-	}
-
+	
 	template<class Handler>
 	class View final : public Handler
 	{
@@ -50,12 +42,6 @@ namespace tgl {
 			mControls.push_back(_Control);
 		}
 	};
-
-
-
-	#endif
-
-
 
 }
 
