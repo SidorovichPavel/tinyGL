@@ -45,7 +45,7 @@ namespace tgl
 	template<class T>
 	class Event 
 	{
-		static_assert("No... Pleas, use that: Event(<return_t(arguments_t)>)");
+		static_assert("No... Pleas, use that: Event(<return_t(arguments_t...)>)");
 	};
 
 	template<class Ret, class... Args>

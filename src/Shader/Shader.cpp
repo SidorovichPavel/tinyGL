@@ -6,6 +6,51 @@
 
 namespace tgl
 {
+	Shader::Shader(const std::string& shader_pack_name)
+	{
+		mProgram = gl::CreateProgram();
+		mVertexShader = load_shader("res/glsl/" + shader_pack_name + ".vert", GL_VERTEX_SHADER);
+		mFragmentShader = load_shader("res/glsl/" + shader_pack_name + ".frag", GL_FRAGMENT_SHADER);
+		//auto GeometryShader = compile_shader(gsh_code, GL_GEOMETRY_SHADER);
+
+		link();
+	}
+
+	Shader::~Shader()
+	{
+		gl::DetachShader(mProgram, mVertexShader);
+		gl::DetachShader(mProgram, mFragmentShader);
+		gl::DeleteShader(mVertexShader);
+		gl::DeleteShader(mFragmentShader);
+		gl::DeleteProgram(mProgram);
+	}
+
+	Shader::Shader(Shader&& _Other) noexcept
+	{
+		mProgram = _Other.mProgram; 
+		_Other.mProgram = 0;
+		
+		mVertexShader = _Other.mVertexShader;
+		_Other.mVertexShader = 0;
+
+		mFragmentShader = _Other.mFragmentShader;
+		_Other.mFragmentShader = 0;
+	}
+
+	Shader& Shader::operator=(Shader&& _Right) noexcept
+	{
+		mProgram = _Right.mProgram;
+		_Right.mProgram = 0;
+
+		mVertexShader = _Right.mVertexShader;
+		_Right.mVertexShader = 0;
+
+		mFragmentShader = _Right.mFragmentShader;
+		_Right.mFragmentShader = 0;
+
+		return *this;
+	}
+
 	unsigned Shader::load_shader(const std::string& shader_file_name, gl::GLenum shader_type)
 	{
 		unsigned shader = gl::CreateShader(shader_type);
@@ -30,21 +75,15 @@ namespace tgl
 			throw std::runtime_error(log);
 	}
 
-	Shader::Shader(const std::string& shader_pack_name)
-	{
-		mProgram = gl::CreateProgram();
-		mVertexShader = load_shader("res/glsl/" + shader_pack_name + ".vert", GL_VERTEX_SHADER);
-		mFragmentShader = load_shader("res/glsl/" + shader_pack_name + ".frag", GL_FRAGMENT_SHADER);
-		//auto GeometryShader = compile_shader(gsh_code, GL_GEOMETRY_SHADER);
-	}
-
-	void Shader::link()
+	void Shader::link() noexcept
 	{
 		gl::AttachShader(mProgram, mVertexShader);
 		gl::AttachShader(mProgram, mFragmentShader);
 
 		gl::LinkProgram(mProgram);
 	}
+
+
 
 	void Shader::bind_attribute(unsigned index, const std::string& name)
 	{
@@ -56,14 +95,7 @@ namespace tgl
 		gl::UseProgram(mProgram);
 	}
 
-	Shader::~Shader()
-	{
-		gl::DetachShader(mProgram, mVertexShader);
-		gl::DetachShader(mProgram, mFragmentShader);
-		gl::DeleteShader(mVertexShader);
-		gl::DeleteShader(mFragmentShader);
-		gl::DeleteProgram(mProgram);
-	}
+	//uniforms
 
 	void Shader::uniform_matrix4f(const std::string& name, void* ptr)
 	{

@@ -6,10 +6,12 @@
 
 namespace tgl
 {
+	#ifdef _WIN32
 	namespace win
 	{
 		#include <Windows.h>
 	}
+	#endif
 }
 
 namespace tgl
@@ -18,29 +20,21 @@ namespace tgl
 	{
 		#include "GL/GL.h"
 		#include "GL/glext.h"
-		
+
 		template<class>
 		struct tgl_func {};
 
-		template<class Ret, class... Params>		
-		struct tgl_func<Ret(__stdcall*)(Params...)>			
-		{		
+		template<class Ret, class... Params>
+		struct tgl_func<Ret(__stdcall*)(Params...)>
+		{
 			using func_t = Ret(Params...);
-			
+
 			static std::function<Ret(Params...)> LoadFunction(const char* _Func_Name)
 			{
 				void* data = tgl::win::wglGetProcAddress(_Func_Name);
 				if (data)
-				{
 					return reinterpret_cast<Ret(*)(Params...)>(data);
-				}
-				else
-				{
-					std::string error_str("tinyGL[Win32] -> init failed -> failed wile get proc address \"");
-					error_str += _Func_Name;
-					error_str += "\"";
-					throw std::runtime_error(error_str);
-				}
+
 				return nullptr;
 			}
 		};

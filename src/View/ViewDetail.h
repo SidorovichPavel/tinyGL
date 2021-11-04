@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdexcept>
+#include <memory>
 
 #include <src/Event/Event.h>
 #include <src/View/Mouse.h>
@@ -9,9 +10,9 @@
 
 namespace tgl::win
 {
-	#ifdef _WIN32
+#ifdef _WIN32
 	#ifndef WIN32_LEAN_AND_MEAN
-	#define WIN32_LEAN_AND_MEAN
+		#define WIN32_LEAN_AND_MEAN
 	#endif
 
 	#include <Windows.h>
@@ -30,7 +31,7 @@ namespace tgl::win
 		bool mMouseRawInput;
 
 		Mouse& mVirtualMouse;
-		detail::Events mEvents;
+		std::unique_ptr<detail::Events> mEvents;
 	public:
 		bool mIsOpen;
 		RECT mWinGlobalSize;
@@ -42,12 +43,20 @@ namespace tgl::win
 		void init_opengl();
 		void enale_opengl_context() noexcept;
 		void mouse_raw_input(bool _Mode = true);
-		void show_cursor(bool mode);
+		void show_cursor(bool mode) noexcept;
+		void send_message(uint32_t _Msg, uint64_t _WParam, int64_t _LParam) noexcept;
+		void post_message(uint32_t _Msg, uint64_t _WParam, int64_t _LParam) noexcept;
+		void invalidate_rect() noexcept;
 		void swap_buffers() noexcept;
 		void destroy() noexcept;
+
+		void close() noexcept;
+
 		detail::Events& events() noexcept;
 	};
 
-	#endif // __WIN32
+
+
+#endif // __WIN32
 }
 

@@ -36,6 +36,10 @@ namespace tgl {
 			return base::mIsOpen;
 		}
 
+		std::pair<int, int> get_size() const noexcept
+		{
+			return std::pair<int, int>(base::mWidth, base::mHeight);
+		}
 		//TODO: work with controls
 		void add_control(IControls* _Control)
 		{

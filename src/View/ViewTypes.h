@@ -26,13 +26,13 @@ namespace tgl::win
 			* extended-key flag, context code, previous key-state flag,
 			* and transition-state flag, as shown following.
 			*/
-			Event<void(int64_t, int64_t)> key_down;
+			Event<void(uint64_t, int64_t)> key_down;
 			/*desc
 			* first - The virtual-key code of the nonsystem key. See Virtual-Key Codes.
 			* second - The repeat count, scan code, extended-key flag, context code,
 			* previous key-state flag, and transition-state flag, as shown in the following table.
 			*/
-			Event<void(int64_t, int64_t)> key_up;
+			Event<void(uint64_t, int64_t)> key_up;
 			/*desc
 			* first - x
 			* second - y
@@ -55,6 +55,10 @@ namespace tgl::win
 			Event<void(const RAWINPUT*)> raw_input;
 
 			Event<void(RECT*)> moving;
+
+			Event<void(HDC dc)> paint;
+
+			Event<void()> close;
 
 			Event<void(int32_t, int32_t)> mouse_raw_input;
 			/*desc

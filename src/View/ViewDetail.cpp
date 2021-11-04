@@ -35,49 +35,91 @@ namespace tgl::win
 		switch (uMsg)
 		{
 		case WM_CREATE:
-			mEvents.create(hWnd);
+			mEvents->create(hWnd);
 			break;
 		case WM_SIZE:
 			GetWindowRect(mHandle, &mWinGlobalSize);
-			mEvents.size(mWidth = LOWORD(lParam), mHeight = HIWORD(lParam));
+			mEvents->size(mWidth = LOWORD(lParam), mHeight = HIWORD(lParam));
 			break;
 		case WM_DESTROY:
 			this->mIsOpen = false;
 			PostQuitMessage(EXIT_SUCCESS);
 			break;
+		case WM_CLOSE:
+			mEvents->close();
+			DestroyWindow(mHandle);
+			break;
 		case WM_KEYDOWN:
-			mEvents.key_down(static_cast<__int64>(wParam), static_cast<__int64>(lParam));
+			mEvents->key_down(static_cast<uint64_t>(wParam), static_cast<int64_t>(lParam));
 			break;
 		case WM_KEYUP:
-			mEvents.key_up(static_cast<__int64>(wParam), static_cast<__int64>(lParam));
+			mEvents->key_up(static_cast<uint64_t>(wParam), static_cast<int64_t>(lParam));
 			break;
 		case WM_MOUSEMOVE:
-			mEvents.mouse_move(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), static_cast<__int64>(wParam));
+			mEvents->mouse_move(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), static_cast<int64_t>(wParam));
 			break;
 		case WM_MOVE:
 			GetWindowRect(mHandle, &mWinGlobalSize);
-			mEvents.move(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+			mEvents->move(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 			break;
 		case WM_MOUSEWHEEL:
-			mEvents.mouse_wheel(GET_KEYSTATE_WPARAM(wParam), GET_WHEEL_DELTA_WPARAM(wParam),
-							  GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+			mEvents->mouse_wheel(GET_KEYSTATE_WPARAM(wParam), GET_WHEEL_DELTA_WPARAM(wParam),
+				GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 			break;
 		case WM_LBUTTONDOWN:
-			mEvents.mouse_lbutton_down(static_cast<int64_t>(wParam),
-							   GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+			mEvents->mouse_lbutton_down(static_cast<int64_t>(wParam),
+				GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 			break;
 		case WM_LBUTTONUP:
-			mEvents.mouse_lbutton_up(static_cast<int64_t>(wParam),
-							   GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+			mEvents->mouse_lbutton_up(static_cast<int64_t>(wParam),
+				GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 			break;
 		case WM_RBUTTONDOWN:
-			mEvents.mouse_rbutton_down(static_cast<int64_t>(wParam),
-							   GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+			mEvents->mouse_rbutton_down(static_cast<int64_t>(wParam),
+				GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 			break;
 		case WM_RBUTTONUP:
-			mEvents.mouse_rbutton_up(static_cast<int64_t>(wParam),
-							   GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+			mEvents->mouse_rbutton_up(static_cast<int64_t>(wParam),
+				GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 			break;
+		case WM_PAINT:
+		{
+			PAINTSTRUCT ps;
+			RECT Rect;
+
+			GetClientRect(hWnd, &Rect);
+			HDC hdc = BeginPaint(hWnd, &ps);
+
+			// Создание теневого контекста для двойной буферизации
+			HDC hCmpDC = CreateCompatibleDC(hdc);
+			HBITMAP hBmp = CreateCompatibleBitmap(hdc, Rect.right - Rect.left,
+				Rect.bottom - Rect.top);
+			SelectObject(hCmpDC, hBmp);
+
+			// Закраска фоновым цветом
+			LOGBRUSH br;
+			br.lbStyle = BS_SOLID;
+			br.lbColor = 0xffffff;
+			HBRUSH brush = CreateBrushIndirect(&br);
+			FillRect(hCmpDC, &Rect, brush);
+			DeleteObject(brush);
+
+			// Здесь рисуем на контексте hCmpDC
+			mEvents->paint(hCmpDC);
+
+			// Копируем изображение из теневого контекста на экран
+			SetStretchBltMode(hdc, COLORONCOLOR);
+			BitBlt(hdc, 0, 0, Rect.right - Rect.left, Rect.bottom - Rect.top,
+				hCmpDC, 0, 0, SRCCOPY);
+
+			// Удаляем ненужные системные объекты
+			DeleteDC(hCmpDC);
+			DeleteObject(hBmp);
+			hCmpDC = NULL;
+
+			EndPaint(hWnd, &ps);
+		}
+		break;
 		case WM_INPUT:
 		{
 			UINT size = 0;
@@ -91,7 +133,7 @@ namespace tgl::win
 
 			RAWINPUT* raw = reinterpret_cast<RAWINPUT*>(data.data());
 
-			mEvents.raw_input(raw);
+			mEvents->raw_input(raw);
 
 			switch (raw->header.dwType)
 			{
@@ -104,7 +146,7 @@ namespace tgl::win
 				else
 					mVirtualMouse += std::make_pair(raw->data.mouse.lLastX, raw->data.mouse.lLastY);
 
-				mEvents.mouse_raw_input(mVirtualMouse.dx(), mVirtualMouse.dy());
+				mEvents->mouse_raw_input(mVirtualMouse.dx(), mVirtualMouse.dy());
 				break;
 			}
 		}
@@ -122,7 +164,8 @@ namespace tgl::win
 		mHeight(height),
 		mGL_resource_content(0),
 		mMouseRawInput(false),
-		mVirtualMouse(_VMouse)
+		mVirtualMouse(_VMouse),
+		mEvents(new detail::Events)
 	{
 		WNDCLASSEX wc = { sizeof(wc) };
 		wc.hbrBackground = reinterpret_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
@@ -138,9 +181,11 @@ namespace tgl::win
 
 		mWinGlobalSize = { 0,0,width,height };
 		AdjustWindowRect(&mWinGlobalSize, WS_OVERLAPPEDWINDOW, 0);
-		mHandle = CreateWindowEx(0, wc.lpszClassName, title.c_str(), WS_OVERLAPPEDWINDOW,
-								 0, 0, mWinGlobalSize.right - mWinGlobalSize.left, mWinGlobalSize.bottom - mWinGlobalSize.top,
-								 0, 0, 0, this);
+		mHandle = CreateWindowEx(
+			0, wc.lpszClassName, title.c_str(), WS_OVERLAPPEDWINDOW,
+			0, 0, mWinGlobalSize.right - mWinGlobalSize.left, mWinGlobalSize.bottom - mWinGlobalSize.top,
+			0, 0, 0,
+			this);
 
 		if (mIsOpen = static_cast<bool>(mHandle))
 		{
@@ -154,7 +199,8 @@ namespace tgl::win
 
 	WinHandler::~WinHandler()
 	{
-		wglDeleteContext(mGL_resource_content);
+		if (mGL_resource_content)
+			wglDeleteContext(mGL_resource_content);
 		if (mIsOpen)
 			DestroyWindow(mHandle);
 	}
@@ -216,7 +262,7 @@ namespace tgl::win
 		}
 	}
 
-	void WinHandler::show_cursor(bool mode)
+	void WinHandler::show_cursor(bool mode) noexcept
 	{
 		if (!mode)
 		{
@@ -234,6 +280,21 @@ namespace tgl::win
 		}
 	}
 
+	void WinHandler::send_message(uint32_t _Msg, uint64_t _WParam, int64_t _LParam) noexcept
+	{
+		win::SendMessage(mHandle, static_cast<UINT>(_Msg), static_cast<WPARAM>(_WParam), static_cast<LPARAM>(_LParam));
+	}
+
+	void WinHandler::post_message(uint32_t _Msg, uint64_t _WParam, int64_t _LParam) noexcept
+	{
+		win::PostMessage(mHandle, static_cast<UINT>(_Msg), static_cast<WPARAM>(_WParam), static_cast<LPARAM>(_LParam));
+	}
+
+	void WinHandler::invalidate_rect() noexcept
+	{
+		InvalidateRect(mHandle, nullptr, false);
+	}
+
 	void WinHandler::swap_buffers() noexcept
 	{
 		SwapBuffers(mDevice_context);
@@ -244,9 +305,14 @@ namespace tgl::win
 		DestroyWindow(mHandle);
 	}
 
+	void WinHandler::close() noexcept
+	{
+		CloseWindow(mHandle);
+	}
+
 	detail::Events& WinHandler::events() noexcept
 	{
-		return mEvents;
+		return *mEvents;
 	}
 
 #endif

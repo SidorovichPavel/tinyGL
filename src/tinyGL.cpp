@@ -4,26 +4,47 @@
 #include <stdexcept>
 #include <iostream>
 
+#undef min max
+
 namespace tgl
 {
 	std::atomic<bool> opengl_is_init = false;
 
-	int event_pool(void(*render_func)()) noexcept
+	std::pair<bool, int> event_pool() noexcept
 	{
 	#ifdef _WIN32
-		win::MSG msg{};
-		for (
-			auto ok = 1; ok > 0;
-			ok = win::GetMessage(&msg, 0, 0, 0)
-			)
-		{
-			win::TranslateMessage(&msg);
-			win::DispatchMessage(&msg);
 
-			render_func();
+		static win::MSG msg{};
+		static auto nextUpdate = 0ull;
+		constexpr auto fpsLock = 1000ull / 60;
+
+		while (tgl::win::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+		{
+			tgl::win::TranslateMessage(&msg);
+			tgl::win::DispatchMessage(&msg);
 		}
 
-		return msg.wParam;
+		auto ms = tgl::win::GetTickCount64();
+		auto msNext = nextUpdate;
+		auto wait = 0ull;
+		auto ret = WAIT_TIMEOUT;
+
+		if (ms < msNext)
+			wait = std::min(fpsLock, msNext - ms);
+
+		if (wait <= 1)
+		{
+			nextUpdate = ms + fpsLock;
+			return std::make_pair(true, static_cast<int>(msg.wParam));
+		}
+
+		if (tgl::win::MsgWaitForMultipleObjects(0, nullptr, FALSE, static_cast<unsigned>(wait), QS_ALLEVENTS) == ret)
+		{
+			nextUpdate = tgl::win::GetTickCount64() + fpsLock;
+			return std::make_pair(true, static_cast<int>(msg.wParam));
+		}
+		
+		return std::make_pair(false, static_cast<int>(msg.wParam));
 	#else
 		//TODO
 	#endif
