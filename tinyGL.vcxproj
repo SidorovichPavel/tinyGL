@@ -23,6 +23,7 @@
     <ClCompile Include="src\Shader\Shader.cpp" />
     <ClCompile Include="src\App\App.cpp" />
     <ClCompile Include="src\tinyGL.cpp" />
+    <ClCompile Include="src\Utility\utility.cpp" />
     <ClCompile Include="src\View\Controls\Edit\EditControl.cpp" />
     <ClCompile Include="src\View\Controls\Font\Font.cpp" />
     <ClCompile Include="src\View\Mouse.cpp" />
@@ -44,6 +45,7 @@
     <ClInclude Include="src\App\App.h" />
     <ClInclude Include="src\style\style.h" />
     <ClInclude Include="src\tinyGL.h" />
+    <ClInclude Include="src\Utility\utility.h" />
     <ClInclude Include="src\View\Controls\Edit\EditControl.h" />
     <ClInclude Include="src\View\Controls\Font\Font.h" />
     <ClInclude Include="src\View\Controls\IControls.h" />

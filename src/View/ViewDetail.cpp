@@ -1,4 +1,5 @@
 #include "ViewDetail.h"
+#include "..\Utility\utility.h"
 
 #include <gl/GL.h>
 
@@ -32,6 +33,7 @@ namespace tgl::win
 
 	LRESULT WinHandler::WinProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 	{
+		unsigned int uiLParam = static_cast<unsigned int>(lParam);
 		switch (uMsg)
 		{
 		case WM_CREATE:
@@ -39,7 +41,9 @@ namespace tgl::win
 			break;
 		case WM_SIZE:
 			GetWindowRect(mHandle, &mWinGlobalSize);
-			mEvents->size(mWidth = LOWORD(lParam), mHeight = HIWORD(lParam));
+			mWidth = lo_word::get(uiLParam);
+			mHeight = hi_word::get(uiLParam);
+			mEvents->size(mWidth, mHeight);
 			break;
 		case WM_DESTROY:
 			this->mIsOpen = false;
@@ -56,31 +60,32 @@ namespace tgl::win
 			mEvents->key_up(static_cast<uint64_t>(wParam), static_cast<int64_t>(lParam));
 			break;
 		case WM_MOUSEMOVE:
-			mEvents->mouse_move(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), static_cast<int64_t>(wParam));
+			mEvents->mouse_move(get_x::get(uiLParam), get_y::get(uiLParam), static_cast<int64_t>(wParam));
 			break;
 		case WM_MOVE:
 			GetWindowRect(mHandle, &mWinGlobalSize);
-			mEvents->move(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+
+			mEvents->move(get_x::get(uiLParam), get_y::get(uiLParam));
 			break;
 		case WM_MOUSEWHEEL:
 			mEvents->mouse_wheel(GET_KEYSTATE_WPARAM(wParam), GET_WHEEL_DELTA_WPARAM(wParam),
-				GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+				get_x::get(uiLParam), get_y::get(uiLParam));
 			break;
 		case WM_LBUTTONDOWN:
 			mEvents->mouse_lbutton_down(static_cast<int64_t>(wParam),
-				GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+				get_x::get(uiLParam), get_y::get(uiLParam));
 			break;
 		case WM_LBUTTONUP:
 			mEvents->mouse_lbutton_up(static_cast<int64_t>(wParam),
-				GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+				get_x::get(uiLParam), get_y::get(uiLParam));
 			break;
 		case WM_RBUTTONDOWN:
 			mEvents->mouse_rbutton_down(static_cast<int64_t>(wParam),
-				GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+				get_x::get(uiLParam), get_y::get(uiLParam));
 			break;
 		case WM_RBUTTONUP:
 			mEvents->mouse_rbutton_up(static_cast<int64_t>(wParam),
-				GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+				get_x::get(uiLParam), get_y::get(uiLParam));
 			break;
 		case WM_PAINT:
 		{

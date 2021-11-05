@@ -79,6 +79,9 @@
     <ClCompile Include="src\View\ViewDetail.cpp">
       <Filter>src\View</Filter>
     </ClCompile>
+    <ClCompile Include="src\Utility\utility.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\style\style.h">
@@ -145,5 +148,6 @@
       <Filter>src\View</Filter>
     </ClInclude>
     <ClInclude Include="src\View\ViewTypes.h" />
+    <ClInclude Include="src\Utility\utility.h" />
   </ItemGroup>
 </Project>

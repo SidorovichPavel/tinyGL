@@ -4,7 +4,8 @@
 #include <stdexcept>
 #include <iostream>
 
-#undef min max
+#undef min
+#undef max
 
 namespace tgl
 {
