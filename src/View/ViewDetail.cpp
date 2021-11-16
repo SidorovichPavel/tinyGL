@@ -43,7 +43,7 @@ namespace tgl::win
 			GetWindowRect(mHandle, &mWinGlobalSize);
 			mWidth = lo_word::get(uiLParam);
 			mHeight = hi_word::get(uiLParam);
-			mEvents->size(mWidth, mHeight);
+			mEvents->size(lo_word::get(uiLParam), hi_word::get(uiLParam));
 			break;
 		case WM_DESTROY:
 			this->mIsOpen = false;

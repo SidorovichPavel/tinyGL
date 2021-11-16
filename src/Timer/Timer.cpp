@@ -20,13 +20,13 @@ namespace tgl
 	Timer::Timer(Timer&& _Other) noexcept
 	{
 		this->mHandle = _Other.mHandle;
-		booom.swap(&_Other.booom);
+		//booom.swap(&_Other.booom);
 	}
 
 	Timer& Timer::operator=(Timer&& _Right) noexcept
 	{
 		this->mHandle = _Right.mHandle;
-		booom.swap(&_Right.booom);
+		//booom.swap(&_Right.booom);
 		return *this;
 	}
 

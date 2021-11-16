@@ -18,8 +18,8 @@ namespace tgl
 {
 	namespace gl
 	{
-		#include "GL/GL.h"
-		#include "GL/glext.h"
+		#include <gl\GL.h>
+		#include "..\GL\glext.h"
 
 		template<class>
 		struct tgl_func {};
@@ -32,10 +32,7 @@ namespace tgl
 			static std::function<Ret(Params...)> LoadFunction(const char* _Func_Name)
 			{
 				void* data = tgl::win::wglGetProcAddress(_Func_Name);
-				if (data)
-					return reinterpret_cast<Ret(*)(Params...)>(data);
-
-				return nullptr;
+				return reinterpret_cast<Ret(*)(Params...)>(data);
 			}
 		};
 
@@ -71,11 +68,11 @@ namespace tgl
 		GL_EXTERN_DECL(PFNGLUNIFORMMATRIX4FVPROC, UniformMatrix4fv);
 		GL_EXTERN_DECL(PFNGLUNIFORM4FVPROC, Uniform4fv);
 		GL_EXTERN_DECL(PFNGLUNIFORM3FVPROC, Uniform3fv);
+		GL_EXTERN_DECL(PFNGLUNIFORM4FPROC, Uniform4f);
 		GL_EXTERN_DECL(PFNGLUNIFORM1IPROC, Uniform1i);
 
 		GL_EXTERN_DECL(PFNGLACTIVETEXTUREPROC, ActiveTexture);
 		GL_EXTERN_DECL(PFNGLGENERATEMIPMAPPROC, GenerateMipmap);
-
 
 		GL_EXTERN_DECL(PFNGLDEBUGMESSAGECALLBACKPROC, DebugMessageCallback);
 
