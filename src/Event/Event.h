@@ -1,6 +1,8 @@
 #pragma once
 #include <functional>
 #include <list>
+#include <vector>
+#include <iterator>
 #include <memory>
 
 namespace tgl
@@ -20,7 +22,7 @@ namespace tgl
 	};
 
 	template<class Class, class Ret, class... Args>
-	class Conteiner final : public IConteiner<Ret, Args...>
+	class ObjConteiner final : public IConteiner<Ret, Args...>
 	{
 		using Method = typename ActualType<Ret(Class::*)(Args...)>::type;
 		Class* mClassPtr;
@@ -28,7 +30,7 @@ namespace tgl
 
 	public:
 
-		Conteiner(Class* _Ptr, Method _Met) :
+		ObjConteiner(Class* _Ptr, Method _Met) :
 			mClassPtr(_Ptr),
 			mMethod(_Met)
 		{};
@@ -36,28 +38,50 @@ namespace tgl
 		Ret call(Args... args)
 		{
 			if constexpr (std::is_same<Ret, void>::value)
-				(mClassPtr->*mMethod)(std::forward<Args>(args)...);
+				(mClassPtr->*mMethod)(args...);
 			else
-				return (mClassPtr->*mMethod)(std::forward<Args>(args)...);
+				return (mClassPtr->*mMethod)(args...);
+		}
+	};
+
+	template<class Ret, class... Args>
+	class FuncConteiner final : public IConteiner<Ret, Args...>
+	{
+		using func_t = std::function<Ret(Args...)>;
+		std::function<Ret(Args...)> mFunction;
+
+	public:
+
+		FuncConteiner(func_t _Fn) : mFunction(_Fn) {};
+
+		Ret call(Args... args)
+		{
+			if constexpr (std::is_same<Ret, void>::value)
+				mFunction(std::forward<Args>(args)...);
+			else
+				return mFunction(std::forward<Args>(args)...);
 		}
 	};
 
 	template<class T>
-	class Event 
+	class Event
 	{
 		static_assert("No... Pleas, use that: Event(<return_t(arguments_t...)>)");
 	};
 
 	template<class Ret, class... Args>
-	class Event<Ret(Args...)>
+	class Event<Ret(Args...)> final : public std::list<std::unique_ptr<IConteiner<Ret, Args...>>>
 	{
+	public:
+		using base = std::list<std::unique_ptr<IConteiner<Ret, Args...>>>;
+		using u_ptr_type = std::unique_ptr<IConteiner<Ret, Args...>>;
 		using function_type = std::function<Ret(Args...)>;
 		template<class ClassT>
 		using method_type = typename ActualType<Ret(ClassT::*)(Args...)>::type;
+		template<class ClassT>
+		using obj_conteiner_type = ObjConteiner<ClassT, Ret, Args...>;
+		using func_conteiner_type = typename FuncConteiner<Ret, Args...>;
 
-		std::list<std::unique_ptr<IConteiner<Ret, Args...>>> mReciversM;
-		std::list<function_type> mReciversF;
-	public:
 		Event() {}
 		Event(const Event&) = delete;
 		Event& operator=(const Event&) = delete;
@@ -65,44 +89,34 @@ namespace tgl
 		Event& operator=(Event&&) = delete;
 
 		template<class ClassT>
-		void attach(ClassT* _Ptr, method_type<ClassT> _Met)
+		base::iterator attach(ClassT* _Ptr, method_type<ClassT> _Met)
 		{
-			mReciversM.emplace_back(new Conteiner<ClassT, Ret, Args...>(_Ptr, _Met));
+			return base::insert(base::end(), u_ptr_type(new obj_conteiner_type<ClassT>(_Ptr, _Met)));
 		}
-		void attach(function_type&& _Fn)
+		base::iterator attach(function_type _Fn)
 		{
-			mReciversF.emplace_back(std::forward<function_type>(_Fn));
+			return base::insert(base::end(), u_ptr_type(new func_conteiner_type(_Fn)));
 		}
 		size_t detach_all()
 		{
-			size_t result = mReciversM.size() + mReciversF.size();
-			mReciversM.clear();
-			mReciversF.clear();
+			size_t result = base::size();
+			base::clear();
 			return result;
 		}
 		Ret operator()(Args... args)
 		{
 			if constexpr (std::is_same<Ret, void>::value)
 			{
-				for (auto& obj : mReciversM)
-					obj->call(args...);
-				for (auto& fn : mReciversF)
-					fn(args...);
+				for (auto& elem : *this)
+					elem->call(args...);
 			}
 			else
 			{
 				Ret result;
-				for (auto& obj : mReciversM)
-					result = obj->call(args...);
-				for (auto& fn : mReciversF)
-					result = fn(args...);
+				for (auto& elem : *this)
+					result = elem->call(args...);
 				return result;
 			}
-		}
-		void swap(Event* _Event) noexcept
-		{
-			mReciversM.swap(_Event->mReciversM);
-			mReciversF.swap(_Event->mReciversF);
 		}
 	};
 }
