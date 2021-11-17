@@ -8,22 +8,22 @@
 
 namespace tgl
 {
-	namespace hide
+	namespace detail
 	{
 		template<size_t... _Args>
 		struct unpack_sequence
 		{
-			constexpr static size_t _Elems[sizeof...(_Args)] = { _Args... };
+			constexpr static size_t Elems[sizeof...(_Args)] = { _Args... };
 			constexpr static size_t get_sum()
 			{
 				size_t res = 0;
 				for (auto i = 0; i < sizeof...(_Args); ++i)
-					res += _Elems[i];
+					res += Elems[i];
 				return res;
 			}
 			constexpr static size_t get(size_t _Index)
 			{
-				return _Elems[_Index];
+				return Elems[_Index];
 			}
 			constexpr static size_t count = sizeof...(_Args);
 		};
@@ -62,11 +62,11 @@ namespace tgl
 			gl::BindBuffer(GL_ARRAY_BUFFER, mBuffer);
 			gl::BufferData(GL_ARRAY_BUFFER, int64_t(_Count * sizeof(float)), _Data, GL_STATIC_DRAW);
 
-			mVertexSize = sizeof(float) * hide::unpack_sequence<_Args...>::get_sum();
+			mVertexSize = sizeof(float) * detail::unpack_sequence<_Args...>::get_sum();
 			auto offset = 0;
 			for (auto i = 0; i < sizeof...(_Args); ++i)
 			{
-				auto elem = hide::unpack_sequence<_Args...>::get(i);
+				auto elem = detail::unpack_sequence<_Args...>::get(i);
 				gl::VertexAttribPointer(i, (int32_t)elem, GL_FLOAT, GL_FALSE, (uint32_t)mVertexSize, reinterpret_cast<const void*>(offset));
 				gl::EnableVertexAttribArray(i);
 
