@@ -3,28 +3,26 @@
 #include <atomic>
 #include <string>
 #include <src/style/style.h>
-#include <src/View/Mouse.h>
 #include <src/View/Controls/IControls.h>
 #include <src/Event/Event.h>
 #include <src/View/ViewTypes.h>
-#include <src/View/ViewDetail.h>
+#include <src/View/Detail.h>
 
 namespace tgl {
 	
 	template<class Handler>
-	class View final : public Handler
+	class FullView final : public Handler
 	{
 		using base = Handler;
 
-		Mouse mVirtualMouse;
 		std::vector<IControls*> mControls;
 	public:
-		View(const int width, const int height, const std::wstring& title)
-			: base(width, height, title, mVirtualMouse)
+		FullView(const int width, const int height, const std::string& title)
+			: base(width, height, title)
 		{}
-		View(const View& _Right) = delete;
-		View(View&& _Right) = delete;
-		~View() {};
+		FullView(const FullView& _Right) = delete;
+		FullView(FullView&& _Right) = delete;
+		~FullView() {};
 
 		void enable_mouse_raw_input() { base::mouse_raw_input(); };
 		void disable_mouse_raw_input() { base::mouse_raw_input(false); };
@@ -47,6 +45,10 @@ namespace tgl {
 		}
 	};
 
+
+	#ifdef _WIN32
+		using View = FullView<win::WinHandler>;
+	#endif
 }
 
 

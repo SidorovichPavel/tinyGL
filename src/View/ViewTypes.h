@@ -8,10 +8,8 @@ namespace tgl::win
 	#include <Windows.h>
 	namespace detail
 	{
-
-		class Events
+		struct Events
 		{
-		public:
 			/*desc
 			* window handel for you)
 			*/
@@ -60,7 +58,7 @@ namespace tgl::win
 
 			Event<void()> close;
 
-			Event<void(int32_t, int32_t)> mouse_raw_input;
+			Event<void(unsigned short, int32_t, int32_t)> mouse_raw_input;
 			/*desc
 			* first - additional flags. read msdn
 			* second x position
@@ -73,7 +71,6 @@ namespace tgl::win
 			* thirt y positon
 			*/
 			Event<void(int64_t, int32_t, int32_t)> mouse_lbutton_up;
-			Event<void(int64_t, int32_t, int32_t)> mouse_lclick;
 			/*desc
 			* first - additional flags. read msdn
 			* second x position
@@ -86,7 +83,6 @@ namespace tgl::win
 			* thirt y positon
 			*/
 			Event<void(int64_t, int32_t, int32_t)> mouse_rbutton_up;
-			Event<void(int64_t, int32_t, int32_t)> mouse_rclick;
 		};
 	}
 }
