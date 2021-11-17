@@ -2,6 +2,7 @@
 
 #include <bitset>
 #include <array>
+#include <string>
 
 namespace tgl
 {
@@ -41,5 +42,9 @@ namespace tgl
 	using get_x = lo_word;
 	using get_y = hi_word;
 
-
+#ifdef UNICODE
+	using string = std::wstring;
+#else
+	using string = std::string;
+#endif
 }

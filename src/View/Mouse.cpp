@@ -1,54 +1,25 @@
 #include "Mouse.h"
 
-namespace tgl
+#ifdef _WIN32
+namespace tgl::win
 {
-
-	Mouse::Mouse(int32_t _x, int32_t _y)
-		:
-		x(_x), lastX(0),
-		y(_y), lastY(0),
-		lb_press(false),
-		rb_press(false)
-	{}
-
-	Mouse::~Mouse()
-	{}
-
-	int32_t Mouse::dx() noexcept
+	void WinMouse::raw_input(unsigned short _Flags, int32_t _LastX, int32_t _LastY) noexcept
 	{
-		return x - lastX;
+		if (_Flags & MOUSE_MOVE_ABSOLUTE)
+		{
+			lastX = x;
+			lastY = y;
+			x = _LastX;
+			y = _LastY;
+		}
+		else
+		{
+			lastX = x;
+			lastY = y;
+			x += _LastX;
+			y += _LastY;
+		}
 	}
-
-	int32_t Mouse::dy() noexcept
-	{
-		return y - lastY;
-	}
-
-	Mouse& Mouse::operator=(const std::pair<int32_t, int32_t>& _Right)
-	{
-		lastX = x;
-		lastY = y;
-		x = _Right.first;
-		y = _Right.second;
-		return *this;
-	}
-
-	Mouse& Mouse::operator+=(const std::pair<int32_t, int32_t>& _Right)
-	{
-		lastX = x;
-		lastY = y;
-		x += _Right.first;
-		y += _Right.second;
-		return *this;
-	}
-
-	Mouse& Mouse::operator-=(const std::pair<int32_t, int32_t>& _Right)
-	{
-		lastX = x;
-		lastY = y;
-		x -= _Right.first;
-		y -= _Right.second;
-		return *this;
-	}
-
 }
+
+#endif
