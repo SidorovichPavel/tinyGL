@@ -1,11 +1,15 @@
-#include "ViewDetail.h"
+#include "Detail.h"
 #include "..\Utility\utility.h"
-
+#include <stdexcept>
 #include <gl/GL.h>
 
+#ifdef _WIN32
 namespace tgl::win
 {
-#ifdef _WIN32
+	/***********************************************************************************************************************************
+	****************************************************** WIN HANDLER *****************************************************************
+	************************************************************************************************************************************/
+
 
 	LRESULT WinHandler::GenProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 	{
@@ -37,54 +41,54 @@ namespace tgl::win
 		switch (uMsg)
 		{
 		case WM_CREATE:
-			mEvents->create(hWnd);
+			mEvents.create(hWnd);
 			break;
 		case WM_SIZE:
 			GetWindowRect(mHandle, &mWinGlobalSize);
 			mWidth = lo_word::get(uiLParam);
 			mHeight = hi_word::get(uiLParam);
-			mEvents->size(lo_word::get(uiLParam), hi_word::get(uiLParam));
+			mEvents.size(lo_word::get(uiLParam), hi_word::get(uiLParam));
 			break;
 		case WM_DESTROY:
 			this->mIsOpen = false;
 			PostQuitMessage(EXIT_SUCCESS);
 			break;
 		case WM_CLOSE:
-			mEvents->close();
+			mEvents.close();
 			DestroyWindow(mHandle);
 			break;
 		case WM_KEYDOWN:
-			mEvents->key_down(static_cast<uint64_t>(wParam), static_cast<int64_t>(lParam));
+			mEvents.key_down(static_cast<uint64_t>(wParam), static_cast<int64_t>(lParam));
 			break;
 		case WM_KEYUP:
-			mEvents->key_up(static_cast<uint64_t>(wParam), static_cast<int64_t>(lParam));
+			mEvents.key_up(static_cast<uint64_t>(wParam), static_cast<int64_t>(lParam));
 			break;
 		case WM_MOUSEMOVE:
-			mEvents->mouse_move(get_x::get(uiLParam), get_y::get(uiLParam), static_cast<int64_t>(wParam));
+			mEvents.mouse_move(get_x::get(uiLParam), get_y::get(uiLParam), static_cast<int64_t>(wParam));
 			break;
 		case WM_MOVE:
 			GetWindowRect(mHandle, &mWinGlobalSize);
 
-			mEvents->move(get_x::get(uiLParam), get_y::get(uiLParam));
+			mEvents.move(get_x::get(uiLParam), get_y::get(uiLParam));
 			break;
 		case WM_MOUSEWHEEL:
-			mEvents->mouse_wheel(GET_KEYSTATE_WPARAM(wParam), GET_WHEEL_DELTA_WPARAM(wParam),
+			mEvents.mouse_wheel(GET_KEYSTATE_WPARAM(wParam), GET_WHEEL_DELTA_WPARAM(wParam),
 				get_x::get(uiLParam), get_y::get(uiLParam));
 			break;
 		case WM_LBUTTONDOWN:
-			mEvents->mouse_lbutton_down(static_cast<int64_t>(wParam),
+			mEvents.mouse_lbutton_down(static_cast<int64_t>(wParam),
 				get_x::get(uiLParam), get_y::get(uiLParam));
 			break;
 		case WM_LBUTTONUP:
-			mEvents->mouse_lbutton_up(static_cast<int64_t>(wParam),
+			mEvents.mouse_lbutton_up(static_cast<int64_t>(wParam),
 				get_x::get(uiLParam), get_y::get(uiLParam));
 			break;
 		case WM_RBUTTONDOWN:
-			mEvents->mouse_rbutton_down(static_cast<int64_t>(wParam),
+			mEvents.mouse_rbutton_down(static_cast<int64_t>(wParam),
 				get_x::get(uiLParam), get_y::get(uiLParam));
 			break;
 		case WM_RBUTTONUP:
-			mEvents->mouse_rbutton_up(static_cast<int64_t>(wParam),
+			mEvents.mouse_rbutton_up(static_cast<int64_t>(wParam),
 				get_x::get(uiLParam), get_y::get(uiLParam));
 			break;
 		case WM_PAINT:
@@ -110,7 +114,7 @@ namespace tgl::win
 			DeleteObject(brush);
 
 			// Здесь рисуем на контексте hCmpDC
-			mEvents->paint(hCmpDC);
+			mEvents.paint(hCmpDC);
 
 			// Копируем изображение из теневого контекста на экран
 			SetStretchBltMode(hdc, COLORONCOLOR);
@@ -127,18 +131,18 @@ namespace tgl::win
 		break;
 		case WM_INPUT:
 		{
-			UINT size = 0;
+			mRawInputSize = 0;
 			HRAWINPUT ri = (HRAWINPUT)lParam;
 
-			GetRawInputData(ri, RID_INPUT, NULL, &size, sizeof(RAWINPUTHEADER));
-			std::vector<uint8_t> data(size);
+			GetRawInputData(ri, RID_INPUT, NULL, &mRawInputSize, sizeof(RAWINPUTHEADER));
+			mRawInputData.resize(mRawInputSize);
 
-			if (GetRawInputData(ri, RID_INPUT, data.data(), &size, sizeof(RAWINPUTHEADER)) != size)
+			if (GetRawInputData(ri, RID_INPUT, mRawInputData.data(), &mRawInputSize, sizeof(RAWINPUTHEADER)) != mRawInputSize)
 				break;
 
-			RAWINPUT* raw = reinterpret_cast<RAWINPUT*>(data.data());
+			RAWINPUT* raw = reinterpret_cast<RAWINPUT*>(mRawInputData.data());
 
-			mEvents->raw_input(raw);
+			mEvents.raw_input(raw);
 
 			switch (raw->header.dwType)
 			{
@@ -146,12 +150,7 @@ namespace tgl::win
 				if (!mMouseRawInput)
 					break;
 
-				if (raw->data.mouse.usFlags & MOUSE_MOVE_ABSOLUTE)
-					mVirtualMouse = std::make_pair(raw->data.mouse.lLastX, raw->data.mouse.lLastY);
-				else
-					mVirtualMouse += std::make_pair(raw->data.mouse.lLastX, raw->data.mouse.lLastY);
-
-				mEvents->mouse_raw_input(mVirtualMouse.dx(), mVirtualMouse.dy());
+				mEvents.mouse_raw_input(raw->data.mouse.usFlags, raw->data.mouse.lLastX, raw->data.mouse.lLastX);
 				break;
 			}
 		}
@@ -163,22 +162,24 @@ namespace tgl::win
 		return 0;
 	}
 
-	WinHandler::WinHandler(const int width, const int height, const std::wstring& title, Mouse& _VMouse)
+	WinHandler::WinHandler(const int width, const int height, const std::string& title)
 		:
 		mWidth(width),
 		mHeight(height),
 		mGL_resource_content(0),
 		mMouseRawInput(false),
-		mVirtualMouse(_VMouse),
-		mEvents(new detail::Events)
+		mRawInputHandle(0),
+		mRawInputSize(0)
 	{
+		auto& temp = title;
+
 		WNDCLASSEX wc = { sizeof(wc) };
 		wc.hbrBackground = reinterpret_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
 		wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
 		wc.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
 		wc.hIconSm = LoadIcon(nullptr, IDI_APPLICATION);
 		wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-		wc.lpszClassName = title.c_str();
+		wc.lpszClassName = temp.c_str();
 		wc.lpfnWndProc = WinHandler::GenProc;
 
 		if (!RegisterClassEx(&wc))
@@ -187,12 +188,13 @@ namespace tgl::win
 		mWinGlobalSize = { 0,0,width,height };
 		AdjustWindowRect(&mWinGlobalSize, WS_OVERLAPPEDWINDOW, 0);
 		mHandle = CreateWindowEx(
-			0, wc.lpszClassName, title.c_str(), WS_OVERLAPPEDWINDOW,
+			0, wc.lpszClassName, temp.c_str(), WS_OVERLAPPEDWINDOW,
 			0, 0, mWinGlobalSize.right - mWinGlobalSize.left, mWinGlobalSize.bottom - mWinGlobalSize.top,
 			0, 0, 0,
 			this);
 
-		if (mIsOpen = static_cast<bool>(mHandle))
+		mIsOpen = static_cast<bool>(mHandle);
+		if (mIsOpen)
 		{
 			UpdateWindow(mHandle);
 			ShowWindow(mHandle, SW_SHOWDEFAULT);
@@ -200,6 +202,8 @@ namespace tgl::win
 		}
 		else
 			throw std::runtime_error("window create failed!");
+
+		mRawInputData.reserve(100);
 	}
 
 	WinHandler::~WinHandler()
@@ -317,8 +321,13 @@ namespace tgl::win
 
 	detail::Events& WinHandler::events() noexcept
 	{
-		return *mEvents;
+		return mEvents;
 	}
 
-#endif
+	/***********************************************************************************************************************************
+	****************************************************** WIN MOUSE HANDLER ***********************************************************
+	************************************************************************************************************************************/
+
+
 }
+#endif

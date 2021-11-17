@@ -76,7 +76,7 @@
     <ClCompile Include="src\View\Controls\Font\Font.cpp">
       <Filter>src\View\Font</Filter>
     </ClCompile>
-    <ClCompile Include="src\View\ViewDetail.cpp">
+    <ClCompile Include="src\View\Detail.cpp">
       <Filter>src\View</Filter>
     </ClCompile>
     <ClCompile Include="src\Utility\utility.cpp">
@@ -144,7 +144,7 @@
     <ClInclude Include="src\View\Controls\Font\Font.h">
       <Filter>src\View\Font</Filter>
     </ClInclude>
-    <ClInclude Include="src\View\ViewDetail.h">
+    <ClInclude Include="src\View\Detail.h">
       <Filter>src\View</Filter>
     </ClInclude>
     <ClInclude Include="src\View\ViewTypes.h" />
