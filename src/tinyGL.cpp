@@ -51,13 +51,19 @@ namespace tgl
 	#endif
 	}
 
+	void clear_black() noexcept
+	{
+		gl::glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		tgl::gl::glClearColor(0.f, 0.f, 0.0f, 1.f);
+	}
+
 	void Init()
 	{
 #ifdef _WIN32
 		if (opengl_is_init)
 			return;
 		using namespace win;
-		HWND handle = CreateWindowEx(0, L"button", L"", WS_POPUP, 0, 0, 0, 0, 0, 0, 0, 0);
+		HWND handle = CreateWindowEx(0, TEXT("button"), TEXT(""), WS_POPUP, 0, 0, 0, 0, 0, 0, 0, 0);
 		if (!handle)
 			throw std::runtime_error("tinyGL[Win32] -> init failed -> failed wile window init");
 
@@ -146,7 +152,7 @@ namespace tgl
 #endif
 	}
 	
-	void callback(uint32_t source, uint32_t type, uint32_t id, uint32_t severity, int32_t length, char const* message, void const* user_param)
+	void _stdcall callback(uint32_t source, uint32_t type, uint32_t id, uint32_t severity, int32_t length, char const* message, void const* user_param)
 	{
 		auto source_str = [source] () -> std::string {
 			switch (source)
