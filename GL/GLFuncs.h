@@ -32,7 +32,7 @@ namespace tgl
 			static std::function<Ret(Params...)> LoadFunction(const char* _Func_Name)
 			{
 				void* data = tgl::win::wglGetProcAddress(_Func_Name);
-				return reinterpret_cast<Ret(*)(Params...)>(data);
+				return reinterpret_cast<Ret(_stdcall*)(Params...)>(data);
 			}
 		};
 
