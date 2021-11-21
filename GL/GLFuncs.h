@@ -25,7 +25,7 @@ namespace tgl
 		struct tgl_func {};
 
 		template<class Ret, class... Params>
-		struct tgl_func<Ret(__stdcall*)(Params...)>
+		struct tgl_func<Ret(_stdcall*)(Params...)>
 		{
 			using func_t = Ret(Params...);
 

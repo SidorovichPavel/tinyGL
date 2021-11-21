@@ -12,10 +12,14 @@ namespace tgl
 			mVertexShader,
 			mFragmentShader;
 
-		unsigned load_shader(const std::string& code, gl::GLenum shader_type);
+		unsigned load_shader(const std::string& _Path, gl::GLenum shader_type);
+		unsigned compile_shader(gl::GLenum _Shader_Type, std::string&& _Code);
 	public:
+		static std::string path_prefix;
+
 		void link() noexcept;
 		Shader(const std::string& shader_pack_name);
+		Shader(std::string&& _Vert_Shader_Code, std::string&& _Frag_Shader_Code);
 		~Shader();
 		
 		Shader(Shader&& _Other) noexcept;

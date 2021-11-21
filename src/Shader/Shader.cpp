@@ -6,12 +6,24 @@
 
 namespace tgl
 {
+	std::string Shader::path_prefix;
+
 	Shader::Shader(const std::string& shader_pack_name)
 	{
 		mProgram = gl::CreateProgram();
-		mVertexShader = load_shader("res/glsl/" + shader_pack_name + ".vert", GL_VERTEX_SHADER);
-		mFragmentShader = load_shader("res/glsl/" + shader_pack_name + ".frag", GL_FRAGMENT_SHADER);
+		auto shader_path = path_prefix + shader_pack_name;
+		mVertexShader = load_shader(shader_path + ".vert", GL_VERTEX_SHADER);
+		mFragmentShader = load_shader(shader_path + ".frag", GL_FRAGMENT_SHADER);
 		//auto GeometryShader = compile_shader(gsh_code, GL_GEOMETRY_SHADER);
+
+		link();
+	}
+
+	Shader::Shader(std::string&& _Vert_Shader_Code, std::string&& _Frag_Shader_Code)
+	{
+		mProgram = gl::CreateProgram();
+		mVertexShader = compile_shader(GL_VERTEX_SHADER, std::move(_Vert_Shader_Code));
+		mFragmentShader = compile_shader(GL_FRAGMENT_SHADER, std::move(_Frag_Shader_Code));
 
 		link();
 	}
@@ -51,21 +63,42 @@ namespace tgl
 		return *this;
 	}
 
+	class InCType : public std::ctype<char>
+	{
+		mask mTable[table_size];
+	public:
+		using base = std::ctype<char>;
+		InCType(size_t	refs = 0)
+			: std::ctype<char>(mTable, false, refs)
+		{
+			std::copy_n(classic_table(), table_size, mTable);
+			mTable['\n'] = base::punct;
+			mTable[' '] = base::punct;
+		}
+	};
+
 	unsigned Shader::load_shader(const std::string& shader_file_name, gl::GLenum shader_type)
 	{
-		unsigned shader = gl::CreateShader(shader_type);
 		std::ifstream fin(shader_file_name);
 		if (!fin.is_open())
 			throw std::runtime_error("file \"" + shader_file_name + "\" not found!");
 
-		std::string shader_code = std::string(std::istreambuf_iterator<char>(fin), std::istreambuf_iterator<char>());
+		fin.imbue(std::locale(std::locale::classic(), new InCType));
+		std::string shader_code = std::string(std::istream_iterator<char>(fin), std::istream_iterator<char>());
 
-		const char* c = shader_code.c_str();
+		return compile_shader(shader_type, std::move(shader_code));
+	}
+
+	unsigned Shader::compile_shader(gl::GLenum _Shader_Type, std::string&& _Code)
+	{
+		const char* c = _Code.c_str();
+		unsigned shader = gl::CreateShader(_Shader_Type);
 		gl::ShaderSource(shader, 1, &c, nullptr);
 		gl::CompileShader(shader);
 
 		int status;
 		gl::GetShaderiv(shader, GL_COMPILE_STATUS, &status);
+
 		char log[0x1000];
 		int length;
 		gl::GetShaderInfoLog(shader, sizeof(log), &length, log);

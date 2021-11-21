@@ -9,10 +9,9 @@ namespace tgl
 		mVertexSize(0),
 		mIndicesBuffer(0),
 		mIndicesCount(0),
-		mBuffer(0)
-	{
-		gl::GenVertexArrays(1, &mVAO);
-	}
+		mBuffer(0),
+		mVAO(0)
+	{}
 
 	Mesh::Mesh(Mesh&& _Other) noexcept
 		:
@@ -37,6 +36,11 @@ namespace tgl
 		std::swap(this->mBuffer, _Right.mBuffer);
 		std::swap(this->mVertexSize, _Right.mVertexSize);
 		return *this;
+	}
+
+	void Mesh::gen()
+	{
+		gl::GenVertexArrays(1, &mVAO);
 	}
 
 	Mesh::~Mesh()
@@ -67,6 +71,7 @@ namespace tgl
 
 	void Mesh::bind()
 	{
+		assert(mVAO);
 		gl::BindVertexArray(mVAO);
 	}
 

@@ -5,9 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="src\View">
-      <UniqueIdentifier>{f1a0050f-6ec5-45bb-a9d5-a6845c8bb76e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\Style">
       <UniqueIdentifier>{bc09db45-b9b0-426c-923a-52b3c56f7880}</UniqueIdentifier>
     </Filter>
@@ -32,6 +29,12 @@
     <Filter Include="src\Mesh">
       <UniqueIdentifier>{ce2e103a-12ea-4bab-932e-bc195641d12b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\utility">
+      <UniqueIdentifier>{28347a90-bb0d-4168-82a4-088216e93525}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\View">
+      <UniqueIdentifier>{6cedbb90-7adf-4ba8-b742-9ead504c8e9f}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\View\Controls">
       <UniqueIdentifier>{040a8c68-08c9-43d8-876d-47c063d27797}</UniqueIdentifier>
     </Filter>
@@ -55,9 +58,6 @@
     <ClCompile Include="src\App\App.cpp">
       <Filter>src\App</Filter>
     </ClCompile>
-    <ClCompile Include="src\View\Mouse.cpp">
-      <Filter>src\View</Filter>
-    </ClCompile>
     <ClCompile Include="src\Shader\Shader.cpp">
       <Filter>src\Shader</Filter>
     </ClCompile>
@@ -76,19 +76,22 @@
     <ClCompile Include="src\View\Controls\Font\Font.cpp">
       <Filter>src\View\Font</Filter>
     </ClCompile>
+    <ClCompile Include="src\Utility\utility.cpp">
+      <Filter>src\utility</Filter>
+    </ClCompile>
     <ClCompile Include="src\View\Detail.cpp">
       <Filter>src\View</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utility\utility.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\View\KeyBoard.cpp">
+      <Filter>src\View</Filter>
+    </ClCompile>
+    <ClCompile Include="src\View\Mouse.cpp">
+      <Filter>src\View</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\style\style.h">
       <Filter>src\Style</Filter>
-    </ClInclude>
-    <ClInclude Include="src\View\View.h">
-      <Filter>src\View</Filter>
     </ClInclude>
     <ClInclude Include="src\tinyGL.h">
       <Filter>src</Filter>
@@ -120,9 +123,6 @@
     <ClInclude Include="src\Event\Event.h">
       <Filter>src\Event</Filter>
     </ClInclude>
-    <ClInclude Include="src\View\Mouse.h">
-      <Filter>src\View</Filter>
-    </ClInclude>
     <ClInclude Include="src\Shader\Shader.h">
       <Filter>src\Shader</Filter>
     </ClInclude>
@@ -144,10 +144,23 @@
     <ClInclude Include="src\View\Controls\Font\Font.h">
       <Filter>src\View\Font</Filter>
     </ClInclude>
+    <ClInclude Include="src\Utility\utility.h">
+      <Filter>src\utility</Filter>
+    </ClInclude>
     <ClInclude Include="src\View\Detail.h">
       <Filter>src\View</Filter>
     </ClInclude>
-    <ClInclude Include="src\View\ViewTypes.h" />
-    <ClInclude Include="src\Utility\utility.h" />
+    <ClInclude Include="src\View\KeyBoard.h">
+      <Filter>src\View</Filter>
+    </ClInclude>
+    <ClInclude Include="src\View\Mouse.h">
+      <Filter>src\View</Filter>
+    </ClInclude>
+    <ClInclude Include="src\View\View.h">
+      <Filter>src\View</Filter>
+    </ClInclude>
+    <ClInclude Include="src\View\ViewTypes.h">
+      <Filter>src\View</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

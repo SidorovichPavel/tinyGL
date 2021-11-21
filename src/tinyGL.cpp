@@ -152,49 +152,66 @@ namespace tgl
 #endif
 	}
 	
-	void _stdcall callback(uint32_t source, uint32_t type, uint32_t id, uint32_t severity, int32_t length, char const* message, void const* user_param)
+	void view_port(int16_t _Width, int16_t _Height)
 	{
-		auto source_str = [source] () -> std::string {
-			switch (source)
-			{
-			case GL_DEBUG_SOURCE_API: return "API";
-			case GL_DEBUG_SOURCE_WINDOW_SYSTEM: return "WINDOW SYSTEM";
-			case GL_DEBUG_SOURCE_SHADER_COMPILER: return "SHADER COMPILER";
-			case GL_DEBUG_SOURCE_THIRD_PARTY:  return "THIRD PARTY";
-			case GL_DEBUG_SOURCE_APPLICATION: return "APPLICATION";
-			case GL_DEBUG_SOURCE_OTHER: return "OTHER";
-			default: return "UNKNOWN";
-			}
-		}();
+		gl::glViewport(0, 0, _Width, _Height);
+	}
 
-		auto type_str = [type] () {
-			switch (type)
-			{
-			case GL_DEBUG_TYPE_ERROR: return "ERROR";
-			case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: return "DEPRECATED_BEHAVIOR";
-			case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR: return "UNDEFINED_BEHAVIOR";
-			case GL_DEBUG_TYPE_PORTABILITY: return "PORTABILITY";
-			case GL_DEBUG_TYPE_PERFORMANCE: return "PERFORMANCE";
-			case GL_DEBUG_TYPE_MARKER:  return "MARKER";
-			case GL_DEBUG_TYPE_OTHER: return "OTHER";
-			default: return "UNKNOWN";
-			}
-		}();
+	void view_port_ex(int16_t _X, int16_t _Y, int16_t _Width, int16_t _Height)
+	{
+		gl::glViewport(_X, _Y, _Width, _Height);
+	}
 
-		auto severity_str = [severity] () {
-			switch (severity) {
-			case GL_DEBUG_SEVERITY_NOTIFICATION: return "NOTIFICATION";
-			case GL_DEBUG_SEVERITY_LOW: return "LOW";
-			case GL_DEBUG_SEVERITY_MEDIUM: return "MEDIUM";
-			case GL_DEBUG_SEVERITY_HIGH: return "HIGH";
-			default: return "UNKNOWN";
-			}
-		}();
+	namespace gl
+	{
+		void _stdcall callback(uint32_t source, uint32_t type, uint32_t id, uint32_t severity, int32_t length, char const* message, void const* user_param)
+		{
+			auto source_str = [source]() -> std::string {
+				switch (source)
+				{
+				case GL_DEBUG_SOURCE_API: return "API";
+				case GL_DEBUG_SOURCE_WINDOW_SYSTEM: return "WINDOW SYSTEM";
+				case GL_DEBUG_SOURCE_SHADER_COMPILER: return "SHADER COMPILER";
+				case GL_DEBUG_SOURCE_THIRD_PARTY:  return "THIRD PARTY";
+				case GL_DEBUG_SOURCE_APPLICATION: return "APPLICATION";
+				case GL_DEBUG_SOURCE_OTHER: return "OTHER";
+				default: return "UNKNOWN";
+				}
+			}();
 
-		std::cout << source_str << ", "
-			<< type_str << ", "
-			<< severity_str << ", "
-			<< id << ": "
-			<< message << std::endl;
+			auto type_str = [type]() {
+				switch (type)
+				{
+				case GL_DEBUG_TYPE_ERROR: return "ERROR";
+				case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: return "DEPRECATED_BEHAVIOR";
+				case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR: return "UNDEFINED_BEHAVIOR";
+				case GL_DEBUG_TYPE_PORTABILITY: return "PORTABILITY";
+				case GL_DEBUG_TYPE_PERFORMANCE: return "PERFORMANCE";
+				case GL_DEBUG_TYPE_MARKER:  return "MARKER";
+				case GL_DEBUG_TYPE_OTHER: return "OTHER";
+				default: return "UNKNOWN";
+				}
+			}();
+
+			auto severity_str = [severity]() {
+				switch (severity) {
+				case GL_DEBUG_SEVERITY_NOTIFICATION: return "NOTIFICATION";
+				case GL_DEBUG_SEVERITY_LOW: return "LOW";
+				case GL_DEBUG_SEVERITY_MEDIUM: return "MEDIUM";
+				case GL_DEBUG_SEVERITY_HIGH: return "HIGH";
+				default: return "UNKNOWN";
+				}
+			}();
+
+			std::cout << source_str << ", "
+				<< type_str << ", "
+				<< severity_str << ", "
+				<< id << ": "
+				<< message << std::endl;
+		}
+
+		
+
+
 	}
 }

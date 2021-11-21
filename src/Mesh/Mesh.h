@@ -31,36 +31,35 @@ namespace tgl
 
 	class Mesh
 	{
-		uint32_t				mVAO;
-		uint32_t				mIndicesBuffer;
-		int32_t					mIndicesCount;
-		uint32_t				mBuffer;
-		size_t					mVertexSize;
+		uint32_t	mVAO;
+		uint32_t	mIndicesBuffer;
+		int32_t		mIndicesCount;
+		uint32_t	mBuffer;
+		size_t		mVertexSize;
 	public:
 		Mesh();
+		~Mesh();
 		Mesh(const Mesh&) = delete;
 		Mesh& operator=(const Mesh&) = delete;
 		Mesh(Mesh&& _Other) noexcept;
 		Mesh& operator=(Mesh&& _Right) noexcept;
-		~Mesh();
+
+		void gen();
 
 		void set_indices(size_t _Count, uint32_t* _Elems);
-
 		void draw(uint32_t _GLType);
-
-		void toggle_attribut(uint32_t _Count, bool _Enable);
-
+		void toggle_attribut(uint32_t _Count, bool _Enable = true);
 		void bind();
 		void unbind();
 
 		template<size_t... _Args>
-		void set_attribut(size_t _Count, const float* _Data)
+		void set_attribut(size_t _Count, const float* _Data, unsigned _DrawMode)
 		{
 			bind();
 
 			if (!mBuffer)	gl::GenBuffers(1, &mBuffer);
 			gl::BindBuffer(GL_ARRAY_BUFFER, mBuffer);
-			gl::BufferData(GL_ARRAY_BUFFER, int64_t(_Count * sizeof(float)), _Data, GL_STATIC_DRAW);
+			gl::BufferData(GL_ARRAY_BUFFER, int64_t(_Count * sizeof(float)), _Data, _DrawMode);
 
 			mVertexSize = sizeof(float) * detail::unpack_sequence<_Args...>::get_sum();
 			auto offset = 0;

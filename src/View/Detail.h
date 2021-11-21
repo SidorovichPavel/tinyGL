@@ -46,6 +46,7 @@ namespace tgl
 			void enale_opengl_context() noexcept;
 			void mouse_raw_input(bool _Mode = true);
 			void show_cursor(bool mode) noexcept;
+			void set_title(const std::string& title) noexcept;
 			void send_message(uint32_t _Msg, uint64_t _WParam, int64_t _LParam) noexcept;
 			void post_message(uint32_t _Msg, uint64_t _WParam, int64_t _LParam) noexcept;
 			void invalidate_rect() noexcept;

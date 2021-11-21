@@ -26,7 +26,6 @@ namespace tgl {
 
 		void enable_mouse_raw_input() { base::mouse_raw_input(); };
 		void disable_mouse_raw_input() { base::mouse_raw_input(false); };
-		//void set_title(const std::wstring& title);
 		//void center_cursour();
 		//std::pair<int, int> get_global_center();
 		bool is_open() noexcept
@@ -37,6 +36,12 @@ namespace tgl {
 		std::pair<int, int> get_size() const noexcept
 		{
 			return std::pair<int, int>(base::mWidth, base::mHeight);
+		}
+
+		float get_ratio() const noexcept
+		{
+			float den = base::mHeight == 0 ? 0.001f : static_cast<float>(base::mHeight);
+			return static_cast<float>(base::mWidth) / den;
 		}
 		//TODO: work with controls
 		void add_control(IControls* _Control)

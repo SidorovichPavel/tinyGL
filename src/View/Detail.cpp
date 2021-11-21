@@ -299,6 +299,11 @@ namespace tgl::win
 		win::PostMessage(mHandle, static_cast<UINT>(_Msg), static_cast<WPARAM>(_WParam), static_cast<LPARAM>(_LParam));
 	}
 
+	void WinHandler::set_title(const std::string& title) noexcept
+	{
+		win::SetWindowText(mHandle, title.c_str());
+	}
+
 	void WinHandler::invalidate_rect() noexcept
 	{
 		InvalidateRect(mHandle, nullptr, false);

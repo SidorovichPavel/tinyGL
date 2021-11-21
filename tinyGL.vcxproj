@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GL\GLFuncs.cpp" />
+    <ClCompile Include="src\View\KeyBoard.cpp" />
     <ClCompile Include="src\Shader\Shader.cpp" />
     <ClCompile Include="src\App\App.cpp" />
     <ClCompile Include="src\tinyGL.cpp" />
@@ -34,6 +35,7 @@
     <ClCompile Include="src\View\Detail.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\View\KeyBoard.h" />
     <ClInclude Include="src\Event\Event.h" />
     <ClInclude Include="GL\glcorearb.h" />
     <ClInclude Include="GL\glext.h" />
