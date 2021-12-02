@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <memory>
 #include <atomic>
 #include <string>
 #include <src/style/style.h>
@@ -17,8 +18,8 @@ namespace tgl {
 
 		std::vector<IControls*> mControls;
 	public:
-		FullView(const int width, const int height, const std::string& title)
-			: base(width, height, title)
+		FullView(std::unique_ptr<Style>&& _Style_Ptr)
+			: base(std::move(_Style_Ptr))
 		{}
 		FullView(const FullView& _Right) = delete;
 		FullView(FullView&& _Right) = delete;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "../Utility/utility.h"
 
 #include <src/Event/Event.h>
@@ -38,8 +40,9 @@ namespace tgl
 			bool mIsOpen;
 			RECT mWinGlobalSize;
 			int mWidth, mHeight;
+			int mScreenWidth, mScreenHeight;
 
-			WinHandler(const int width, const int height, const std::string& title);
+			WinHandler(std::unique_ptr<Style>&& _Style_Ptr);
 			~WinHandler();
 
 			void init_opengl();

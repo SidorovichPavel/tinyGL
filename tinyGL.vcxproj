@@ -33,6 +33,7 @@
     <ClCompile Include="src\Texture\Texture.cpp" />
     <ClCompile Include="src\Texture\TextureAtlas.cpp" />
     <ClCompile Include="src\View\Detail.cpp" />
+    <ClCompile Include="src\Style\style.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\View\KeyBoard.h" />

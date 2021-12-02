@@ -162,34 +162,49 @@ namespace tgl::win
 		return 0;
 	}
 
-	WinHandler::WinHandler(const int width, const int height, const std::string& title)
+	WinHandler::WinHandler(std::unique_ptr<Style>&& _Style_Ptr)
 		:
-		mWidth(width),
-		mHeight(height),
 		mGL_resource_content(0),
 		mMouseRawInput(false),
 		mRawInputHandle(0),
 		mRawInputSize(0)
 	{
-		auto& temp = title;
+		mWidth = _Style_Ptr->get_width();
+		mHeight = _Style_Ptr->get_height();
+		auto& temp = _Style_Ptr->get_title();
 
 		WNDCLASSEX wc = { sizeof(wc) };
-		wc.hbrBackground = reinterpret_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
-		wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
-		wc.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
-		wc.hIconSm = LoadIcon(nullptr, IDI_APPLICATION);
-		wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-		wc.lpszClassName = temp.c_str();
-		wc.lpfnWndProc = WinHandler::GenProc;
+		wc.hbrBackground	= reinterpret_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
+		wc.hCursor			= LoadCursor(nullptr, IDC_ARROW);
+		wc.hIcon			= LoadIcon(nullptr, IDI_APPLICATION);
+		wc.hIconSm			= LoadIcon(nullptr, IDI_APPLICATION);
+		wc.style			= CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+		wc.lpszClassName	= temp.c_str();
+		wc.lpfnWndProc		= WinHandler::GenProc;
 
 		if (!RegisterClassEx(&wc))
 			throw std::runtime_error("class register error!");
 
-		mWinGlobalSize = { 0,0,width,height };
-		AdjustWindowRect(&mWinGlobalSize, WS_OVERLAPPEDWINDOW, 0);
+		mScreenWidth	= GetSystemMetrics(SM_CXSCREEN);
+		mScreenHeight	= GetSystemMetrics(SM_CYSCREEN);
+		
+		auto x = 0, y = 0;
+
+		if (_Style_Ptr->get_centered())
+		{
+			x = mScreenWidth - mWidth;
+			x /= 2;
+			y = mScreenHeight - mHeight;
+			y /= 2;
+		}
+		
+		mWinGlobalSize = { 0, 0, mWidth, mHeight };
+		unsigned win_stylee = WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME;
+		AdjustWindowRect(&mWinGlobalSize, win_stylee, 0);
 		mHandle = CreateWindowEx(
-			0, wc.lpszClassName, temp.c_str(), WS_OVERLAPPEDWINDOW,
-			0, 0, mWinGlobalSize.right - mWinGlobalSize.left, mWinGlobalSize.bottom - mWinGlobalSize.top,
+			0, wc.lpszClassName, temp.c_str(), win_stylee,
+			x, y,
+			mWinGlobalSize.right - mWinGlobalSize.left, mWinGlobalSize.bottom - mWinGlobalSize.top,
 			0, 0, 0,
 			this);
 

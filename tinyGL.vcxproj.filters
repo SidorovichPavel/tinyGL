@@ -88,6 +88,9 @@
     <ClCompile Include="src\View\Mouse.cpp">
       <Filter>src\View</Filter>
     </ClCompile>
+    <ClCompile Include="src\Style\style.cpp">
+      <Filter>src\Style</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\style\style.h">
