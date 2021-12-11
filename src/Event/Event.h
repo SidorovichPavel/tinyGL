@@ -52,7 +52,8 @@ namespace tgl
 
 	public:
 
-		FuncConteiner(func_t _Fn) : mFunction(_Fn) {};
+		FuncConteiner(func_t& _Fn) : mFunction(_Fn) {};
+		FuncConteiner(func_t&& _Fn) : mFunction(std::move(_Fn)) {};
 
 		Ret call(Args... args)
 		{
@@ -76,11 +77,13 @@ namespace tgl
 		using base = std::list<std::unique_ptr<IConteiner<Ret, Args...>>>;
 		using u_ptr_type = std::unique_ptr<IConteiner<Ret, Args...>>;
 		using function_type = std::function<Ret(Args...)>;
+		using func_conteiner_type = typename FuncConteiner<Ret, Args...>;
+		
 		template<class ClassT>
 		using method_type = typename ActualType<Ret(ClassT::*)(Args...)>::type;
+		
 		template<class ClassT>
 		using obj_conteiner_type = ObjConteiner<ClassT, Ret, Args...>;
-		using func_conteiner_type = typename FuncConteiner<Ret, Args...>;
 
 		Event() {}
 		Event(const Event&) = delete;
@@ -89,21 +92,29 @@ namespace tgl
 		Event& operator=(Event&&) = delete;
 
 		template<class ClassT>
-		base::iterator attach(ClassT* _Ptr, method_type<ClassT> _Met)
+		[[nodiscard]] base::iterator attach(ClassT* _Ptr, method_type<ClassT> _Met)
 		{
 			return base::insert(base::end(), u_ptr_type(new obj_conteiner_type<ClassT>(_Ptr, _Met)));
 		}
-		base::iterator attach(function_type _Fn)
+
+		[[nodiscard]] base::iterator attach(function_type& _Fn)
 		{
 			return base::insert(base::end(), u_ptr_type(new func_conteiner_type(_Fn)));
 		}
-		size_t detach_all()
+
+		[[nodiscard]] base::iterator attach(function_type&& _Fn)
+		{
+			return base::insert(base::end(), u_ptr_type(new func_conteiner_type(std::move(_Fn))));
+		}
+
+		[[nodiscard]] size_t detach_all()
 		{
 			size_t result = base::size();
 			base::clear();
 			return result;
 		}
-		Ret operator()(Args... args)
+
+		auto operator()(Args... args)
 		{
 			if constexpr (std::is_same<Ret, void>::value)
 			{
@@ -112,10 +123,10 @@ namespace tgl
 			}
 			else
 			{
-				Ret result;
+				std::vector<Ret> results;
 				for (auto& elem : *this)
-					result = elem->call(args...);
-				return result;
+					results.emplace_back(elem->call(args...));
+				return results;
 			}
 		}
 	};
