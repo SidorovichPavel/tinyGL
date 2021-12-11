@@ -1,7 +1,8 @@
-#include "Detail.h"
-#include "..\Utility\utility.h"
 #include <stdexcept>
-#include <gl/GL.h>
+
+#include "Detail.h"
+#include <gl\GL.h>
+#include "..\Utility\utility.h"
 
 #ifdef _WIN32
 namespace tgl::win
@@ -9,7 +10,6 @@ namespace tgl::win
 	/***********************************************************************************************************************************
 	****************************************************** WIN HANDLER *****************************************************************
 	************************************************************************************************************************************/
-
 
 	LRESULT WinHandler::GenProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 	{
@@ -37,7 +37,8 @@ namespace tgl::win
 
 	LRESULT WinHandler::WinProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 	{
-		unsigned int uiLParam = static_cast<unsigned int>(lParam);
+		unsigned int lParam32 = static_cast<unsigned int>(lParam);
+		unsigned long long wParam64 = static_cast<unsigned long long>(wParam);
 		switch (uMsg)
 		{
 		case WM_CREATE:
@@ -45,9 +46,9 @@ namespace tgl::win
 			break;
 		case WM_SIZE:
 			GetWindowRect(mHandle, &mWinGlobalSize);
-			mWidth = lo_word::get(uiLParam);
-			mHeight = hi_word::get(uiLParam);
-			mEvents.size(lo_word::get(uiLParam), hi_word::get(uiLParam));
+			mWidth = lo_word::get(lParam32);
+			mHeight = hi_word::get(lParam32);
+			mEvents.size(lo_word::get(lParam32), hi_word::get(lParam32));
 			break;
 		case WM_DESTROY:
 			this->mIsOpen = false;
@@ -58,38 +59,34 @@ namespace tgl::win
 			DestroyWindow(mHandle);
 			break;
 		case WM_KEYDOWN:
-			mEvents.key_down(static_cast<uint64_t>(wParam), static_cast<int64_t>(lParam));
+			mEvents.key_down(wParam64, static_cast<int64_t>(lParam));
 			break;
 		case WM_KEYUP:
-			mEvents.key_up(static_cast<uint64_t>(wParam), static_cast<int64_t>(lParam));
+			mEvents.key_up(wParam64, static_cast<int64_t>(lParam));
 			break;
 		case WM_MOUSEMOVE:
-			mEvents.mouse_move(get_x::get(uiLParam), get_y::get(uiLParam), static_cast<int64_t>(wParam));
+			mEvents.mouse_move(cut_x::get(lParam32), cut_y::get(lParam32), wParam64);
 			break;
 		case WM_MOVE:
 			GetWindowRect(mHandle, &mWinGlobalSize);
-
-			mEvents.move(get_x::get(uiLParam), get_y::get(uiLParam));
+			mEvents.move(cut_x::get(lParam32), cut_y::get(lParam32));
 			break;
 		case WM_MOUSEWHEEL:
-			mEvents.mouse_wheel(GET_KEYSTATE_WPARAM(wParam), GET_WHEEL_DELTA_WPARAM(wParam),
-				get_x::get(uiLParam), get_y::get(uiLParam));
+			mEvents.mouse_wheel(
+				cut_key_state::get(wParam64), cut_wheel_delta::get(wParam64), cut_x::get(lParam32), cut_y::get(lParam32)
+			);
 			break;
 		case WM_LBUTTONDOWN:
-			mEvents.mouse_lbutton_down(static_cast<int64_t>(wParam),
-				get_x::get(uiLParam), get_y::get(uiLParam));
+			mEvents.mouse_lbutton_down(wParam64, cut_x::get(lParam32), cut_y::get(lParam32));
 			break;
 		case WM_LBUTTONUP:
-			mEvents.mouse_lbutton_up(static_cast<int64_t>(wParam),
-				get_x::get(uiLParam), get_y::get(uiLParam));
+			mEvents.mouse_lbutton_up(wParam64, cut_x::get(lParam32), cut_y::get(lParam32));
 			break;
 		case WM_RBUTTONDOWN:
-			mEvents.mouse_rbutton_down(static_cast<int64_t>(wParam),
-				get_x::get(uiLParam), get_y::get(uiLParam));
+			mEvents.mouse_rbutton_down(wParam64, cut_x::get(lParam32), cut_y::get(lParam32));
 			break;
 		case WM_RBUTTONUP:
-			mEvents.mouse_rbutton_up(static_cast<int64_t>(wParam),
-				get_x::get(uiLParam), get_y::get(uiLParam));
+			mEvents.mouse_rbutton_up(wParam64, cut_x::get(lParam32), cut_y::get(lParam32));
 			break;
 		case WM_PAINT:
 		{
@@ -162,15 +159,16 @@ namespace tgl::win
 		return 0;
 	}
 
-	WinHandler::WinHandler(std::unique_ptr<Style>&& _Style_Ptr)
+	WinHandler::WinHandler(const Style* _Style_Ptr)
 		:
 		mGL_resource_content(0),
 		mMouseRawInput(false),
 		mRawInputHandle(0),
 		mRawInputSize(0)
 	{
-		mWidth = _Style_Ptr->get_width();
-		mHeight = _Style_Ptr->get_height();
+		auto [width, height] = _Style_Ptr->get_size();
+		mWidth = width;
+		mHeight = height;
 		auto& temp = _Style_Ptr->get_title();
 
 		WNDCLASSEX wc = { sizeof(wc) };
@@ -190,7 +188,7 @@ namespace tgl::win
 		
 		auto x = 0, y = 0;
 
-		if (_Style_Ptr->get_centered())
+		if (_Style_Ptr->get_state(Style::State::Center))
 		{
 			x = mScreenWidth - mWidth;
 			x /= 2;
@@ -209,7 +207,7 @@ namespace tgl::win
 			this);
 
 		mIsOpen = static_cast<bool>(mHandle);
-		if (mIsOpen)
+		if (mIsOpen && _Style_Ptr->get_state(Style::State::Visible))
 		{
 			UpdateWindow(mHandle);
 			ShowWindow(mHandle, SW_SHOWDEFAULT);
@@ -253,15 +251,15 @@ namespace tgl::win
 
 		int pixel_format = ChoosePixelFormat(mDevice_context, &pfd);
 		if (!pixel_format)
-			throw std::runtime_error("tinyGL[Win32] -> feiled wile pixel format choose");
+			throw std::runtime_error("tinyGL : feiled wile pixel format choose");
 
 		if (!SetPixelFormat(mDevice_context, pixel_format, &pfd))
-			throw std::runtime_error("tinyGL[Win32] -> failed wile set pixel format");
+			throw std::runtime_error("tinyGL : failed wile set pixel format");
 
 		mGL_resource_content = wglCreateContext(mDevice_context);
 	}
 
-	void WinHandler::enale_opengl_context() noexcept
+	void WinHandler::enable_opengl_context() noexcept
 	{
 		wglMakeCurrent(mDevice_context, mGL_resource_content);
 		glViewport(0, 0, mWidth, mHeight);
@@ -275,14 +273,14 @@ namespace tgl::win
 			RAWINPUTDEVICE rid = { 0x01,0x02,0,mHandle };
 
 			if (!RegisterRawInputDevices(&rid, 1, sizeof(rid)))
-				throw std::runtime_error("failed while enable raw input device");
+				throw std::runtime_error("tinyGL : failed while enable raw input device");
 		}
 		else
 		{
 			RAWINPUTDEVICE rid = { 0x01,0x02,RIDEV_REMOVE,nullptr };
 
 			if (!RegisterRawInputDevices(&rid, 1, sizeof(rid)))
-				throw std::runtime_error("failed while disable raw input device");
+				throw std::runtime_error("tinyGL : failed while disable raw input device");
 		}
 	}
 
