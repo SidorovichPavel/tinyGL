@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <GL/GLFuncs.h>
+#include "../../GL/GLFuncs.h"
 
 namespace tgl
 {

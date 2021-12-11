@@ -1,6 +1,6 @@
 #pragma once
 
-#include <src/Event/Event.h>
+#include "../Event/Event.h"
 
 #ifdef _WIN32
 namespace tgl::win

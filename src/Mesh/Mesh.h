@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <array>
-#include <GL/GLFuncs.h>
+#include "../../GL/GLFuncs.h"
 
 #pragma warning(disable:4312)
 
@@ -59,14 +59,15 @@ namespace tgl
 
 			if (!mBuffer)	gl::GenBuffers(1, &mBuffer);
 			gl::BindBuffer(GL_ARRAY_BUFFER, mBuffer);
-			gl::BufferData(GL_ARRAY_BUFFER, int64_t(_Count * sizeof(float)), _Data, _DrawMode);
-
+			gl::BufferData(GL_ARRAY_BUFFER, static_cast<int64_t>(_Count * sizeof(float)), _Data, _DrawMode);
+			
 			mVertexSize = sizeof(float) * detail::unpack_sequence<_Args...>::get_sum();
 			auto offset = 0;
 			for (auto i = 0; i < sizeof...(_Args); ++i)
 			{
 				auto elem = detail::unpack_sequence<_Args...>::get(i);
-				gl::VertexAttribPointer(i, (int32_t)elem, GL_FLOAT, GL_FALSE, (uint32_t)mVertexSize, reinterpret_cast<const void*>(offset));
+				gl::VertexAttribPointer(i, static_cast<int32_t>(elem), GL_FLOAT, GL_FALSE, static_cast<int32_t>(mVertexSize), 
+					reinterpret_cast<const void*>(offset));
 				gl::EnableVertexAttribArray(i);
 
 				offset += static_cast<uint32_t>(sizeof(float) * elem);

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GL/GLFuncs.h>
+#include "../../GL/GLFuncs.h"
 #include <src/SOIL.h>
 #include <cstdint>
 #include <vector>

@@ -3,11 +3,11 @@
 #include <memory>
 #include <atomic>
 #include <string>
-#include <src/style/style.h>
-#include <src/View/Controls/IControls.h>
-#include <src/Event/Event.h>
-#include <src/View/ViewTypes.h>
-#include <src/View/Detail.h>
+#include "../style/style.h"
+#include "Controls/IControls.h"
+#include "../Event/Event.h"
+#include "ViewTypes.h"
+#include "Detail.h"
 
 namespace tgl {
 	
@@ -15,11 +15,13 @@ namespace tgl {
 	class FullView final : public Handler
 	{
 		using base = Handler;
-
+		std::unique_ptr<Style> mStylePtr;
 		std::vector<IControls*> mControls;
 	public:
-		FullView(std::unique_ptr<Style>&& _Style_Ptr)
-			: base(std::move(_Style_Ptr))
+		FullView(Style* _StylePtr)
+			:
+			mStylePtr(_StylePtr),
+			base(_StylePtr)
 		{}
 		FullView(const FullView& _Right) = delete;
 		FullView(FullView&& _Right) = delete;

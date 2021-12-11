@@ -1,4 +1,4 @@
-#include <src/Shader/Shader.h>
+#include "Shader.h"
 
 #include <iterator>
 #include <stdexcept>

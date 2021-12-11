@@ -1,4 +1,4 @@
-#include <src/Mesh/Mesh.h>
+#include "Mesh.h"
 #include <iostream>
 #include <assert.h>
 

@@ -1,5 +1,5 @@
-﻿#include <src/tinyGL.h>
-#include <GL/GLFuncs.h>
+﻿#include "tinyGL.h"
+#include "../GL/GLFuncs.h"
 
 #include <stdexcept>
 #include <iostream>

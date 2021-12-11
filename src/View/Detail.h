@@ -3,11 +3,10 @@
 #include <memory>
 
 #include "../Utility/utility.h"
-
-#include <src/Event/Event.h>
-#include <src/View/Mouse.h>
-#include <src/Style/Style.h>
-#include <src/View/ViewTypes.h>
+#include "../Event/Event.h"
+#include "../Style/Style.h"
+#include "Mouse.h"
+#include "ViewTypes.h"
 
 namespace tgl
 {
@@ -36,17 +35,19 @@ namespace tgl
 			std::vector<uint8_t> mRawInputData;
 
 			detail::Events mEvents;
-		public:
+			
+		protected:
 			bool mIsOpen;
 			RECT mWinGlobalSize;
 			int mWidth, mHeight;
 			int mScreenWidth, mScreenHeight;
+		public:
 
-			WinHandler(std::unique_ptr<Style>&& _Style_Ptr);
+			WinHandler(const Style* _Style_Ptr);
 			~WinHandler();
 
 			void init_opengl();
-			void enale_opengl_context() noexcept;
+			void enable_opengl_context() noexcept;
 			void mouse_raw_input(bool _Mode = true);
 			void show_cursor(bool mode) noexcept;
 			void set_title(const std::string& title) noexcept;
