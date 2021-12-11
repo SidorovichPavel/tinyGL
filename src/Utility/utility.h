@@ -8,39 +8,27 @@ namespace tgl
 {
 	namespace detail
 	{
-		template<class InType, class OutType, bool Offset = false>
+		template<class InType, class OutType, size_t Offset = 0>
 		struct cutter
 		{
-			static OutType& get(InType& _In) noexcept
+			constexpr static OutType& get(InType& _In) noexcept
 			{
-				if constexpr (Offset)
-				{
-					return *(reinterpret_cast<OutType*>(&_In) + 1);
-				}
-				else
-				{
-					return *(reinterpret_cast<OutType*>(&_In) + 0);
-				}
+				return *(reinterpret_cast<OutType*>(&_In) + Offset);
 			}
 
-			static OutType get(InType&& _In) noexcept
+			constexpr static OutType get(InType&& _In) noexcept
 			{
-				if constexpr (Offset)
-				{
-					return *(reinterpret_cast<OutType*>(&_In) + 1);
-				}
-				else
-				{
-					return *(reinterpret_cast<OutType*>(&_In) + 0);
-				}
+				return *(reinterpret_cast<OutType*>(&_In) + Offset);
 			}
 		};
 	}
 
-	using hi_word = detail::cutter<unsigned int, unsigned short int, true>;
+	using hi_word = detail::cutter<unsigned int, unsigned short int, 1>;
 	using lo_word = detail::cutter<unsigned int, unsigned short int>;
-	using get_x = lo_word;
-	using get_y = hi_word;
+	using cut_y = hi_word;
+	using cut_x = lo_word;
+	using cut_key_state = detail::cutter<unsigned long long, unsigned short>;
+	using cut_wheel_delta = detail::cutter<unsigned long long, unsigned short, 1>;
 
 #ifdef UNICODE
 	using string = std::wstring;
