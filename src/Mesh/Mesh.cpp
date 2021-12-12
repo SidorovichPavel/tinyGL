@@ -11,7 +11,19 @@ namespace tgl
 		mIndicesCount(0),
 		mBuffer(0),
 		mVAO(0)
-	{}
+	{
+		gl::GenVertexArrays(1, &mVAO);
+	}
+
+	Mesh::~Mesh()
+	{
+		if (mBuffer)
+			gl::DeleteBuffers(1, &mBuffer);
+		if (mIndicesBuffer)
+			gl::DeleteBuffers(1, &mIndicesBuffer);
+		if (mVAO)
+			gl::DeleteVertexArrays(1, &mVAO);
+	}
 
 	Mesh::Mesh(Mesh&& _Other) noexcept
 		:
@@ -36,21 +48,6 @@ namespace tgl
 		std::swap(this->mBuffer, _Right.mBuffer);
 		std::swap(this->mVertexSize, _Right.mVertexSize);
 		return *this;
-	}
-
-	void Mesh::gen()
-	{
-		gl::GenVertexArrays(1, &mVAO);
-	}
-
-	Mesh::~Mesh()
-	{
-		if (mBuffer) 
-			gl::DeleteBuffers(1, &mBuffer);
-		if (mIndicesBuffer) 
-			gl::DeleteBuffers(1, &mIndicesBuffer);
-		if (mVAO) 
-			gl::DeleteVertexArrays(1, &mVAO);
 	}
 
 	void Mesh::draw(uint32_t _GLType)
@@ -80,17 +77,19 @@ namespace tgl
 		gl::BindVertexArray(0);
 	}
 
+	void Mesh::_swap(Mesh& _Other) noexcept
+	{
+	}
+
 	void Mesh::set_indices(size_t _Count, uint32_t* _Elems)
 	{
 		mIndicesCount = static_cast<int32_t>(_Count);
 
 		bind();
-
 		if (!mIndicesBuffer)
 			gl::GenBuffers(1, &mIndicesBuffer);
 		gl::BindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndicesBuffer);
 		gl::BufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32_t) * mIndicesCount, _Elems, GL_STATIC_DRAW);
-		
 		unbind();
 	}
 }

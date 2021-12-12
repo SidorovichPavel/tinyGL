@@ -12,10 +12,8 @@ namespace tgl
 		Texture2D(const std::string& file_name);
 		Texture2D(const uint8_t * const _Data, const int _Width, const int _Height) noexcept;
 		~Texture2D();
-
 		Texture2D(const Texture2D&) = delete;
 		Texture2D operator=(const Texture2D&) = delete;
-
 		Texture2D(Texture2D&& _Other) noexcept;
 		Texture2D& operator=(Texture2D&& _Right) noexcept;
 
@@ -28,5 +26,7 @@ namespace tgl
 		int32_t mWidth;
 		int32_t mHeight;
 		int32_t mChanels;
+
+		void _swap(Texture2D& _Other) noexcept;
 	};
 }

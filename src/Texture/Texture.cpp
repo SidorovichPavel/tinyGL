@@ -33,8 +33,28 @@ namespace tgl
 		bind();
 		gl::glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mWidth, mHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, _Data);
 		gl::GenerateMipmap(GL_TEXTURE_2D);
-
 		unbind();
+	}
+
+	Texture2D::~Texture2D()
+	{
+		gl::glDeleteTextures(1, &mHandle);
+	}
+
+	Texture2D::Texture2D(Texture2D&& _Other) noexcept
+		:
+		mHandle(0),
+		mWidth(0),
+		mHeight(0),
+		mChanels(0)
+	{
+		_swap(_Other);
+	}
+
+	Texture2D& Texture2D::operator=(Texture2D&& _Right) noexcept
+	{
+		_swap(_Right);
+		return *this;
 	}
 
 	void Texture2D::bind(int32_t _Target)
@@ -49,18 +69,13 @@ namespace tgl
 
 	void Texture2D::update(const uint8_t* const _Data)
 	{
+		bind();
 		gl::glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mWidth, mHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, _Data);
 		gl::GenerateMipmap(GL_TEXTURE_2D);
-
-		gl::glBindTexture(GL_TEXTURE_2D, 0);
+		unbind();
 	}
 
-	Texture2D::Texture2D(Texture2D&& _Other) noexcept
-		:
-		mHandle(0),
-		mWidth(0),
-		mHeight(0),
-		mChanels(0)
+	void Texture2D::_swap(Texture2D& _Other) noexcept
 	{
 		std::swap(this->mHandle, _Other.mHandle);
 		std::swap(this->mWidth, _Other.mWidth);
@@ -68,18 +83,7 @@ namespace tgl
 		std::swap(this->mChanels, _Other.mChanels);
 	}
 
-	Texture2D::~Texture2D()
-	{
-		gl::glDeleteTextures(1, &mHandle);
-	}
-
-	Texture2D& Texture2D::operator=(Texture2D&& _Right) noexcept
-	{
-		std::swap(this->mHandle, _Right.mHandle);
-		std::swap(this->mWidth, _Right.mWidth);
-		std::swap(this->mHeight, _Right.mHeight);
-		return *this;
-	}
+	
 
 	
 	
