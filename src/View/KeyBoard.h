@@ -14,8 +14,6 @@ namespace tgl
 	{
 		class WinKeyBoard
 		{
-			std::bitset<1024> mKeyStates;
-
 		public:
 			WinKeyBoard();
 			~WinKeyBoard();
@@ -30,6 +28,8 @@ namespace tgl
 			bool is_move_back() const noexcept;
 			bool is_move_right() const noexcept;
 			bool is_move_left() const noexcept;
+
+			std::bitset<1024> mKeyStates;
 		};
 	}
 
