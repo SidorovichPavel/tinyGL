@@ -48,7 +48,7 @@ namespace tgl
 		void bind();
 		void unbind();
 
-		template<size_t... Args>
+		template<uint32_t... Args>
 		void set_attribut(size_t _Count, const float* _Data, unsigned _DrawMode)
 		{
 			bind();
