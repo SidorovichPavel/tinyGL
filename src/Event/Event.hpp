@@ -92,22 +92,26 @@ namespace tgl
 		Event& operator=(Event&&) = delete;
 
 		template<class ClassT>
-		[[nodiscard]] base::iterator attach(ClassT* _Ptr, method_type<ClassT> _Met)
+		[[nodiscard]]
+		base::iterator attach(ClassT* _Ptr, method_type<ClassT> _Met)
 		{
 			return base::insert(base::end(), u_ptr_type(new obj_conteiner_type<ClassT>(_Ptr, _Met)));
 		}
 
-		[[nodiscard]] base::iterator attach(function_type& _Fn)
+		[[nodiscard]]
+		base::iterator attach(function_type& _Fn)
 		{
 			return base::insert(base::end(), u_ptr_type(new func_conteiner_type(_Fn)));
 		}
 
-		[[nodiscard]] base::iterator attach(function_type&& _Fn)
+		[[nodiscard]] 
+		base::iterator attach(function_type&& _Fn)
 		{
 			return base::insert(base::end(), u_ptr_type(new func_conteiner_type(std::move(_Fn))));
 		}
 
-		[[nodiscard]] size_t detach_all()
+		[[nodiscard]] 
+		size_t detach_all()
 		{
 			size_t result = base::size();
 			base::clear();

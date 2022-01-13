@@ -19,6 +19,7 @@ namespace tgl
 	namespace gl
 	{
 		#include <gl\GL.h>
+		#include "glcorearb.h"
 		#include "glext.h"
 
 		template<class>
