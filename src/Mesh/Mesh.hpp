@@ -4,8 +4,6 @@
 #include <array>
 #include "../../GL/GLFuncs.hpp"
 
-#pragma warning(disable:4312)
-
 namespace tgl
 {
 	namespace detail

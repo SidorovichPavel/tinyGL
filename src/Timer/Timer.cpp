@@ -1,8 +1,5 @@
 #include "Timer.hpp"
 
-
-#pragma warning(disable:26495)
-
 namespace tgl
 {
 	void Timer::STimerProc(win::HWND _Wnd, win::UINT _Msg, win::UINT_PTR _Handle, win::DWORD _Ms)
@@ -11,9 +8,9 @@ namespace tgl
 		(*pTimer).booom();
 	}
 
-	Timer::Timer(win::HWND _Win, unsigned _Delay) :
-		mHandle(reinterpret_cast<win::UINT_PTR>(this))
+	Timer::Timer(win::HWND _Win, unsigned _Delay)
 	{
+		mHandle = reinterpret_cast<win::UINT_PTR>(this);
 		win::SetTimer(_Win, mHandle, _Delay, Timer::STimerProc);
 	}
 
