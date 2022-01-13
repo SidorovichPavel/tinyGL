@@ -1,4 +1,5 @@
-#include "Mesh.h"
+#include "Mesh.hpp"
+
 #include <iostream>
 #include <assert.h>
 
@@ -33,20 +34,12 @@ namespace tgl
 		mBuffer(0),
 		mVertexSize(0)
 	{
-		std::swap(this->mVAO, _Other.mVAO);
-		std::swap(this->mIndicesBuffer, _Other.mIndicesBuffer);
-		std::swap(this->mIndicesCount, _Other.mIndicesCount);
-		std::swap(this->mBuffer, _Other.mBuffer);
-		std::swap(this->mVertexSize, _Other.mVertexSize);
+		_swap(_Other);
 	}
 
 	Mesh& Mesh::operator=(Mesh&& _Right) noexcept
 	{
-		std::swap(this->mVAO, _Right.mVAO);
-		std::swap(this->mIndicesBuffer, _Right.mIndicesBuffer);
-		std::swap(this->mIndicesCount, _Right.mIndicesCount);
-		std::swap(this->mBuffer, _Right.mBuffer);
-		std::swap(this->mVertexSize, _Right.mVertexSize);
+		_swap(_Right);
 		return *this;
 	}
 
@@ -79,6 +72,11 @@ namespace tgl
 
 	void Mesh::_swap(Mesh& _Other) noexcept
 	{
+		std::swap(this->mVAO, _Other.mVAO);
+		std::swap(this->mIndicesBuffer, _Other.mIndicesBuffer);
+		std::swap(this->mIndicesCount, _Other.mIndicesCount);
+		std::swap(this->mBuffer, _Other.mBuffer);
+		std::swap(this->mVertexSize, _Other.mVertexSize);
 	}
 
 	void Mesh::set_indices(size_t _Count, uint32_t* _Elems)

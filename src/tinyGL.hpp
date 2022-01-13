@@ -1,6 +1,6 @@
 #pragma once
 
-#include "..\GL\GLFuncs.h"
+#include "..\GL\GLFuncs.hpp"
 
 namespace tgl
 {

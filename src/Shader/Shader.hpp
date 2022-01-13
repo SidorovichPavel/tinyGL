@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "../../GL/GLFuncs.h"
+#include "../../GL/GLFuncs.hpp"
 
 namespace tgl
 {
@@ -14,6 +14,7 @@ namespace tgl
 
 		unsigned load_shader(const std::string& _Path, gl::GLenum shader_type);
 		unsigned compile_shader(gl::GLenum _Shader_Type, std::string&& _Code);
+		void _swap(Shader& _Other);
 	public:
 		static std::string path_prefix;
 

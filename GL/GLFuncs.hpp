@@ -19,7 +19,7 @@ namespace tgl
 	namespace gl
 	{
 		#include <gl\GL.h>
-		#include "..\GL\glext.h"
+		#include "glext.h"
 
 		template<class>
 		struct tgl_func {};

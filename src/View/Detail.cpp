@@ -1,8 +1,8 @@
 #include <stdexcept>
 
-#include "Detail.h"
+#include "Detail.hpp"
 #include <gl\GL.h>
-#include "..\Utility\utility.h"
+#include "..\Utility\utility.hpp"
 
 #ifdef _WIN32
 namespace tgl::win
@@ -48,7 +48,7 @@ namespace tgl::win
 			GetWindowRect(mHandle, &mWinGlobalSize);
 			mWidth = lo_word::get(lParam32);
 			mHeight = hi_word::get(lParam32);
-			mEvents.size(lo_word::get(lParam32), hi_word::get(lParam32));
+			mEvents.size(mWidth, mHeight);
 			break;
 		case WM_DESTROY:
 			this->mIsOpen = false;
@@ -166,6 +166,7 @@ namespace tgl::win
 		mRawInputHandle(0),
 		mRawInputSize(0)
 	{
+		std::tie(mWidth, mHeight) = _Style_Ptr->get_size();
 		auto [width, height] = _Style_Ptr->get_size();
 		mWidth = width;
 		mHeight = height;

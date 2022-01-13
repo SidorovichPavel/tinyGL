@@ -1,7 +1,7 @@
 #include <stdexcept>
 #include <vector>
 #include <iostream>
-#include "Texture.h"
+#include "Texture.hpp"
 #include <src/SOIL.h>
 
 namespace tgl

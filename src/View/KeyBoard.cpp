@@ -1,4 +1,4 @@
-#include "KeyBoard.h"
+#include "KeyBoard.hpp"
 
 namespace tgl
 {

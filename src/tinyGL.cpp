@@ -1,5 +1,5 @@
-﻿#include "tinyGL.h"
-#include "../GL/GLFuncs.h"
+﻿#include "tinyGL.hpp"
+#include "../GL/GLFuncs.hpp"
 
 #include <stdexcept>
 #include <iostream>
@@ -47,7 +47,7 @@ namespace tgl
 		
 		return std::make_pair(false, static_cast<int>(msg.wParam));
 	#else
-		//TODO
+		//TODO:
 	#endif
 	}
 
@@ -90,15 +90,13 @@ namespace tgl
 		HDC dc = GetDC(handle);
 		int pixel_format = ChoosePixelFormat(dc, &pfd);
 		if (!pixel_format)
-			throw std::runtime_error("tinyGL[Win32] -> init failed -> feiled wile pixel format choose");
+			throw std::runtime_error("tinyGL::ChoosePixelFormat::feiled wile pixel format choose");
 
 		if (!SetPixelFormat(dc, pixel_format, &pfd))
-			throw std::runtime_error("tinyGL[Win32] -> init failed -> failed wile set pixel format");
+			throw std::runtime_error("tinyGL::SetPixelFormat::failed wile set pixel format");
 
 		HGLRC gl_rc = wglCreateContext(dc);
 		wglMakeCurrent(dc, gl_rc);
-		
-		std::cout << "Loading OpenGL extentions..." << std::endl;
 
 		#define GL_INIT_FUNC(name, type, gl_name) name = gl::tgl_func<type>::LoadFunction(#gl_name)
 		#define GL_INIT(type, name) GL_INIT_FUNC(gl::name, gl::type, gl##name)
@@ -141,8 +139,6 @@ namespace tgl
 
 		GL_INIT(PFNGLDEBUGMESSAGECALLBACKPROC, DebugMessageCallback);
 		
-		std::cout << "Done" << std::endl;
-
 		wglDeleteContext(gl_rc);
 		DestroyWindow(handle);
 

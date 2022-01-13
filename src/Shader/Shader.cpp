@@ -1,4 +1,4 @@
-#include "Shader.h"
+#include "Shader.hpp"
 
 #include <iterator>
 #include <stdexcept>
@@ -38,28 +38,17 @@ namespace tgl
 	}
 
 	Shader::Shader(Shader&& _Other) noexcept
+		:
+		mProgram(0),
+		mVertexShader(0),
+		mFragmentShader(0)
 	{
-		mProgram = _Other.mProgram; 
-		_Other.mProgram = 0;
-		
-		mVertexShader = _Other.mVertexShader;
-		_Other.mVertexShader = 0;
-
-		mFragmentShader = _Other.mFragmentShader;
-		_Other.mFragmentShader = 0;
+		_swap(_Other);
 	}
 
 	Shader& Shader::operator=(Shader&& _Right) noexcept
 	{
-		mProgram = _Right.mProgram;
-		_Right.mProgram = 0;
-
-		mVertexShader = _Right.mVertexShader;
-		_Right.mVertexShader = 0;
-
-		mFragmentShader = _Right.mFragmentShader;
-		_Right.mFragmentShader = 0;
-
+		_swap(_Right);
 		return *this;
 	}
 
@@ -106,6 +95,13 @@ namespace tgl
 			return shader;
 		else
 			throw std::runtime_error(log);
+	}
+
+	void Shader::_swap(Shader& _Other)
+	{
+		std::swap(this->mProgram, _Other.mProgram);
+		std::swap(this->mVertexShader, _Other.mVertexShader);
+		std::swap(this->mFragmentShader, _Other.mFragmentShader);
 	}
 
 	void Shader::link() noexcept

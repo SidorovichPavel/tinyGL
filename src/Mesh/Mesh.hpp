@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <array>
-#include "../../GL/GLFuncs.h"
+#include "../../GL/GLFuncs.hpp"
 
 #pragma warning(disable:4312)
 

@@ -1,4 +1,4 @@
-#include "Mouse.h"
+#include "Mouse.hpp"
 
 #ifdef _WIN32
 namespace tgl::win

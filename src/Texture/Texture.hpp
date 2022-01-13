@@ -2,7 +2,7 @@
 
 #include <cstdint>
 #include <string>
-#include "../../GL/GLFuncs.h"
+#include "../../GL/GLFuncs.hpp"
 
 namespace tgl
 {

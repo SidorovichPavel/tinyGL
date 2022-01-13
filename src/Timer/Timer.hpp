@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Event/Event.h"
+#include "../Event/Event.hpp"
 
 namespace tgl
 {

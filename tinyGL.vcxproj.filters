@@ -11,9 +11,6 @@
     <Filter Include="GL">
       <UniqueIdentifier>{bcd44663-d7f8-463c-a017-48e9537f25b6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\App">
-      <UniqueIdentifier>{38b76ae9-edc1-4c6d-a084-3f8bfaf41bf2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\Event">
       <UniqueIdentifier>{fde7d0d6-237d-4797-9e9c-e7300bfe359f}</UniqueIdentifier>
     </Filter>
@@ -55,9 +52,6 @@
     <ClCompile Include="src\Timer\Timer.cpp">
       <Filter>src\Timer</Filter>
     </ClCompile>
-    <ClCompile Include="src\App\App.cpp">
-      <Filter>src\App</Filter>
-    </ClCompile>
     <ClCompile Include="src\Shader\Shader.cpp">
       <Filter>src\Shader</Filter>
     </ClCompile>
@@ -93,10 +87,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\style\style.h">
+    <ClInclude Include="src\style\style.hpp">
       <Filter>src\Style</Filter>
     </ClInclude>
-    <ClInclude Include="src\tinyGL.h">
+    <ClInclude Include="src\tinyGL.hpp">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="GL\wglext.h">
@@ -114,55 +108,52 @@
     <ClInclude Include="GL\wgl.h">
       <Filter>GL</Filter>
     </ClInclude>
-    <ClInclude Include="GL\GLFuncs.h">
+    <ClInclude Include="GL\GLFuncs.hpp">
       <Filter>GL</Filter>
     </ClInclude>
-    <ClInclude Include="src\Timer\Timer.h">
+    <ClInclude Include="src\Timer\Timer.hpp">
       <Filter>src\Timer</Filter>
     </ClInclude>
-    <ClInclude Include="src\App\App.h">
-      <Filter>src\App</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Event\Event.h">
+    <ClInclude Include="src\Event\Event.hpp">
       <Filter>src\Event</Filter>
     </ClInclude>
-    <ClInclude Include="src\Shader\Shader.h">
+    <ClInclude Include="src\Shader\Shader.hpp">
       <Filter>src\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="src\Texture\Texture.h">
+    <ClInclude Include="src\Texture\Texture.hpp">
       <Filter>src\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="src\Mesh\Mesh.h">
+    <ClInclude Include="src\Mesh\Mesh.hpp">
       <Filter>src\Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="src\Texture\TextureAtlas.h">
+    <ClInclude Include="src\Texture\TextureAtlas.hpp">
       <Filter>src\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="src\View\Controls\Edit\EditControl.h">
+    <ClInclude Include="src\View\Controls\Edit\EditControl.hpp">
       <Filter>src\View\Edit</Filter>
     </ClInclude>
-    <ClInclude Include="src\View\Controls\IControls.h">
+    <ClInclude Include="src\View\Controls\IControls.hpp">
       <Filter>src\View\Controls</Filter>
     </ClInclude>
-    <ClInclude Include="src\View\Controls\Font\Font.h">
+    <ClInclude Include="src\View\Controls\Font\Font.hpp">
       <Filter>src\View\Font</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utility\utility.h">
+    <ClInclude Include="src\Utility\utility.hpp">
       <Filter>src\utility</Filter>
     </ClInclude>
-    <ClInclude Include="src\View\Detail.h">
+    <ClInclude Include="src\View\Detail.hpp">
       <Filter>src\View</Filter>
     </ClInclude>
-    <ClInclude Include="src\View\KeyBoard.h">
+    <ClInclude Include="src\View\KeyBoard.hpp">
       <Filter>src\View</Filter>
     </ClInclude>
-    <ClInclude Include="src\View\Mouse.h">
+    <ClInclude Include="src\View\Mouse.hpp">
       <Filter>src\View</Filter>
     </ClInclude>
-    <ClInclude Include="src\View\View.h">
+    <ClInclude Include="src\View\View.hpp">
       <Filter>src\View</Filter>
     </ClInclude>
-    <ClInclude Include="src\View\ViewTypes.h">
+    <ClInclude Include="src\View\ViewTypes.hpp">
       <Filter>src\View</Filter>
     </ClInclude>
   </ItemGroup>

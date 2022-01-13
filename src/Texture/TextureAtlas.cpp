@@ -1,4 +1,4 @@
-#include "TextureAtlas.h"
+#include "TextureAtlas.hpp"
 #include <src/SOIL.h>
 #include <iterator>
 #include <algorithm>

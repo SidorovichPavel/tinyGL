@@ -1,4 +1,4 @@
-#include "GLFuncs.h"
+#include "GLFuncs.hpp"
 
 namespace tgl::gl
 {

@@ -3,11 +3,11 @@
 #include <memory>
 #include <atomic>
 #include <string>
-#include "../style/style.h"
-#include "Controls/IControls.h"
-#include "../Event/Event.h"
-#include "ViewTypes.h"
-#include "Detail.h"
+#include "../style/style.hpp"
+#include "Controls/IControls.hpp"
+#include "../Event/Event.hpp"
+#include "ViewTypes.hpp"
+#include "Detail.hpp"
 
 namespace tgl {
 	

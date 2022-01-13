@@ -2,11 +2,11 @@
 
 #include <memory>
 
-#include "../Utility/utility.h"
-#include "../Event/Event.h"
-#include "../Style/Style.h"
-#include "Mouse.h"
-#include "ViewTypes.h"
+#include "../Utility/utility.hpp"
+#include "../Event/Event.hpp"
+#include "../Style/Style.hpp"
+#include "Mouse.hpp"
+#include "ViewTypes.hpp"
 
 namespace tgl
 {

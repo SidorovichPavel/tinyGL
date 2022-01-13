@@ -22,7 +22,6 @@
     <ClCompile Include="GL\GLFuncs.cpp" />
     <ClCompile Include="src\View\KeyBoard.cpp" />
     <ClCompile Include="src\Shader\Shader.cpp" />
-    <ClCompile Include="src\App\App.cpp" />
     <ClCompile Include="src\tinyGL.cpp" />
     <ClCompile Include="src\Utility\utility.cpp" />
     <ClCompile Include="src\View\Controls\Edit\EditControl.cpp" />
@@ -36,30 +35,29 @@
     <ClCompile Include="src\Style\style.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\View\KeyBoard.h" />
-    <ClInclude Include="src\Event\Event.h" />
+    <ClInclude Include="src\View\KeyBoard.hpp" />
+    <ClInclude Include="src\Event\Event.hpp" />
     <ClInclude Include="GL\glcorearb.h" />
     <ClInclude Include="GL\glext.h" />
     <ClInclude Include="GL\glxext.h" />
     <ClInclude Include="GL\wgl.h" />
     <ClInclude Include="GL\wglext.h" />
-    <ClInclude Include="GL\GLFuncs.h" />
-    <ClInclude Include="src\Shader\Shader.h" />
-    <ClInclude Include="src\App\App.h" />
-    <ClInclude Include="src\style\style.h" />
-    <ClInclude Include="src\tinyGL.h" />
-    <ClInclude Include="src\Utility\utility.h" />
-    <ClInclude Include="src\View\Controls\Edit\EditControl.h" />
-    <ClInclude Include="src\View\Controls\Font\Font.h" />
-    <ClInclude Include="src\View\Controls\IControls.h" />
-    <ClInclude Include="src\View\Mouse.h" />
-    <ClInclude Include="src\View\View.h" />
-    <ClInclude Include="src\Mesh\Mesh.h" />
-    <ClInclude Include="src\Timer\Timer.h" />
-    <ClInclude Include="src\Texture\Texture.h" />
-    <ClInclude Include="src\Texture\TextureAtlas.h" />
-    <ClInclude Include="src\View\Detail.h" />
-    <ClInclude Include="src\View\ViewTypes.h" />
+    <ClInclude Include="GL\GLFuncs.hpp" />
+    <ClInclude Include="src\Shader\Shader.hpp" />
+    <ClInclude Include="src\style\style.hpp" />
+    <ClInclude Include="src\tinyGL.hpp" />
+    <ClInclude Include="src\Utility\utility.hpp" />
+    <ClInclude Include="src\View\Controls\Edit\EditControl.hpp" />
+    <ClInclude Include="src\View\Controls\Font\Font.hpp" />
+    <ClInclude Include="src\View\Controls\IControls.hpp" />
+    <ClInclude Include="src\View\Mouse.hpp" />
+    <ClInclude Include="src\View\View.hpp" />
+    <ClInclude Include="src\Mesh\Mesh.hpp" />
+    <ClInclude Include="src\Timer\Timer.hpp" />
+    <ClInclude Include="src\Texture\Texture.hpp" />
+    <ClInclude Include="src\Texture\TextureAtlas.hpp" />
+    <ClInclude Include="src\View\Detail.hpp" />
+    <ClInclude Include="src\View\ViewTypes.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
