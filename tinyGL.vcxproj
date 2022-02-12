@@ -19,7 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Shader\FileShader.cpp" />
     <ClCompile Include="GL\GLFuncs.cpp" />
+    <ClCompile Include="src\Shader\StaticShader.cpp" />
     <ClCompile Include="src\View\KeyBoard.cpp" />
     <ClCompile Include="src\Shader\Shader.cpp" />
     <ClCompile Include="src\tinyGL.cpp" />
@@ -35,6 +37,8 @@
     <ClCompile Include="src\Style\style.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Shader\FileShader.hpp" />
+    <ClInclude Include="src\Shader\StaticShader.hpp" />
     <ClInclude Include="src\View\KeyBoard.hpp" />
     <ClInclude Include="src\Event\Event.hpp" />
     <ClInclude Include="GL\glcorearb.h" />

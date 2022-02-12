@@ -73,8 +73,9 @@ namespace tgl::win
 			break;
 		case WM_MOUSEWHEEL:
 			mEvents.mouse_wheel(
-				cut_key_state::get(wParam64), cut_wheel_delta::get(wParam64), cut_x::get(lParam32), cut_y::get(lParam32)
-			);
+				cut_key_state::get(wParam64), 
+				cut_wheel_delta::get(wParam64), 
+				cut_x::get(lParam32), cut_y::get(lParam32));
 			break;
 		case WM_LBUTTONDOWN:
 			mEvents.mouse_lbutton_down(wParam64, cut_x::get(lParam32), cut_y::get(lParam32));
@@ -144,10 +145,8 @@ namespace tgl::win
 			switch (raw->header.dwType)
 			{
 			case RIM_TYPEMOUSE:
-				if (!mMouseRawInput)
-					break;
-
-				mEvents.mouse_raw_input(raw->data.mouse.usFlags, raw->data.mouse.lLastX, raw->data.mouse.lLastX);
+				if (mMouseRawInput)
+					mEvents.mouse_raw_input(raw->data.mouse.usFlags, raw->data.mouse.lLastX, raw->data.mouse.lLastX);
 				break;
 			}
 		}

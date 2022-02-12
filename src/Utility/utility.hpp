@@ -11,7 +11,7 @@ namespace tgl
 		template<class InType, class OutType, size_t Offset = 0>
 		struct cutter
 		{
-			static_assert(sizeof(InType) >= sizeof(OutType), "fail");
+			static_assert(sizeof(OutType) < sizeof(InType), "fail");
 			constexpr static OutType& get(InType& _In) noexcept
 			{
 				return *(reinterpret_cast<OutType*>(&_In) + Offset);

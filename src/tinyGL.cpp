@@ -51,11 +51,7 @@ namespace tgl
 	#endif
 	}
 
-	void clear_black() noexcept
-	{
-		gl::glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		tgl::gl::glClearColor(0.f, 0.f, 0.0f, 1.f);
-	}
+	
 
 	void Init()
 	{
@@ -107,11 +103,11 @@ namespace tgl
 		GL_INIT(PFNGLDELETEBUFFERSPROC, DeleteBuffers);
 
 		GL_INIT(PFNGLGENVERTEXARRAYSPROC, GenVertexArrays);
+		GL_INIT(PFNGLDELETEVERTEXARRAYSPROC, DeleteVertexArrays);
 		GL_INIT(PFNGLVERTEXATTRIBPOINTERPROC, VertexAttribPointer);
 		GL_INIT(PFNGLBINDVERTEXARRAYPROC, BindVertexArray);
 		GL_INIT(PFNGLENABLEVERTEXATTRIBARRAYPROC, EnableVertexAttribArray);
 		GL_INIT(PFNGLDISABLEVERTEXATTRIBARRAYPROC, DisableVertexAttribArray);
-		GL_INIT(PFNGLDELETEVERTEXARRAYSPROC, DeleteVertexArrays);
 
 		GL_INIT(PFNGLCREATEPROGRAMPROC, CreateProgram);
 		GL_INIT(PFNGLDELETEPROGRAMPROC, DeleteProgram);
@@ -147,7 +143,19 @@ namespace tgl
 
 #endif
 	}
+
+	void clear_black() noexcept
+	{
+		gl::glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		tgl::gl::glClearColor(0.f, 0.f, 0.0f, 1.f);
+	}
 	
+	void clear_color(float _R, float _G, float _B) noexcept
+	{
+		gl::glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		tgl::gl::glClearColor(_R, _G, _B, 1.f);
+	}
+
 	void view_port(int16_t _Width, int16_t _Height)
 	{
 		gl::glViewport(0, 0, _Width, _Height);
