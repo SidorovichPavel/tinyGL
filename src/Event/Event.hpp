@@ -37,7 +37,7 @@ namespace tgl
 
 		Ret call(Args... args)
 		{
-			if constexpr (std::is_same<Ret, void>::value)
+			if constexpr (std::is_same_v<Ret, void>)
 				(mClassPtr->*mMethod)(args...);
 			else
 				return (mClassPtr->*mMethod)(args...);
@@ -52,12 +52,11 @@ namespace tgl
 
 	public:
 
-		FuncConteiner(func_t& _Fn) : mFunction(_Fn) {};
-		FuncConteiner(func_t&& _Fn) : mFunction(std::move(_Fn)) {};
+		FuncConteiner(func_t&& _Fn) : mFunction(std::forward<func_t>(_Fn)) {};
 
 		Ret call(Args... args)
 		{
-			if constexpr (std::is_same<Ret, void>::value)
+			if constexpr (std::is_same_v<Ret, void>)
 				mFunction(std::forward<Args>(args)...);
 			else
 				return mFunction(std::forward<Args>(args)...);
@@ -67,7 +66,7 @@ namespace tgl
 	template<class T>
 	class Event
 	{
-		static_assert("No... Pleas, use that: Event(<return_t(arguments_t...)>)");
+		static_assert("No... Pleas, use that: Event<return_t(arguments_t...)>");
 	};
 
 	template<class Ret, class... Args>
@@ -98,16 +97,10 @@ namespace tgl
 			return base::insert(base::end(), u_ptr_type(new obj_conteiner_type<ClassT>(_Ptr, _Met)));
 		}
 
-		[[nodiscard]]
-		base::iterator attach(function_type& _Fn)
-		{
-			return base::insert(base::end(), u_ptr_type(new func_conteiner_type(_Fn)));
-		}
-
 		[[nodiscard]] 
 		base::iterator attach(function_type&& _Fn)
 		{
-			return base::insert(base::end(), u_ptr_type(new func_conteiner_type(std::move(_Fn))));
+			return base::insert(base::end(), u_ptr_type(new func_conteiner_type(std::forward<function_type>(_Fn))));
 		}
 
 		[[nodiscard]] 
@@ -120,7 +113,7 @@ namespace tgl
 
 		auto operator()(Args... args)
 		{
-			if constexpr (std::is_same<Ret, void>::value)
+			if constexpr (std::is_same_v<Ret, void>)
 			{
 				for (auto& elem : *this)
 					elem->call(args...);
@@ -129,9 +122,10 @@ namespace tgl
 			{
 				std::vector<Ret> results;
 				for (auto& elem : *this)
-					results.emplace_back(elem->call(args...));
+					results.push_back(elem->call(args...));
 				return results;
 			}
 		}
+
 	};
 }
