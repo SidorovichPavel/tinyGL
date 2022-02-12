@@ -7,28 +7,29 @@ namespace tgl
 {
 	class Shader
 	{
+	protected:
+
 		unsigned
 			mProgram,
 			mVertexShader,
-			mFragmentShader;
+			mFragmentShader,
+			mGeometryShader;
 
-		unsigned load_shader(const std::string& _Path, gl::GLenum shader_type);
-		unsigned compile_shader(gl::GLenum _Shader_Type, std::string&& _Code);
-		void _swap(Shader& _Other);
+		unsigned compile_shader(gl::GLenum _Shader_Type, const std::string& _Code);
+
 	public:
 		static std::string path_prefix;
 
-		void link() noexcept;
-		Shader(const std::string& shader_pack_name);
-		Shader(std::string&& _Vert_Shader_Code, std::string&& _Frag_Shader_Code);
-		~Shader();
+		Shader() noexcept;
+		virtual ~Shader();
 		
-		Shader(Shader&& _Other) noexcept;
-		Shader& operator=(Shader&& _Right) noexcept;
+		Shader(Shader&& _Other) = delete;
+		Shader& operator=(Shader&& _Right) = delete;
 
 		Shader(const Shader&) = delete;
 		Shader& operator=(const Shader&) = delete;
 		
+		void link() noexcept;
 		void bind_attribute(unsigned _Index, const std::string& _Name);
 		void use();
 
