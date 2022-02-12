@@ -23,7 +23,10 @@ namespace tgl
 		#include "glext.h"
 
 		template<class>
-		struct tgl_func {};
+		struct tgl_func 
+		{
+			static_assert("something");
+		};
 
 		template<class Ret, class... Params>
 		struct tgl_func<Ret(_stdcall*)(Params...)>
@@ -45,11 +48,11 @@ namespace tgl
 		GL_EXTERN_DECL(PFNGLDELETEBUFFERSPROC, DeleteBuffers);
 
 		GL_EXTERN_DECL(PFNGLGENVERTEXARRAYSPROC, GenVertexArrays);
+		GL_EXTERN_DECL(PFNGLDELETEVERTEXARRAYSPROC, DeleteVertexArrays);
 		GL_EXTERN_DECL(PFNGLVERTEXATTRIBPOINTERPROC, VertexAttribPointer);
 		GL_EXTERN_DECL(PFNGLBINDVERTEXARRAYPROC, BindVertexArray);
 		GL_EXTERN_DECL(PFNGLENABLEVERTEXATTRIBARRAYPROC, EnableVertexAttribArray);
 		GL_EXTERN_DECL(PFNGLDISABLEVERTEXATTRIBARRAYPROC, DisableVertexAttribArray);
-		GL_EXTERN_DECL(PFNGLDELETEVERTEXARRAYSPROC, DeleteVertexArrays);
 
 		GL_EXTERN_DECL(PFNGLCREATEPROGRAMPROC, CreateProgram);
 		GL_EXTERN_DECL(PFNGLDELETEPROGRAMPROC, DeleteProgram);
