@@ -16,6 +16,8 @@ namespace tgl
 			const std::string& _Fragment_File_Name,
 			const std::string& _Geometry_File_Name);
 		~FileShader() noexcept;
+
+
 	};
 
 }

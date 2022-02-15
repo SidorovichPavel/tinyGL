@@ -17,4 +17,15 @@ namespace tgl
 
 	}
 
+	StaticShader::StaticShader(StaticShader&& _Other) noexcept
+	{
+		base::_swap(_Other);
+	}
+
+	StaticShader& StaticShader::operator=(StaticShader&& _Right) noexcept
+	{
+		base::_swap(_Right);
+		return *this;
+	}
+
 }

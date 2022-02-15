@@ -45,10 +45,16 @@ namespace tgl
 		char log[0x1000];
 		int length;
 		gl::GetShaderInfoLog(shader, sizeof(log), &length, log);
-		if (length <= 0)
-			return shader;
-		else
-			return 0;
+		auto res = (length <= 0) ? shader : 0u;
+		return res;
+	}
+
+	void Shader::_swap(Shader& _Other) noexcept
+	{
+		std::swap(this->mProgram, _Other.mProgram);
+		std::swap(this->mVertexShader, _Other.mVertexShader);
+		std::swap(this->mFragmentShader, _Other.mFragmentShader);
+		std::swap(this->mGeometryShader, _Other.mGeometryShader);
 	}
 
 	void Shader::link() noexcept

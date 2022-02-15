@@ -16,7 +16,7 @@ namespace tgl
 			mGeometryShader;
 
 		unsigned compile_shader(gl::GLenum _Shader_Type, const std::string& _Code);
-
+		void _swap(Shader& _Other) noexcept;
 	public:
 		static std::string path_prefix;
 
@@ -42,3 +42,6 @@ namespace tgl
 
 
 }
+
+#include "StaticShader.hpp"
+#include "FileShader.hpp"
