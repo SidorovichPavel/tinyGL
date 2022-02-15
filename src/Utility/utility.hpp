@@ -3,11 +3,20 @@
 #include <bitset>
 #include <array>
 #include <string>
+#include <chrono>
 
 namespace tgl
 {
 	namespace detail
 	{
+		struct FrameTimeInfo
+		{
+			float duration;
+			std::chrono::time_point<std::chrono::steady_clock> timepoint;
+		};
+
+		FrameTimeInfo update_frame_time(std::chrono::time_point<std::chrono::steady_clock> _Prev_TP);
+
 		template<class InType, class OutType, size_t Offset = 0>
 		struct cutter
 		{
