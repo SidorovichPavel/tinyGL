@@ -41,6 +41,9 @@
     <Filter Include="src\View\Font">
       <UniqueIdentifier>{e53106d2-4667-4059-818f-9a5d8ba9a3a0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Logger">
+      <UniqueIdentifier>{b4bf7579-e000-4f31-8e1c-4af9e1ed17b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\tinyGL.cpp">
@@ -90,6 +93,9 @@
     </ClCompile>
     <ClCompile Include="src\Shader\StaticShader.cpp">
       <Filter>src\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Logger\Logger.cpp">
+      <Filter>src\Logger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -167,6 +173,9 @@
     </ClInclude>
     <ClInclude Include="src\Shader\StaticShader.hpp">
       <Filter>src\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Logger\Logger.hpp">
+      <Filter>src\Logger</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
