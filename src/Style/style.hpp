@@ -17,7 +17,7 @@ namespace tgl
 
 	public:
 		
-		enum class State
+		enum class State : size_t
 		{
 			Center = 0,
 			Visible,
@@ -38,6 +38,3 @@ namespace tgl
 	};
 
 }
-
-
-#undef gen
