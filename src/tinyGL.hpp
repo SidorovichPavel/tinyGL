@@ -10,7 +10,7 @@ namespace tgl
 	std::pair<bool, int> event_pool() noexcept;
 
 	void clear_black() noexcept;
-	/*clamp(0.f,1.f,params)*/
+	/*clamp(0.f,1.f,each param)*/
 	void clear_color(float _R, float _G, float _B) noexcept;
 	void view_port(int16_t _Width, int16_t _Height);
 	void view_port_ex(int16_t _X, int16_t _Y, int16_t _Width, int16_t _Height);
