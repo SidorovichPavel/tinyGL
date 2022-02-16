@@ -137,7 +137,7 @@ namespace tgl::win
 
 			if (GetRawInputData(ri, RID_INPUT, mRawInputData.data(), &mRawInputSize, sizeof(RAWINPUTHEADER)) != mRawInputSize)
 				break;
-
+			
 			RAWINPUT* raw = reinterpret_cast<RAWINPUT*>(mRawInputData.data());
 
 			mEvents.raw_input(raw);
@@ -146,7 +146,7 @@ namespace tgl::win
 			{
 			case RIM_TYPEMOUSE:
 				if (mMouseRawInput)
-					mEvents.mouse_raw_input(raw->data.mouse.usFlags, raw->data.mouse.lLastX, raw->data.mouse.lLastX);
+					mEvents.mouse_raw_input(raw->data.mouse.usFlags, raw->data.mouse.lLastX, raw->data.mouse.lLastY);
 				break;
 			}
 		}
