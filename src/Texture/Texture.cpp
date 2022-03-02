@@ -2,27 +2,29 @@
 #include <vector>
 #include <iostream>
 #include "Texture.hpp"
-#include <src/SOIL.h>
+#include <SOIL.h>
 
 namespace tgl
 {
 	Texture2D::Texture2D(const std::string& file_name)
 	{
-		auto path = "res/" + file_name;
-		uint8_t* image = SOIL_load_image(path.c_str(), &mWidth, &mHeight, &mChanels, SOIL_LOAD_RGB);
+		uint8_t* image = SOIL_load_image(file_name.c_str(), &mWidth, &mHeight, &mChanels, SOIL_LOAD_RGB);
 
 		if (!image)
 			throw std::runtime_error("failed while load image");
-
+		
 		gl::glGenTextures(1, &mHandle);
 		gl::glBindTexture(GL_TEXTURE_2D, mHandle);
 		gl::glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mWidth, mHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 		gl::GenerateMipmap(GL_TEXTURE_2D);
+		gl::glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		gl::glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		SOIL_free_image_data(image);
 		gl::glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
+	template<>
 	Texture2D::Texture2D(const uint8_t* const _Data, const int _Width, const int _Height) noexcept
 		:
 		mWidth(_Width),
@@ -30,10 +32,26 @@ namespace tgl
 		mChanels(0)
 	{
 		gl::glGenTextures(1, &mHandle);
-		bind();
+		gl::glBindTexture(GL_TEXTURE_2D, mHandle);
 		gl::glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mWidth, mHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, _Data);
 		gl::GenerateMipmap(GL_TEXTURE_2D);
-		unbind();
+		gl::glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		gl::glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	}
+
+	template<>
+	Texture2D::Texture2D(const float* const _Data, const int _Width, const int _Height) noexcept
+		:
+		mWidth(_Width),
+		mHeight(_Height),
+		mChanels(0)
+	{
+		gl::glGenTextures(1, &mHandle);
+		gl::glBindTexture(GL_TEXTURE_2D, mHandle);
+		gl::glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mWidth, mHeight, 0, GL_RGB, GL_FLOAT, _Data);
+		gl::GenerateMipmap(GL_TEXTURE_2D);
+		gl::glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		gl::glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}
 
 	Texture2D::~Texture2D()
@@ -83,9 +101,9 @@ namespace tgl
 		std::swap(this->mChanels, _Other.mChanels);
 	}
 
-	
 
-	
-	
+
+
+
 
 }

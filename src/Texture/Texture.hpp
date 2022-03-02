@@ -10,7 +10,14 @@ namespace tgl
 	{
 	public:
 		Texture2D(const std::string& file_name);
-		Texture2D(const uint8_t * const _Data, const int _Width, const int _Height) noexcept;
+		template<class T>
+		Texture2D(const T* const _Data, const int _Width, const int _Height) noexcept
+		{
+			if constexpr (std::is_arithmetic_v<T>)
+				static_assert(false, "sorry, i don't added implementation for this type");
+			else
+				static_assert(false, "HM....");
+		}
 		~Texture2D();
 		Texture2D(const Texture2D&) = delete;
 		Texture2D operator=(const Texture2D&) = delete;
