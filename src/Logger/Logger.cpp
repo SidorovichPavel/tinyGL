@@ -1,12 +1,14 @@
 #include "Logger.hpp"
 
+#include <iostream>
+
 namespace tgl
 {
 	flush_t flush;
 
 	Logger::Logger(std::ostream& _Out) noexcept
 		:
-		mOut(_Out)
+		mOut(&_Out)
 	{
 
 	}
@@ -14,6 +16,12 @@ namespace tgl
 	Logger::~Logger() noexcept
 	{
 
+	}
+
+	Logger& Logger::operator=(std::ostream& _Out) noexcept
+	{
+		mOut = &_Out;
+		return *this;
 	}
 
 	Logger& Logger::operator<<(const std::string& _Str)
@@ -31,9 +39,9 @@ namespace tgl
 	void Logger::operator<<(const flush_t _Ph)
 	{
 		for (auto&& str : mBuffer)
-			mOut << str;
-		mOut << std::endl;
+			*mOut << str;
+		*mOut << std::endl;
 	}
 
-
+	Logger logger = std::cout;
 }

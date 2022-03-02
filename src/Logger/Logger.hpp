@@ -16,10 +16,12 @@ namespace tgl
 	class Logger
 	{
 		std::list<std::string> mBuffer;
-		std::ostream& mOut;
+		std::ostream* mOut;
 	public:
 		Logger(std::ostream& _Out) noexcept;
 		~Logger() noexcept;
+
+		Logger& operator=(std::ostream& _Out) noexcept;
 
 		Logger& operator<<(const std::string& _Str);
 		Logger& operator<<(std::string&& _Str);
@@ -45,6 +47,6 @@ namespace tgl
 
 	};
 
-
+	extern Logger logger;
 
 }
