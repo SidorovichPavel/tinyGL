@@ -18,6 +18,12 @@ namespace tgl
 			MouseBase(const MouseBase&) = default;
 			MouseBase(MouseBase&&) = default;
 
+			std::pair<int32_t, int32_t> dif() noexcept
+			{
+				base::mUpdated = false;
+				return { base::x - base::lastX, base::y - base::lastY };
+			}
+
 			int32_t dx() noexcept
 			{
 				return base::x - base::lastX;
@@ -43,16 +49,19 @@ namespace tgl
 			int32_t y, lastY;
 			bool lb_press;
 			bool rb_press;
+			bool mUpdated;
 		public:
 			WinMouse(int32_t _x = 0, int32_t _y = 0) noexcept :
 				x(_x), lastX(0),
 				y(_y), lastY(0),
 				lb_press(false),
-				rb_press(false)
+				rb_press(false),
+				mUpdated(false)
 			{}
 			~WinMouse() {}
 
 			void raw_input(unsigned short _Flags, int32_t _LastX, int32_t _LastY) noexcept;
+			bool get_update_state() noexcept;
 		};
 
 	}

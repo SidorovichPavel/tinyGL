@@ -25,37 +25,15 @@ namespace tgl
 				mKeyStates[static_cast<size_t>(_KeyCode)] = false;
 		}
 
-		bool WinKeyBoard::is_copy() const noexcept
+		detail::KeyBoardEvents& win::WinKeyBoard::events() noexcept
+		{
+			return mEvents;
+		}
+
+		bool WinKeyBoard::is_copy_combo() const noexcept
 		{
 			return mKeyStates[VK_CONTROL] && mKeyStates['C'];
 		}
-
-		bool WinKeyBoard::is_default() const noexcept
-		{
-			return mKeyStates[VK_MENU] && mKeyStates[VK_CONTROL] && mKeyStates['D'];
-		}
-
-		bool WinKeyBoard::is_move_front() const noexcept
-		{
-			return mKeyStates['W'];
-		}
-
-		bool WinKeyBoard::is_move_back() const noexcept
-		{
-			return mKeyStates['S'];
-		}
-
-		bool WinKeyBoard::is_move_right() const noexcept
-		{
-			return mKeyStates['D'];
-		}
-
-		bool WinKeyBoard::is_move_left() const noexcept
-		{
-			return mKeyStates['A'];
-		}
-
-
 
 	}
 #endif // _WIN32
