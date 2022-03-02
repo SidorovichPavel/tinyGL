@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../GL/GLFuncs.hpp"
-#include <src/SOIL.h>
+#include <SOIL.h>
 #include <cstdint>
 #include <vector>
 #include <string>
