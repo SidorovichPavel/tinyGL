@@ -73,8 +73,8 @@ namespace tgl::win
 			break;
 		case WM_MOUSEWHEEL:
 			mEvents.mouse_wheel(
-				cut_key_state::get(wParam64), 
-				cut_wheel_delta::get(wParam64), 
+				cut_key_state::get(wParam64),
+				cut_wheel_delta::get(wParam64),
 				cut_x::get(lParam32), cut_y::get(lParam32));
 			break;
 		case WM_LBUTTONDOWN:
@@ -137,7 +137,7 @@ namespace tgl::win
 
 			if (GetRawInputData(ri, RID_INPUT, mRawInputData.data(), &mRawInputSize, sizeof(RAWINPUTHEADER)) != mRawInputSize)
 				break;
-			
+
 			RAWINPUT* raw = reinterpret_cast<RAWINPUT*>(mRawInputData.data());
 
 			mEvents.raw_input(raw);
@@ -172,7 +172,7 @@ namespace tgl::win
 		auto& temp = _Style_Ptr->get_title();
 
 		WNDCLASSEX wc = { sizeof(wc) };
-		wc.hbrBackground	= reinterpret_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
+wc.hbrBackground	= reinterpret_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
 		wc.hCursor			= LoadCursor(nullptr, IDC_ARROW);
 		wc.hIcon			= LoadIcon(nullptr, IDI_APPLICATION);
 		wc.hIconSm			= LoadIcon(nullptr, IDI_APPLICATION);
@@ -195,7 +195,7 @@ namespace tgl::win
 			y = mScreenHeight - mHeight;
 			y /= 2;
 		}
-		
+
 		mWinGlobalSize = { 0, 0, mWidth, mHeight };
 		unsigned win_stylee = WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME;
 		AdjustWindowRect(&mWinGlobalSize, win_stylee, 0);
