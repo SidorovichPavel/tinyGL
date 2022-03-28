@@ -31,12 +31,16 @@ namespace tgl
 			WinKeyBoard();
 			virtual ~WinKeyBoard();
 
-			void key_down(uint64_t _KeyCode, int64_t _KeyState);
-			void key_up(uint64_t _KeyCode, int64_t _KeyState);
+			bool operator[](size_t _Idx) noexcept;
 
 			detail::KeyBoardEvents& events() noexcept;
 
+			void key_down(uint64_t _KeyCode, int64_t _KeyState);
+			void key_up(uint64_t _KeyCode, int64_t _KeyState);
+
 			bool is_copy_combo() const noexcept;
+
+
 		};
 	}
 

@@ -13,6 +13,11 @@ namespace tgl
 		WinKeyBoard::~WinKeyBoard()
 		{}
 
+		bool WinKeyBoard::operator[](size_t _Idx) noexcept
+		{
+			return mKeyStates[_Idx];
+		}
+
 		void WinKeyBoard::key_down(uint64_t _KeyCode, int64_t _KeyState)
 		{
 			if (_KeyCode < 1024)
