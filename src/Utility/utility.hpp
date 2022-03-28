@@ -11,11 +11,16 @@ namespace tgl
 	{
 		struct FrameTimeInfo
 		{
-			float duration;
+			std::chrono::milliseconds duration;
 			std::chrono::time_point<std::chrono::steady_clock> timepoint;
+
+			FrameTimeInfo() noexcept;
+			FrameTimeInfo(std::chrono::milliseconds _ms, std::chrono::time_point<std::chrono::steady_clock> _TimePoint) noexcept;
+			float s() noexcept;
+			int64_t ms() noexcept;
 		};
 
-		FrameTimeInfo update_frame_time(std::chrono::time_point<std::chrono::steady_clock> _Prev_TP);
+		void update_frame_time(FrameTimeInfo& _FrameTimeInfo) noexcept;
 
 		template<class InType, class OutType, size_t Offset = 0>
 		struct cutter
@@ -45,4 +50,11 @@ namespace tgl
 #else
 	using string = std::string;
 #endif
+
+
+
+
+
+
+
 }
