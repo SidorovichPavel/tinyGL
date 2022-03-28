@@ -48,5 +48,4 @@ namespace tgl
 	};
 
 	extern Logger logger;
-
 }

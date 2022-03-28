@@ -1,6 +1,7 @@
 #include "Logger.hpp"
 
 #include <iostream>
+#include <fstream>
 
 namespace tgl
 {
@@ -10,7 +11,7 @@ namespace tgl
 		:
 		mOut(&_Out)
 	{
-
+		*this << tgl::flush;
 	}
 
 	Logger::~Logger() noexcept
@@ -39,7 +40,7 @@ namespace tgl
 	void Logger::operator<<(const flush_t _Ph)
 	{
 		for (auto&& str : mBuffer)
-			*mOut << str;
+			*mOut << str << std::endl;
 		*mOut << std::endl;
 	}
 
