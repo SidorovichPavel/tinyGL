@@ -11,13 +11,21 @@ namespace tgl
 	public:
 		Texture2D(const std::string& file_name);
 		template<class T>
-		Texture2D(const T* const _Data, const int _Width, const int _Height) noexcept
+		Texture2D(const T* _Data, int _Width, int _Height) noexcept
 		{
 			if constexpr (std::is_arithmetic_v<T>)
 				static_assert(false, "sorry, i don't added implementation for this type");
 			else
 				static_assert(false, "HM....");
 		}
+		template<>
+		Texture2D(const uint8_t* _Data, int _Width, int _Height) noexcept;
+		template<>
+		Texture2D(const float* _Data, int _Width, int _Height) noexcept;
+		
+		/* only for float data */
+		Texture2D(nullptr_t _Data, int _Width, int _Height);
+
 		~Texture2D();
 		Texture2D(const Texture2D&) = delete;
 		Texture2D operator=(const Texture2D&) = delete;
@@ -27,7 +35,7 @@ namespace tgl
 		void bind(int32_t _Target = GL_TEXTURE_2D);
 		void unbind(int32_t _Target = GL_TEXTURE_2D);
 
-		void update(const uint8_t* const _Data);
+		uint32_t get_handle() noexcept;
 	private:
 		uint32_t mHandle;
 		int32_t mWidth;

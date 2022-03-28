@@ -24,8 +24,22 @@ namespace tgl
 		gl::glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
+	Texture2D::Texture2D(nullptr_t _Data, int _Width, int _Height)
+		:
+		mWidth(_Width),
+		mHeight(_Height),
+		mChanels(0)
+	{
+		gl::glGenTextures(1, &mHandle);
+		gl::glBindTexture(GL_TEXTURE_2D, mHandle);
+		gl::glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mWidth, mHeight, 0, GL_RGB, GL_FLOAT, nullptr);
+		/*gl::GenerateMipmap(GL_TEXTURE_2D);
+		gl::glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		gl::glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);*/
+	}
+
 	template<>
-	Texture2D::Texture2D(const uint8_t* const _Data, const int _Width, const int _Height) noexcept
+	Texture2D::Texture2D(const uint8_t* _Data, int _Width, int _Height) noexcept
 		:
 		mWidth(_Width),
 		mHeight(_Height),
@@ -40,7 +54,7 @@ namespace tgl
 	}
 
 	template<>
-	Texture2D::Texture2D(const float* const _Data, const int _Width, const int _Height) noexcept
+	Texture2D::Texture2D(const float* _Data, int _Width, int _Height) noexcept
 		:
 		mWidth(_Width),
 		mHeight(_Height),
@@ -85,12 +99,9 @@ namespace tgl
 		gl::glBindTexture(_Target, 0);
 	}
 
-	void Texture2D::update(const uint8_t* const _Data)
+	uint32_t Texture2D::get_handle() noexcept
 	{
-		bind();
-		gl::glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mWidth, mHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, _Data);
-		gl::GenerateMipmap(GL_TEXTURE_2D);
-		unbind();
+		return mHandle;
 	}
 
 	void Texture2D::_swap(Texture2D& _Other) noexcept
