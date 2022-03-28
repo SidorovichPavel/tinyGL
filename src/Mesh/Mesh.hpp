@@ -25,15 +25,41 @@ namespace tgl
 			}
 			constexpr static size_t count = sizeof...(Args);
 		};
+
+		template<class T>
+		struct type_to_gl {
+			constexpr static unsigned value = 0;
+		};
+		template<>
+		struct type_to_gl<float> {
+			constexpr static unsigned value = GL_FLOAT;
+		};
+		template<>
+		struct type_to_gl<unsigned int> {
+			constexpr static unsigned value = GL_UNSIGNED_INT;
+		};
+		template<>
+		struct type_to_gl<int> {
+			constexpr static unsigned value = GL_INT;
+		};
+
 	}
+
+	enum class GlDrawMode : uint32_t
+	{
+		Static = GL_STATIC_DRAW,
+		Dynamic = GL_DYNAMIC_DRAW,
+		Stream = GL_STREAM_DRAW
+	};
 
 	class Mesh
 	{
-		uint32_t	mVAO;
-		uint32_t	mIndicesBuffer;
-		int32_t		mIndicesCount;
-		uint32_t	mBuffer;
-		size_t		mVertexSize;
+		uint32_t				mVAO;
+		uint32_t				mIndicesBuffer;
+		int32_t					mIndicesCount;
+		std::vector<uint32_t>	mBuffer;
+		size_t					mVertexSize;
+
 	public:
 		Mesh();
 		~Mesh();
@@ -42,34 +68,67 @@ namespace tgl
 		Mesh(Mesh&& _Other) noexcept;
 		Mesh& operator=(Mesh&& _Right) noexcept;
 
-		void set_indices(size_t _Count, uint32_t* _Elems);
+		
 		void draw(uint32_t _GLType);
 		void toggle_attribut(uint32_t _Count, bool _Enable = true);
 		void bind();
 		void unbind();
 
-		template<uint32_t... Args>
-		void set_attribut(size_t _Count, const float* _Data, unsigned _DrawMode)
+		void set_indices(size_t _Count, uint32_t* _Elems, GlDrawMode _DrawMode = GlDrawMode::Static);
+
+		template<class T>
+		void set_attribut(size_t _Idx, size_t _NumbOfElemPerVertex, size_t _Count, const T* _Data, GlDrawMode _DrawMode = GlDrawMode::Static)
 		{
 			bind();
-			if (!mBuffer)	gl::GenBuffers(1, &mBuffer);
-			gl::BindBuffer(GL_ARRAY_BUFFER, mBuffer);
-			gl::BufferData(GL_ARRAY_BUFFER, static_cast<int64_t>(_Count * sizeof(float)), _Data, _DrawMode);
-			
+			if (_Idx == mBuffer.size())
+			{
+				mBuffer.push_back(0);
+				gl::GenBuffers(1, &mBuffer[_Idx]);
+			}
+			else if (_Idx > mBuffer.size())
+				return;
+
+			auto buffer_size = static_cast<tgl::gl::GLsizeiptr>(sizeof(T) * _Count);
+			gl::BindBuffer(GL_ARRAY_BUFFER, mBuffer[_Idx]);
+			gl::BufferData(GL_ARRAY_BUFFER, buffer_size, _Data, static_cast<uint32_t>(_DrawMode));
+
+			mVertexSize = _NumbOfElemPerVertex * sizeof(T);
+
+			gl::VertexAttribPointer(static_cast<int32_t>(_Idx), static_cast<int32_t>(_NumbOfElemPerVertex), detail::type_to_gl<T>::value, GL_FALSE,
+				static_cast<int32_t>(mVertexSize), reinterpret_cast<const void*>(0));
+			gl::EnableVertexAttribArray(static_cast<int32_t>(_Idx));
+
+			unbind();
+		}
+
+		template<uint32_t... Args>
+		void set_attributs(size_t _Count, const float* _Data, GlDrawMode _DrawMode = GlDrawMode::Static)
+		{
+			bind();
+			if (!mBuffer.size())
+			{
+				mBuffer.push_back(0);
+				gl::GenBuffers(1, mBuffer.data());
+			}
+			gl::BindBuffer(GL_ARRAY_BUFFER, mBuffer.front());
+			gl::BufferData(GL_ARRAY_BUFFER, static_cast<int64_t>(_Count * sizeof(float)), _Data, static_cast<uint32_t>(_DrawMode));
+
 			mVertexSize = sizeof(float) * detail::unpack_sequence<Args...>::get_sum();
-			auto offset = 0;
+			size_t offset = 0;
 			for (auto i = 0; i < sizeof...(Args); ++i)
 			{
 				auto elem = detail::unpack_sequence<Args...>::get(i);
-				gl::VertexAttribPointer(i, static_cast<int32_t>(elem), GL_FLOAT, GL_FALSE, static_cast<int32_t>(mVertexSize), 
-					reinterpret_cast<const void*>(offset));
+				gl::VertexAttribPointer(i, static_cast<int32_t>(elem), GL_FLOAT, GL_FALSE,
+					static_cast<int32_t>(mVertexSize), reinterpret_cast<const void*>(offset));
 				gl::EnableVertexAttribArray(i);
 
-				offset += static_cast<uint32_t>(sizeof(float) * elem);
+				offset += static_cast<size_t>(sizeof(float) * elem);
 			}
 			unbind();
 		}
 
+
+		
 	private:
 		void _swap(Mesh& _Other) noexcept;
 	};
