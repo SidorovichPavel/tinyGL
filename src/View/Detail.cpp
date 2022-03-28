@@ -11,7 +11,7 @@ namespace tgl::win
 	****************************************************** WIN HANDLER *****************************************************************
 	************************************************************************************************************************************/
 
-	LRESULT WinHandler::GenProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
+	LRESULT WinHandler::GeneralProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 	{
 		WinHandler* pWinH;
 		if (uMsg == WM_NCCREATE)
@@ -58,6 +58,12 @@ namespace tgl::win
 			mEvents.close();
 			DestroyWindow(mHandle);
 			break;
+		case WM_SETFOCUS:
+			mEvents.set_focus();
+			break;
+		case WM_KILLFOCUS:
+			mEvents.kill_focus();
+			break;
 		case WM_KEYDOWN:
 			mEvents.key_down(wParam64, static_cast<int64_t>(lParam));
 			break;
@@ -90,43 +96,34 @@ namespace tgl::win
 			mEvents.mouse_rbutton_up(wParam64, cut_x::get(lParam32), cut_y::get(lParam32));
 			break;
 		case WM_PAINT:
-		{
-			PAINTSTRUCT ps;
-			RECT Rect;
-
-			GetClientRect(hWnd, &Rect);
-			HDC hdc = BeginPaint(hWnd, &ps);
+			GetClientRect(hWnd, &mClientRect);
+			mDCHandle = BeginPaint(hWnd, &mPS);
 
 			// Создание теневого контекста для двойной буферизации
-			HDC hCmpDC = CreateCompatibleDC(hdc);
-			HBITMAP hBmp = CreateCompatibleBitmap(hdc, Rect.right - Rect.left,
-				Rect.bottom - Rect.top);
-			SelectObject(hCmpDC, hBmp);
+			mCompatibleDCHandle = CreateCompatibleDC(mDCHandle);
+			mCompatibleBitMapHandle = CreateCompatibleBitmap(mDCHandle, mClientRect.right - mClientRect.left,
+				mClientRect.bottom - mClientRect.top);
+			SelectObject(mCompatibleDCHandle, mCompatibleBitMapHandle);
 
 			// Закраска фоновым цветом
-			LOGBRUSH br;
-			br.lbStyle = BS_SOLID;
-			br.lbColor = 0xffffff;
-			HBRUSH brush = CreateBrushIndirect(&br);
-			FillRect(hCmpDC, &Rect, brush);
-			DeleteObject(brush);
+			FillRect(mCompatibleDCHandle, &mClientRect, mBrushHandle);
 
 			// Здесь рисуем на контексте hCmpDC
-			mEvents.paint(hCmpDC);
+			mEvents.paint(mCompatibleDCHandle);
 
 			// Копируем изображение из теневого контекста на экран
-			SetStretchBltMode(hdc, COLORONCOLOR);
-			BitBlt(hdc, 0, 0, Rect.right - Rect.left, Rect.bottom - Rect.top,
-				hCmpDC, 0, 0, SRCCOPY);
+			SetStretchBltMode(mDCHandle, COLORONCOLOR);
+			BitBlt(mDCHandle, 0, 0,
+				mClientRect.right - mClientRect.left, mClientRect.bottom - mClientRect.top,
+				mCompatibleDCHandle, 0, 0, SRCCOPY);
 
 			// Удаляем ненужные системные объекты
-			DeleteDC(hCmpDC);
-			DeleteObject(hBmp);
-			hCmpDC = NULL;
+			DeleteObject(mCompatibleBitMapHandle);
+			DeleteDC(mCompatibleDCHandle);
+			mCompatibleBitMapHandle = NULL;
 
-			EndPaint(hWnd, &ps);
-		}
-		break;
+			EndPaint(hWnd, &mPS);
+			break;
 		case WM_INPUT:
 		{
 			mRawInputSize = 0;
@@ -145,8 +142,10 @@ namespace tgl::win
 			switch (raw->header.dwType)
 			{
 			case RIM_TYPEMOUSE:
-				if (mMouseRawInput)
-					mEvents.mouse_raw_input(raw->data.mouse.usFlags, raw->data.mouse.lLastX, raw->data.mouse.lLastY);
+				if (raw->data.mouse.usFlags & MOUSE_MOVE_ABSOLUTE)
+					mEvents.mouse_move(raw->data.mouse.lLastX, raw->data.mouse.lLastY, 0);
+				else
+					mEvents.mouse_shift(raw->data.mouse.lLastX, raw->data.mouse.lLastY);
 				break;
 			}
 		}
@@ -161,31 +160,34 @@ namespace tgl::win
 	WinHandler::WinHandler(const Style* _Style_Ptr)
 		:
 		mGL_resource_content(0),
-		mMouseRawInput(false),
 		mRawInputHandle(0),
-		mRawInputSize(0)
+		mRawInputSize(0),
+		mPS({ 0 }),
+		mClientRect({ 0 }),
+		mCursor(0)
 	{
 		std::tie(mWidth, mHeight) = _Style_Ptr->get_size();
 		auto [width, height] = _Style_Ptr->get_size();
 		mWidth = width;
 		mHeight = height;
-		auto& temp = _Style_Ptr->get_title();
+		auto& s = _Style_Ptr->get_title();
+		auto temp = std::wstring(s.begin(), s.end());
 
 		WNDCLASSEX wc = { sizeof(wc) };
-wc.hbrBackground	= reinterpret_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
-		wc.hCursor			= LoadCursor(nullptr, IDC_ARROW);
-		wc.hIcon			= LoadIcon(nullptr, IDI_APPLICATION);
-		wc.hIconSm			= LoadIcon(nullptr, IDI_APPLICATION);
-		wc.style			= CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-		wc.lpszClassName	= temp.c_str();
-		wc.lpfnWndProc		= WinHandler::GenProc;
+		wc.hbrBackground = reinterpret_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
+		wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
+		wc.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
+		wc.hIconSm = LoadIcon(nullptr, IDI_APPLICATION);
+		wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+		wc.lpszClassName = temp.c_str();
+		wc.lpfnWndProc = WinHandler::GeneralProc;
 
 		if (!RegisterClassEx(&wc))
 			throw std::runtime_error("class register error!");
 
-		mScreenWidth	= GetSystemMetrics(SM_CXSCREEN);
-		mScreenHeight	= GetSystemMetrics(SM_CYSCREEN);
-		
+		mScreenWidth = GetSystemMetrics(SM_CXSCREEN);
+		mScreenHeight = GetSystemMetrics(SM_CYSCREEN);
+
 		auto x = 0, y = 0;
 
 		if (_Style_Ptr->get_state(Style::State::Center))
@@ -216,11 +218,28 @@ wc.hbrBackground	= reinterpret_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
 		else
 			throw std::runtime_error("window create failed!");
 
+		//подготовка к рисованию через WM_PAINT
+		GetClientRect(mHandle, &mClientRect);
+		mDCHandle = BeginPaint(mHandle, &mPS);
+		mCompatibleDCHandle = CreateCompatibleDC(mDCHandle);
+		mCompatibleBitMapHandle = CreateCompatibleBitmap(mDCHandle,
+			mClientRect.right - mClientRect.left,
+			mClientRect.bottom - mClientRect.top);
+		SelectObject(mCompatibleDCHandle, mCompatibleBitMapHandle);
+
+
+		LOGBRUSH brush;
+		brush.lbStyle = BS_SOLID;
+		brush.lbColor = 0xffffffff;
+		mBrushHandle = CreateBrushIndirect(&brush);
+
 		mRawInputData.reserve(100);
 	}
 
 	WinHandler::~WinHandler()
 	{
+		DeleteObject(mBrushHandle);
+
 		if (mGL_resource_content)
 			wglDeleteContext(mGL_resource_content);
 		if (mIsOpen)
@@ -267,7 +286,6 @@ wc.hbrBackground	= reinterpret_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
 
 	void WinHandler::mouse_raw_input(bool _Mode)
 	{
-		mMouseRawInput = true;
 		if (_Mode)
 		{
 			RAWINPUTDEVICE rid = { 0x01,0x02,0,mHandle };
@@ -284,20 +302,18 @@ wc.hbrBackground	= reinterpret_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
 		}
 	}
 
-	void WinHandler::show_cursor(bool mode) noexcept
+	void WinHandler::show_cursor(bool _Mode) noexcept
 	{
-		if (!mode)
+		if (!_Mode)
 		{
-			mouse_raw_input();
-			ShowCursor(FALSE);
-			RECT coords{ mWinGlobalSize.left + 50, mWinGlobalSize.top + 50,
-				mWinGlobalSize.right - 50,mWinGlobalSize.bottom - 50 };
+			mouse_raw_input(true);
+			RECT coords{ mScreenWidth, mScreenHeight, mScreenWidth, mScreenHeight };
 			ClipCursor(&coords);
 		}
 		else
 		{
 			ClipCursor(nullptr);
-			ShowCursor(TRUE);
+			SetCursorPos(mScreenWidth / 2, mScreenHeight / 2);
 			mouse_raw_input(false);
 		}
 	}
@@ -314,7 +330,8 @@ wc.hbrBackground	= reinterpret_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
 
 	void WinHandler::set_title(const std::string& title) noexcept
 	{
-		win::SetWindowText(mHandle, title.c_str());
+		auto temp = std::wstring(title.begin(), title.end());
+		win::SetWindowText(mHandle, temp.c_str());
 	}
 
 	void WinHandler::invalidate_rect() noexcept
@@ -337,7 +354,7 @@ wc.hbrBackground	= reinterpret_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
 		CloseWindow(mHandle);
 	}
 
-	detail::Events& WinHandler::events() noexcept
+	detail::Events& WinHandler::get_events() noexcept
 	{
 		return mEvents;
 	}
