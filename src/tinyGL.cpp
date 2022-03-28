@@ -4,22 +4,19 @@
 #include <stdexcept>
 #include <iostream>
 
-#undef min
-#undef max
-
 namespace tgl
 {
 	std::atomic<bool> opengl_is_init = false;
 
-	std::pair<bool, int> event_pool() noexcept
+	std::pair<bool, int> event_pool(int8_t fps) noexcept
 	{
 	#ifdef _WIN32
-
 		static win::MSG msg{};
 		static auto nextUpdate = 0ull;
-		constexpr auto fpsLock = 1000ull / 60;
+		auto fpsLock = 1000ull / fps;
 
-		while (tgl::win::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+		auto msg_count = 20;
+		while (tgl::win::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) && msg_count--)
 		{
 			tgl::win::TranslateMessage(&msg);
 			tgl::win::DispatchMessage(&msg);
@@ -50,8 +47,6 @@ namespace tgl
 		//TODO:
 	#endif
 	}
-
-	
 
 	void Init()
 	{
@@ -134,7 +129,7 @@ namespace tgl
 		GL_INIT(PFNGLGENERATEMIPMAPPROC, GenerateMipmap);
 
 		GL_INIT(PFNGLDEBUGMESSAGECALLBACKPROC, DebugMessageCallback);
-		
+
 		wglDeleteContext(gl_rc);
 		DestroyWindow(handle);
 
@@ -156,7 +151,7 @@ namespace tgl
 		tgl::gl::glClearColor(_R, _G, _B, 1.f);
 	}
 
-	void view_port(int16_t _Width, int16_t _Height)
+	void view_port(uint16_t _Width, uint16_t _Height)
 	{
 		gl::glViewport(0, 0, _Width, _Height);
 	}
@@ -218,4 +213,5 @@ namespace tgl
 
 
 	}
+	
 }
