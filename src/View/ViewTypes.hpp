@@ -60,7 +60,7 @@ namespace tgl
 
 				Event<void()> close;
 
-				Event<void(unsigned short _Flags, int32_t _LastX, int32_t _LastY)> mouse_raw_input;
+				Event<void(int32_t _ShiftX, int32_t _ShiftY)> mouse_shift;
 				/*desc
 				* first - additional flags. read msdn
 				* second x position
@@ -85,6 +85,9 @@ namespace tgl
 				* thirt y positon
 				*/
 				Event<void(int64_t, int32_t, int32_t)> mouse_rbutton_up;
+				
+				Event<void(void)> set_focus;
+				Event<void(void)> kill_focus;
 			};
 		}
 	}
