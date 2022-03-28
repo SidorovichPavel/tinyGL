@@ -17,35 +17,35 @@ namespace tgl {
 		using base = Handler;
 		std::unique_ptr<Style> mStylePtr;
 		std::vector<IControls*> mControls;
+
 	public:
-		FullView(Style* _StylePtr)
+		FullView(Style* _StylePtr) noexcept 
 			:
 			mStylePtr(_StylePtr),
 			base(_StylePtr)
 		{}
+		~FullView()
+		{};
+
 		FullView(const FullView& _Right) = delete;
 		FullView(FullView&& _Right) = delete;
-		~FullView() {};
 
-		void enable_mouse_raw_input() { base::mouse_raw_input(); };
-		void disable_mouse_raw_input() { base::mouse_raw_input(false); };
-		//void center_cursour();
-		//std::pair<int, int> get_global_center();
+		std::pair<int32_t, int32_t> get_size() noexcept
+		{
+			return std::pair<int32_t, int32_t>(base::mWidth, base::mHeight);
+		}
+
+		float get_ratio() noexcept
+		{
+			float den = base::mHeight == 0 ? 0.001f : static_cast<float>(base::mHeight);
+			return static_cast<float>(base::mWidth) / den;
+		}
+
 		bool is_open() noexcept
 		{
 			return base::mIsOpen;
 		}
 
-		std::pair<int, int> get_size() const noexcept
-		{
-			return std::pair<int, int>(base::mWidth, base::mHeight);
-		}
-
-		float get_ratio() const noexcept
-		{
-			float den = base::mHeight == 0 ? 0.001f : static_cast<float>(base::mHeight);
-			return static_cast<float>(base::mWidth) / den;
-		}
 		//TODO: work with controls
 		void add_control(IControls* _Control)
 		{
