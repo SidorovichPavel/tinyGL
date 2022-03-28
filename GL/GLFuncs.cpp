@@ -2,7 +2,7 @@
 
 namespace tgl::gl
 {
-	#define GL_FUNC_DECL(type, name) std::function<typename tgl_func<type>::func_t> name;
+	#define GL_FUNC_DECL(type, name) tgl_func<type>::func_t name;
 
 	GL_FUNC_DECL(PFNGLGENBUFFERSPROC, GenBuffers);
 	GL_FUNC_DECL(PFNGLBINDBUFFERPROC, BindBuffer);

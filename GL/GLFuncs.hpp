@@ -31,16 +31,16 @@ namespace tgl
 		template<class Ret, class... Params>
 		struct tgl_func<Ret(_stdcall*)(Params...)>
 		{
-			using func_t = Ret(Params...);
+			using func_t = std::function<Ret(Params...)>;
 
-			static std::function<Ret(Params...)> LoadFunction(const char* _Func_Name)
+			static func_t LoadFunction(const char* _Func_Name)
 			{
 				void* data = tgl::win::wglGetProcAddress(_Func_Name);
-				return reinterpret_cast<Ret(_stdcall*)(Params...)>(data);
+				return static_cast<Ret(_stdcall*)(Params...)>(data);
 			}
 		};
-
-		#define GL_EXTERN_DECL(type, name) extern std::function<typename tgl_func< type >::func_t> name
+		
+		#define GL_EXTERN_DECL(type, name) extern tgl_func<type>::func_t name
 
 		GL_EXTERN_DECL(PFNGLGENBUFFERSPROC, GenBuffers);
 		GL_EXTERN_DECL(PFNGLBINDBUFFERPROC, BindBuffer);
