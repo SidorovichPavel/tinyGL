@@ -44,9 +44,6 @@
     <Filter Include="src\Logger">
       <UniqueIdentifier>{b4bf7579-e000-4f31-8e1c-4af9e1ed17b1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\EventQueue">
-      <UniqueIdentifier>{23560953-4392-4d4a-9150-7d57555e47c4}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\tinyGL.cpp">
@@ -99,9 +96,6 @@
     </ClCompile>
     <ClCompile Include="src\Logger\Logger.cpp">
       <Filter>src\Logger</Filter>
-    </ClCompile>
-    <ClCompile Include="src\EventQueue\EventQueue.cpp">
-      <Filter>src\EventQueue</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -182,9 +176,6 @@
     </ClInclude>
     <ClInclude Include="src\Logger\Logger.hpp">
       <Filter>src\Logger</Filter>
-    </ClInclude>
-    <ClInclude Include="src\EventQueue\EventQueue.hpp">
-      <Filter>src\EventQueue</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
