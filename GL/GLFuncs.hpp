@@ -31,7 +31,7 @@ namespace tgl
 		template<class Ret, class... Params>
 		struct tgl_func<Ret(_stdcall*)(Params...)>
 		{
-			using func_t = std::function<Ret(Params...)>;
+			using func_t = Ret(__stdcall*)(Params...);
 
 			static func_t LoadFunction(const char* _Func_Name)
 			{
