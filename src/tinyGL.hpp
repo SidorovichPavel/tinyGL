@@ -16,7 +16,9 @@ namespace tgl
 
 	void Init();
 
-	std::pair<bool, int> event_pool(int8_t fps = 60) noexcept;
+	extern detail::FrameTimeInfo FrameTimeInfo;
+
+	std::pair<bool, int> event_pool(int fps, detail::FrameTimeInfo& fti) noexcept;
 
 	void clear_black() noexcept;
 	/*clamp(0.f,1.f,each param)*/

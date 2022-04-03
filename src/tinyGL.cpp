@@ -8,44 +8,54 @@ namespace tgl
 {
 	std::atomic<bool> opengl_is_init = false;
 
-	std::pair<bool, int> event_pool(int8_t fps) noexcept
+	detail::FrameTimeInfo FrameTimeInfo;
+	std::pair<bool, int> event_pool(int fps, detail::FrameTimeInfo& fti) noexcept
 	{
-	#ifdef _WIN32
-		static win::MSG msg{};
-		static auto nextUpdate = 0ull;
-		auto fpsLock = 1000ull / fps;
+#ifdef _WIN32
+		win::MSG msg{};
 
-		auto msg_count = 20;
-		while (tgl::win::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) && msg_count--)
+		using namespace std::chrono_literals;
+
+		auto fix_particle = std::chrono::milliseconds(static_cast<int>(fps * 0.012));
+		std::chrono::nanoseconds fps_lock = (1000ms / fps) + fix_particle;
+
+		std::chrono::milliseconds msg_wait;
+		for (;;)
 		{
-			tgl::win::TranslateMessage(&msg);
-			tgl::win::DispatchMessage(&msg);
-		}
+			while (tgl::win::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+			{
+				tgl::win::TranslateMessage(&msg);
+				tgl::win::DispatchMessage(&msg);
+			}
 
-		auto ms = tgl::win::GetTickCount64();
-		auto msNext = nextUpdate;
-		auto wait = 0ull;
-		auto ret = WAIT_TIMEOUT;
+			auto current = std::chrono::steady_clock::now().time_since_epoch();
+			std::chrono::nanoseconds wait;
+			auto next_update = fti.next_update;
 
-		if (ms < msNext)
-			wait = std::min(fpsLock, msNext - ms);
+			if (current < next_update)
+				wait = std::min(fps_lock, next_update - current);
 
-		if (wait <= 1)
-		{
-			nextUpdate = ms + fpsLock;
-			return std::make_pair(true, static_cast<int>(msg.wParam));
-		}
+			if (wait < 100ns)
+			{
+				fti.next_update = current + fps_lock;
+				wait = 0ns;
+				break;
+			}
 
-		if (tgl::win::MsgWaitForMultipleObjects(0, nullptr, FALSE, static_cast<unsigned>(wait), QS_ALLEVENTS) == ret)
-		{
-			nextUpdate = tgl::win::GetTickCount64() + fpsLock;
-			return std::make_pair(true, static_cast<int>(msg.wParam));
-		}
-		
-		return std::make_pair(false, static_cast<int>(msg.wParam));
-	#else
+			msg_wait = std::chrono::duration_cast<std::chrono::milliseconds>(wait);
+
+			if (tgl::win::MsgWaitForMultipleObjects(0, nullptr, FALSE, static_cast<uint32_t>(msg_wait.count()), QS_ALLEVENTS) == WAIT_TIMEOUT)
+			{
+				fti.next_update = std::chrono::steady_clock::now().time_since_epoch() + fps_lock;
+				msg_wait = 0ms;
+				break;
+			}
+		} 
+
+		return std::make_pair(true, static_cast<int>(msg.wParam));
+#else
 		//TODO:
-	#endif
+#endif
 	}
 
 	void Init()
@@ -89,8 +99,8 @@ namespace tgl
 		HGLRC gl_rc = wglCreateContext(dc);
 		wglMakeCurrent(dc, gl_rc);
 
-		#define GL_INIT_FUNC(name, type, gl_name) name = gl::tgl_func<type>::LoadFunction(#gl_name)
-		#define GL_INIT(type, name) GL_INIT_FUNC(gl::name, gl::type, gl##name)
+#define GL_INIT_FUNC(name, type, gl_name) name = gl::tgl_func<type>::LoadFunction(#gl_name)
+#define GL_INIT(type, name) GL_INIT_FUNC(gl::name, gl::type, gl##name)
 
 		GL_INIT(PFNGLGENBUFFERSPROC, GenBuffers);
 		GL_INIT(PFNGLBINDBUFFERPROC, BindBuffer);
@@ -144,7 +154,7 @@ namespace tgl
 		gl::glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		tgl::gl::glClearColor(0.f, 0.f, 0.0f, 1.f);
 	}
-	
+
 	void clear_color(float _R, float _G, float _B) noexcept
 	{
 		gl::glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -153,7 +163,7 @@ namespace tgl
 
 	void view_port(uint16_t _Width, uint16_t _Height)
 	{
-		gl::glViewport(0, 0, _Width, _Height);
+		gl::glViewport(0, 0, static_cast<unsigned int>(_Width), static_cast<unsigned int>(_Height));
 	}
 
 	void view_port_ex(int16_t _X, int16_t _Y, int16_t _Width, int16_t _Height)
@@ -209,9 +219,9 @@ namespace tgl
 				<< message << std::endl;
 		}
 
-		
+
 
 
 	}
-	
-}
+
+	}

@@ -2,32 +2,36 @@
 
 namespace tgl::detail
 {
+	using namespace std::chrono_literals;
 	FrameTimeInfo::FrameTimeInfo() noexcept
 		:
 		timepoint(std::chrono::steady_clock::now()),
-		duration(std::chrono::milliseconds(10))
+		duration(16ms),
+		next_update(0ms)
 	{}
 
 	FrameTimeInfo::FrameTimeInfo(std::chrono::milliseconds _ms, std::chrono::time_point<std::chrono::steady_clock> _TimePoint) noexcept
 		:
+		timepoint(_TimePoint),
 		duration(_ms),
-		timepoint(_TimePoint)
+		next_update(0ms)
 	{}
 
 	float FrameTimeInfo::s() noexcept
 	{
-		return duration.count() / 1000.f;
+		return std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() / 1000.f;
 	}
 
 	int64_t FrameTimeInfo::ms() noexcept
 	{
-		return duration.count();
+		return std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
 	}
 
-	void update_frame_time(FrameTimeInfo& _FrameTimeInfo) noexcept
+	void FrameTimeInfo::update_frame_time() noexcept
 	{
 		auto current = std::chrono::steady_clock::now();
-		_FrameTimeInfo.duration = std::chrono::duration_cast<std::chrono::milliseconds>(current - _FrameTimeInfo.timepoint);
-		_FrameTimeInfo.timepoint = current;
+		duration = std::chrono::duration_cast<std::chrono::milliseconds>(current - timepoint);
+		timepoint = current;
 	}
+
 }
