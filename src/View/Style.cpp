@@ -12,7 +12,7 @@ namespace tgl
 		mStates.reset();
 	}
 
-	Style::Style(std::string&& _Title,
+	Style::Style(string&& _Title,
 		int _X, int _Y, int _W, int _H,
 		bool _Centered, bool _Visible, bool _Fullscreen)
 		:
@@ -29,12 +29,12 @@ namespace tgl
 
 	Style::~Style() {};
 
-	const std::string& Style::get_title() const noexcept
+	const string& Style::get_title() const noexcept
 	{
 		return mTitle;
 	}
 
-	void Style::set_title(const std::string& _Title) noexcept
+	void Style::set_title(const string& _Title) noexcept
 	{
 		mTitle = _Title;
 	}

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <string>
 #include <bitset>
+#include "..\utility\utility.hpp"
 
 namespace tgl
 {
@@ -13,7 +13,7 @@ namespace tgl
 		int mWidth, mHeight;
 
 		std::bitset<8> mStates;
-		std::string mTitle;
+		string mTitle;
 
 	public:
 		
@@ -25,13 +25,13 @@ namespace tgl
 		};
 
 		Style();
-		Style(std::string&& _Title, 
+		Style(string&& _Title, 
 			int _X = 0, int _Y = 0, int _W = 640, int _H = 480, 
 			bool _Centered = true, bool _Visible = true, bool _Fullscreen = false);
 		~Style();
 
-		const std::string& get_title() const noexcept;
-		void set_title(const std::string& _Title) noexcept;
+		const string& get_title() const noexcept;
+		void set_title(const string& _Title) noexcept;
 		void set_state(State _State, bool _Val = true);
 		bool get_state(State _State) const;
 		std::pair<int, int> get_size() const noexcept;
