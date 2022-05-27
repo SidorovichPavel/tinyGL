@@ -19,13 +19,12 @@ namespace tgl
 		auto fix_particle = std::chrono::milliseconds(static_cast<int>(fps * 0.012));
 		std::chrono::nanoseconds fps_lock = (1000ms / fps) + fix_particle;
 
-		std::chrono::milliseconds msg_wait;
 		for (;;)
 		{
-			while (tgl::win::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+			while (win::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 			{
-				tgl::win::TranslateMessage(&msg);
-				tgl::win::DispatchMessage(&msg);
+				win::TranslateMessage(&msg);
+				win::DispatchMessage(&msg);
 			}
 
 			auto current = std::chrono::steady_clock::now().time_since_epoch();
@@ -38,20 +37,18 @@ namespace tgl
 			if (wait < 100ns)
 			{
 				fti.next_update = current + fps_lock;
-				wait = 0ns;
 				break;
 			}
 
-			msg_wait = std::chrono::duration_cast<std::chrono::milliseconds>(wait);
+			auto msg_wait = std::chrono::duration_cast<std::chrono::milliseconds>(wait);
 
-			if (tgl::win::MsgWaitForMultipleObjects(0, nullptr, FALSE, static_cast<uint32_t>(msg_wait.count()), QS_ALLEVENTS) == WAIT_TIMEOUT)
+			if (win::MsgWaitForMultipleObjects(0, nullptr, FALSE, static_cast<uint32_t>(msg_wait.count()), QS_ALLEVENTS) == WAIT_TIMEOUT)
 			{
 				fti.next_update = std::chrono::steady_clock::now().time_since_epoch() + fps_lock;
-				msg_wait = 0ms;
 				break;
 			}
-		} 
-
+		}
+		
 		return std::make_pair(true, static_cast<int>(msg.wParam));
 #else
 		//TODO:
@@ -224,4 +221,4 @@ namespace tgl
 
 	}
 
-	}
+}

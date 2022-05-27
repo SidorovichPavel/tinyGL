@@ -1,15 +1,26 @@
 #pragma once
 
-class IControls
+namespace tgl
 {
-	bool mNeedUpdate;
-	void virtual update() = 0;
-public:
-	IControls() = default;
-	virtual ~IControls() = default;
+	namespace controls
+	{
+		namespace detail
+		{
 
-	void virtual set_focus() = 0;
-	void virtual kill_focus() = 0;
+			class IControls
+			{
+				bool mNeedUpdate;
+				void virtual update() = 0;
+			public:
+				IControls() = default;
+				virtual ~IControls() = default;
 
-	void virtual draw() = 0;
-};
+				void virtual set_focus() = 0;
+				void virtual kill_focus() = 0;
+
+				void virtual draw() = 0;
+			};
+
+		}
+	}
+}

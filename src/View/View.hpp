@@ -3,7 +3,7 @@
 #include <memory>
 #include <atomic>
 #include <string>
-#include "../style/style.hpp"
+#include "Style.hpp"
 #include "Controls/IControls.hpp"
 #include "../Event/Event.hpp"
 #include "ViewTypes.hpp"

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\View\Controls\Button\Button.cpp" />
     <ClCompile Include="src\Logger\Logger.cpp" />
     <ClCompile Include="src\Shader\FileShader.cpp" />
     <ClCompile Include="GL\GLFuncs.cpp" />
@@ -26,7 +27,7 @@
     <ClCompile Include="src\View\KeyBoard.cpp" />
     <ClCompile Include="src\Shader\Shader.cpp" />
     <ClCompile Include="src\tinyGL.cpp" />
-    <ClCompile Include="src\Utility\utility.cpp" />
+    <ClCompile Include="src\utility\utility.cpp" />
     <ClCompile Include="src\View\Controls\Edit\EditControl.cpp" />
     <ClCompile Include="src\View\Controls\Font\Font.cpp" />
     <ClCompile Include="src\View\Mouse.cpp" />
@@ -35,9 +36,10 @@
     <ClCompile Include="src\Texture\Texture.cpp" />
     <ClCompile Include="src\Texture\TextureAtlas.cpp" />
     <ClCompile Include="src\View\Detail.cpp" />
-    <ClCompile Include="src\Style\style.cpp" />
+    <ClCompile Include="src\View\Style.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\View\Controls\Button\Button.hpp" />
     <ClInclude Include="src\Logger\Logger.hpp" />
     <ClInclude Include="src\Shader\FileShader.hpp" />
     <ClInclude Include="src\Shader\StaticShader.hpp" />
@@ -50,9 +52,9 @@
     <ClInclude Include="GL\wglext.h" />
     <ClInclude Include="GL\GLFuncs.hpp" />
     <ClInclude Include="src\Shader\Shader.hpp" />
-    <ClInclude Include="src\style\style.hpp" />
+    <ClInclude Include="src\View\Style.hpp" />
     <ClInclude Include="src\tinyGL.hpp" />
-    <ClInclude Include="src\Utility\utility.hpp" />
+    <ClInclude Include="src\utility\utility.hpp" />
     <ClInclude Include="src\View\Controls\Edit\EditControl.hpp" />
     <ClInclude Include="src\View\Controls\Font\Font.hpp" />
     <ClInclude Include="src\View\Controls\IControls.hpp" />
@@ -76,26 +78,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>

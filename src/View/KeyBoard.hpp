@@ -6,45 +6,48 @@
 
 namespace tgl
 {
-#ifdef _WIN32
+	#ifdef _WIN32
 	namespace win
 	{
-		namespace detail
+		#include <Windows.h>
+
+		enum class KeyCode : uint32_t
 		{
-			struct KeyBoardEvents
-			{
-				Event<void()> copy;
-				Event<void()> cutting;
-				Event<void()> save;
-			};
-		}
+			A = 'A',
+			B = 'B',
+			C = 'C',
+			D = 'D',
+			E = 'E',
+			S = 'S',
+			W = 'W',
+			UP = VK_UP,
+			LEFT = VK_LEFT,
+			DOWN = VK_DOWN,
+			RIGHT = VK_RIGHT,
+			TAB = VK_TAB,
+			ALT = VK_MENU,
+			RALT = VK_RMENU,
+			CTRL = VK_CONTROL,
+			RCTRL = VK_RCONTROL,
+		};
 
 		class WinKeyBoard
 		{
-		private:
-			detail::KeyBoardEvents mEvents;
-
-		protected:
-			std::bitset<1024> mKeyStates;
-
 		public:
 			WinKeyBoard();
 			virtual ~WinKeyBoard();
 
-			bool operator[](size_t _Idx) noexcept;
-
-			detail::KeyBoardEvents& events() noexcept;
+			bool operator[](KeyCode _Code) noexcept;
 
 			void key_down(uint64_t _KeyCode, int64_t _KeyState);
 			void key_up(uint64_t _KeyCode, int64_t _KeyState);
 
-			bool is_copy_combo() const noexcept;
-
-
+		protected:
+			std::bitset<1024> mKeyStates;
 		};
 	}
 
 	using KeyBoard = win::WinKeyBoard;
-
-#endif
+	using KeyCode = win::KeyCode;
+	#endif
 }

@@ -4,7 +4,7 @@
 
 #include "../Utility/utility.hpp"
 #include "../Event/Event.hpp"
-#include "../Style/Style.hpp"
+#include "Style.hpp"
 #include "Mouse.hpp"
 #include "ViewTypes.hpp"
 
@@ -20,6 +20,12 @@ namespace tgl
 		#include <windowsx.h>
 		#include <WinUser.h>
 
+		enum class DrawLib
+		{
+			Kernel32,
+			OpenGL
+		};
+
 		class WinHandler
 		{
 			HWND mHandle;
@@ -32,7 +38,6 @@ namespace tgl
 			HDC mDCHandle, mCompatibleDCHandle;
 			HBITMAP mCompatibleBitMapHandle;
 			HBRUSH mBrushHandle;
-			HCURSOR mCursor;
 
 			UINT mRawInputSize;
 			HRAWINPUT mRawInputHandle;
@@ -43,12 +48,13 @@ namespace tgl
 			static LRESULT CALLBACK GeneralProc(HWND, UINT, WPARAM, LPARAM) noexcept;
 			LRESULT WinProc(HWND, UINT, WPARAM, LPARAM) noexcept;
 			void mouse_raw_input(bool _Mode);
+			DrawLib MDrawLib;
 
 		protected:
 			bool mIsOpen;
 			int mWidth, mHeight;
 			int32_t mScreenWidth, mScreenHeight;
-
+			
 		public:
 			WinHandler(const Style* _Style_Ptr);
 			virtual ~WinHandler();
