@@ -7,7 +7,6 @@ namespace tgl
 #ifdef _WIN32
 	namespace win
 	{
-#include <Windows.h>
 
 		WinKeyBoard::WinKeyBoard()
 			:
@@ -17,11 +16,11 @@ namespace tgl
 		WinKeyBoard::~WinKeyBoard()
 		{}
 
-		bool WinKeyBoard::operator[](size_t _Idx) noexcept
+		bool WinKeyBoard::operator[](KeyCode _Code) noexcept
 		{
-			assert(_Idx < key_number);
+			assert(static_cast<size_t>(_Code) < key_number);
 
-			return mKeyStates[_Idx];
+			return mKeyStates[static_cast<size_t>(_Code)];
 		}
 
 		uint8_t WinKeyBoard::get_key_count(size_t _Idx) noexcept

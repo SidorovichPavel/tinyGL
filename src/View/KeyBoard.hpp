@@ -20,6 +20,22 @@ namespace tgl
 			};
 		}
 
+#include <Windows.h>
+		enum class KeyCode
+		{
+			W = 'W',
+			A = 'A',
+			S = 'S',
+			D = 'D',
+			Up = VK_UP,
+			Left = VK_LEFT,
+			Down = VK_DOWN,
+			Right = VK_RIGHT,
+			TAB = VK_TAB,
+			Shift = VK_SHIFT,
+
+		};
+
 		class WinKeyBoard
 		{
 		private:
@@ -34,7 +50,7 @@ namespace tgl
 			WinKeyBoard();
 			virtual ~WinKeyBoard();
 
-			bool operator[](size_t _Idx) noexcept;
+			bool operator[](KeyCode _Code) noexcept;
 			uint8_t get_key_count(size_t _Idx) noexcept;
 			void clear_key_count(size_t _Idx) noexcept;
 
@@ -50,6 +66,6 @@ namespace tgl
 	}
 
 	using KeyBoard = win::WinKeyBoard;
-
+	using KeyCode = win::KeyCode;
 #endif
 }
