@@ -18,7 +18,7 @@ namespace tgl
 
 	extern detail::FrameTimeInfo FrameTimeInfo;
 
-	std::pair<bool, int> event_pool(int fps, detail::FrameTimeInfo& fti) noexcept;
+	std::pair<bool, int> event_pool(int fps, detail::FrameTimeInfo& fti = tgl::FrameTimeInfo) noexcept;
 
 	void clear_black() noexcept;
 	/*clamp(0.f,1.f,each param)*/

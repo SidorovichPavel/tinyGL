@@ -96,9 +96,6 @@ namespace tgl::win
 			mEvents.mouse_rbutton_up(wParam64, cut_x::get(lParam32), cut_y::get(lParam32));
 			break;
 		case WM_PAINT:
-			if (MDrawLib != DrawLib::Kernel32)
-				break;
-
 			GetClientRect(hWnd, &mClientRect);
 			mDCHandle = BeginPaint(hWnd, &mPS);
 
@@ -167,14 +164,14 @@ namespace tgl::win
 		mRawInputSize(0),
 		mPS({ 0 }),
 		mClientRect({ 0 }),
-		MDrawLib(DrawLib::Kernel32)
+		mCursor(0)
 	{
 		std::tie(mWidth, mHeight) = _Style_Ptr->get_size();
 		auto [width, height] = _Style_Ptr->get_size();
 		mWidth = width;
 		mHeight = height;
-
-		auto title = _Style_Ptr->get_title();
+		auto& s = _Style_Ptr->get_title();
+		auto temp = std::wstring(s.begin(), s.end());
 
 		WNDCLASSEX wc = { sizeof(wc) };
 		wc.hbrBackground = reinterpret_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
@@ -182,7 +179,7 @@ namespace tgl::win
 		wc.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
 		wc.hIconSm = LoadIcon(nullptr, IDI_APPLICATION);
 		wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-		wc.lpszClassName = title.c_str();
+		wc.lpszClassName = temp.c_str();
 		wc.lpfnWndProc = WinHandler::GeneralProc;
 
 		if (!RegisterClassEx(&wc))
@@ -202,10 +199,10 @@ namespace tgl::win
 		}
 
 		mWinGlobalSize = { 0, 0, mWidth, mHeight };
-		unsigned win_stylee = WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME;
+		unsigned win_stylee = WS_OVERLAPPEDWINDOW;
 		AdjustWindowRect(&mWinGlobalSize, win_stylee, 0);
 		mHandle = CreateWindowEx(
-			0, wc.lpszClassName, title.c_str(), win_stylee,
+			0, wc.lpszClassName, temp.c_str(), win_stylee,
 			x, y,
 			mWinGlobalSize.right - mWinGlobalSize.left, mWinGlobalSize.bottom - mWinGlobalSize.top,
 			0, 0, 0,
@@ -279,7 +276,6 @@ namespace tgl::win
 			throw std::runtime_error("tinyGL : failed wile set pixel format");
 
 		mGL_resource_content = wglCreateContext(mDevice_context);
-		MDrawLib = DrawLib::OpenGL;
 	}
 
 	void WinHandler::enable_opengl_context() noexcept
@@ -338,6 +334,11 @@ namespace tgl::win
 		win::SetWindowText(mHandle, temp.c_str());
 	}
 
+	win::HWND WinHandler::get_handle() noexcept
+	{
+		return mHandle;
+	}
+
 	void WinHandler::invalidate_rect() noexcept
 	{
 		InvalidateRect(mHandle, nullptr, false);
@@ -350,6 +351,7 @@ namespace tgl::win
 
 	void WinHandler::destroy() noexcept
 	{
+		CloseWindow(mHandle);
 		DestroyWindow(mHandle);
 	}
 
@@ -362,5 +364,11 @@ namespace tgl::win
 	{
 		return mEvents;
 	}
+
+	/***********************************************************************************************************************************
+	****************************************************** WIN MOUSE HANDLER ***********************************************************
+	************************************************************************************************************************************/
+
+
 }
 #endif

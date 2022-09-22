@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\View\Controls\Button\Button.cpp" />
     <ClCompile Include="src\Logger\Logger.cpp" />
     <ClCompile Include="src\Shader\FileShader.cpp" />
     <ClCompile Include="GL\GLFuncs.cpp" />
@@ -27,7 +26,7 @@
     <ClCompile Include="src\View\KeyBoard.cpp" />
     <ClCompile Include="src\Shader\Shader.cpp" />
     <ClCompile Include="src\tinyGL.cpp" />
-    <ClCompile Include="src\utility\utility.cpp" />
+    <ClCompile Include="src\Utility\utility.cpp" />
     <ClCompile Include="src\View\Controls\Edit\EditControl.cpp" />
     <ClCompile Include="src\View\Controls\Font\Font.cpp" />
     <ClCompile Include="src\View\Mouse.cpp" />
@@ -39,7 +38,6 @@
     <ClCompile Include="src\View\Style.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\View\Controls\Button\Button.hpp" />
     <ClInclude Include="src\Logger\Logger.hpp" />
     <ClInclude Include="src\Shader\FileShader.hpp" />
     <ClInclude Include="src\Shader\StaticShader.hpp" />
@@ -52,13 +50,13 @@
     <ClInclude Include="GL\wglext.h" />
     <ClInclude Include="GL\GLFuncs.hpp" />
     <ClInclude Include="src\Shader\Shader.hpp" />
-    <ClInclude Include="src\View\Style.hpp" />
     <ClInclude Include="src\tinyGL.hpp" />
-    <ClInclude Include="src\utility\utility.hpp" />
+    <ClInclude Include="src\Utility\utility.hpp" />
     <ClInclude Include="src\View\Controls\Edit\EditControl.hpp" />
     <ClInclude Include="src\View\Controls\Font\Font.hpp" />
     <ClInclude Include="src\View\Controls\IControls.hpp" />
     <ClInclude Include="src\View\Mouse.hpp" />
+    <ClInclude Include="src\View\Style.hpp" />
     <ClInclude Include="src\View\View.hpp" />
     <ClInclude Include="src\Mesh\Mesh.hpp" />
     <ClInclude Include="src\Timer\Timer.hpp" />
@@ -153,7 +151,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>opengl32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\SOIL\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\SOIL\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -178,7 +176,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>opengl32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\SOIL\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\SOIL\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -199,7 +197,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>opengl32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\SOIL\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\SOIL\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -225,7 +223,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>opengl32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\SOIL\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\SOIL\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

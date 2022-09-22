@@ -1,53 +1,55 @@
 #pragma once
 
 #include <bitset>
+#include <vector>
 
 #include "..\Event\Event.hpp"
 
 namespace tgl
 {
-	#ifdef _WIN32
+#ifdef _WIN32
 	namespace win
 	{
-		#include <Windows.h>
-
-		enum class KeyCode : uint32_t
+		namespace detail
 		{
-			A = 'A',
-			B = 'B',
-			C = 'C',
-			D = 'D',
-			E = 'E',
-			S = 'S',
-			W = 'W',
-			UP = VK_UP,
-			LEFT = VK_LEFT,
-			DOWN = VK_DOWN,
-			RIGHT = VK_RIGHT,
-			TAB = VK_TAB,
-			ALT = VK_MENU,
-			RALT = VK_RMENU,
-			CTRL = VK_CONTROL,
-			RCTRL = VK_RCONTROL,
-		};
+			struct KeyBoardEvents
+			{
+				Event<void()> copy;
+				Event<void()> cutting;
+				Event<void()> save;
+			};
+		}
 
 		class WinKeyBoard
 		{
+		private:
+			detail::KeyBoardEvents mEvents;
+
+		protected:
+			static constexpr size_t key_number = 1024;
+			std::bitset<key_number> mKeyStates;
+			std::vector<uint8_t> mKeyCounters;
+
 		public:
 			WinKeyBoard();
 			virtual ~WinKeyBoard();
 
-			bool operator[](KeyCode _Code) noexcept;
+			bool operator[](size_t _Idx) noexcept;
+			uint8_t get_key_count(size_t _Idx) noexcept;
+			void clear_key_count(size_t _Idx) noexcept;
+
+			detail::KeyBoardEvents& events() noexcept;
 
 			void key_down(uint64_t _KeyCode, int64_t _KeyState);
 			void key_up(uint64_t _KeyCode, int64_t _KeyState);
 
-		protected:
-			std::bitset<1024> mKeyStates;
+			bool is_copy_combo() const noexcept;
+
+
 		};
 	}
 
 	using KeyBoard = win::WinKeyBoard;
-	using KeyCode = win::KeyCode;
-	#endif
+
+#endif
 }

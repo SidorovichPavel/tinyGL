@@ -5,6 +5,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="src\Style">
+      <UniqueIdentifier>{bc09db45-b9b0-426c-923a-52b3c56f7880}</UniqueIdentifier>
+    </Filter>
     <Filter Include="GL">
       <UniqueIdentifier>{bcd44663-d7f8-463c-a017-48e9537f25b6}</UniqueIdentifier>
     </Filter>
@@ -70,7 +73,7 @@
     <ClCompile Include="src\View\Controls\Font\Font.cpp">
       <Filter>src\View\Font</Filter>
     </ClCompile>
-    <ClCompile Include="src\utility\utility.cpp">
+    <ClCompile Include="src\Utility\utility.cpp">
       <Filter>src\utility</Filter>
     </ClCompile>
     <ClCompile Include="src\View\Detail.cpp">
@@ -92,9 +95,6 @@
       <Filter>src\Logger</Filter>
     </ClCompile>
     <ClCompile Include="src\View\Style.cpp">
-      <Filter>src\View</Filter>
-    </ClCompile>
-    <ClCompile Include="src\View\Controls\Button\Button.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -147,7 +147,7 @@
     <ClInclude Include="src\View\Controls\Font\Font.hpp">
       <Filter>src\View\Font</Filter>
     </ClInclude>
-    <ClInclude Include="src\utility\utility.hpp">
+    <ClInclude Include="src\Utility\utility.hpp">
       <Filter>src\utility</Filter>
     </ClInclude>
     <ClInclude Include="src\View\Detail.hpp">
@@ -174,9 +174,6 @@
     <ClInclude Include="src\Logger\Logger.hpp">
       <Filter>src\Logger</Filter>
     </ClInclude>
-    <ClInclude Include="src\View\Style.hpp">
-      <Filter>src\View</Filter>
-    </ClInclude>
-    <ClInclude Include="src\View\Controls\Button\Button.hpp" />
+    <ClInclude Include="src\View\Style.hpp" />
   </ItemGroup>
 </Project>
