@@ -17,9 +17,11 @@ namespace tgl
 		using namespace std::chrono_literals;
 
 		auto fix_particle = std::chrono::milliseconds(static_cast<int>(fps * 0.012));
-		std::chrono::nanoseconds fps_lock = (1000ms / fps) + fix_particle;
+		std::chrono::nanoseconds fps_lock = (1000ms / fps);// +fix_particle;
 
 		std::chrono::milliseconds msg_wait;
+		auto next_update = fti.next_update;
+
 		for (;;)
 		{
 			while (tgl::win::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
@@ -30,15 +32,19 @@ namespace tgl
 
 			auto current = std::chrono::steady_clock::now().time_since_epoch();
 			std::chrono::nanoseconds wait;
-			auto next_update = fti.next_update;
 
 			if (current < next_update)
+			{
 				wait = std::min(fps_lock, next_update - current);
-
-			if (wait < 100ns)
+				if (wait < 100ns)
+				{
+					fti.next_update = current + fps_lock;
+					break;
+				}
+			}
+			else
 			{
 				fti.next_update = current + fps_lock;
-				wait = 0ns;
 				break;
 			}
 
@@ -47,7 +53,7 @@ namespace tgl
 			if (tgl::win::MsgWaitForMultipleObjects(0, nullptr, FALSE, static_cast<uint32_t>(msg_wait.count()), QS_ALLEVENTS) == WAIT_TIMEOUT)
 			{
 				fti.next_update = std::chrono::steady_clock::now().time_since_epoch() + fps_lock;
-				msg_wait = 0ms;
+				//msg_wait = 0ms;
 				break;
 			}
 		} 
