@@ -23,8 +23,8 @@ namespace tgl
 		{}
 		~Mouse() {}
 
-		void shift(int32_t _ShiftX, int32_t _ShiftY) noexcept;
-		void move(int32_t _LastX, int32_t _LastY, int64_t _State) noexcept;
+		virtual void shift(int32_t _ShiftX, int32_t _ShiftY) noexcept;
+		virtual void move(int32_t _LastX, int32_t _LastY, int64_t _State) noexcept;
 		bool get_update_state() noexcept;
 		std::pair<int32_t, int32_t> get_shift() noexcept;
 	};
