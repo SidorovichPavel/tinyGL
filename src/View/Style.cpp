@@ -23,8 +23,8 @@ namespace tgl
 		mTitle(std::move(_Title))
 	{
 		mStates[static_cast<size_t>(State::Center)]		= _Centered;
-		mStates[static_cast<size_t>(State::Visible)]	= _Centered;
-		mStates[static_cast<size_t>(State::Fullscreen)] = _Centered;
+		mStates[static_cast<size_t>(State::Visible)]	= _Visible;
+		mStates[static_cast<size_t>(State::Fullscreen)] = _Fullscreen;
 	}
 
 	Style::~Style() {};
