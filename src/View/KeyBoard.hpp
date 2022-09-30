@@ -33,7 +33,7 @@ namespace tgl
 			Right = VK_RIGHT,
 			TAB = VK_TAB,
 			Shift = VK_SHIFT,
-
+			Escape = VK_ESCAPE,
 		};
 
 		class WinKeyBoard
