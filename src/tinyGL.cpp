@@ -2,7 +2,9 @@
 #include "../GL/GLFuncs.hpp"
 
 #include <stdexcept>
+#ifdef _DEBUG
 #include <iostream>
+#endif
 
 namespace tgl
 {
@@ -17,32 +19,28 @@ namespace tgl
 		using namespace std::chrono_literals;
 
 		auto fix_particle = std::chrono::milliseconds(static_cast<int>(fps * 0.012));
-		std::chrono::nanoseconds fps_lock = (1000ms / fps);// +fix_particle;
+		std::chrono::nanoseconds fps_lock = 1000000000ns / fps + fix_particle;
 
 		std::chrono::milliseconds msg_wait;
-		auto next_update = fti.next_update;
 
 		for (;;)
 		{
-			while (tgl::win::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+			auto current = std::chrono::steady_clock::now().time_since_epoch();
+
+			while (tgl::win::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) &&
+					current < fti.next_update)
 			{
 				tgl::win::TranslateMessage(&msg);
 				tgl::win::DispatchMessage(&msg);
+
+				current = std::chrono::steady_clock::now().time_since_epoch();
 			}
 
-			auto current = std::chrono::steady_clock::now().time_since_epoch();
 			std::chrono::nanoseconds wait;
 
-			if (current < next_update)
-			{
-				wait = std::min(fps_lock, next_update - current);
-				if (wait < 100ns)
-				{
-					fti.next_update = current + fps_lock;
-					break;
-				}
-			}
-			else
+			wait = std::min(fps_lock, std::max(fti.next_update - current, 0ns));
+
+			if (wait < 1us)
 			{
 				fti.next_update = current + fps_lock;
 				break;
@@ -53,10 +51,9 @@ namespace tgl
 			if (tgl::win::MsgWaitForMultipleObjects(0, nullptr, FALSE, static_cast<uint32_t>(msg_wait.count()), QS_ALLEVENTS) == WAIT_TIMEOUT)
 			{
 				fti.next_update = std::chrono::steady_clock::now().time_since_epoch() + fps_lock;
-				//msg_wait = 0ms;
 				break;
 			}
-		} 
+		}
 
 		return std::make_pair(true, static_cast<int>(msg.wParam));
 #else
@@ -70,9 +67,9 @@ namespace tgl
 		if (opengl_is_init)
 			return;
 		using namespace win;
-		HWND handle = CreateWindowEx(0, TEXT("button"), TEXT(""), WS_POPUP, 0, 0, 0, 0, 0, 0, 0, 0);
+		HWND handle = CreateWindowEx(0, TEXT("edit"), TEXT(""), WS_POPUP, 0, 0, 0, 0, 0, 0, 0, 0);
 		if (!handle)
-			throw std::runtime_error("tinyGL[Win32] -> init failed -> failed wile window init");
+			throw std::runtime_error("tinyGL::init failed::failed wile window init");
 
 		PIXELFORMATDESCRIPTOR pfd =
 		{
@@ -179,6 +176,8 @@ namespace tgl
 
 	namespace gl
 	{
+		#ifdef _DEBUG
+
 		void _stdcall callback(uint32_t source, uint32_t type, uint32_t id, uint32_t severity, int32_t length, char const* message, void const* user_param)
 		{
 			auto source_str = [source]() -> std::string {
@@ -225,9 +224,9 @@ namespace tgl
 				<< message << std::endl;
 		}
 
-
+		#endif
 
 
 	}
 
-	}
+}
