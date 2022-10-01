@@ -36,7 +36,7 @@ namespace tgl {
 
 		float get_ratio() noexcept
 		{
-			float den = base::mHeight == 0 ? 0.001f : static_cast<float>(base::mHeight);
+			float den = base::mHeight == 0 ? 0.0001f : static_cast<float>(base::mHeight);
 			return static_cast<float>(base::mWidth) / den;
 		}
 
