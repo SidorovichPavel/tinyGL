@@ -199,7 +199,7 @@ namespace tgl::win
 		}
 
 		mWinGlobalSize = { 0, 0, mWidth, mHeight };
-		unsigned win_stylee = WS_OVERLAPPEDWINDOW;
+		auto win_stylee = _Style_Ptr->get_modifier();
 		AdjustWindowRect(&mWinGlobalSize, win_stylee, 0);
 		mHandle = CreateWindowEx(
 			0, wc.lpszClassName, temp.c_str(), win_stylee,
@@ -339,7 +339,7 @@ namespace tgl::win
 		return mHandle;
 	}
 
-	void WinHandler::invalidate_rect() noexcept
+	void WinHandler::redraw() noexcept
 	{
 		InvalidateRect(mHandle, nullptr, false);
 	}

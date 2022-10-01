@@ -7,7 +7,8 @@ namespace tgl
 		mXPos(0),
 		mYPos(0),
 		mWidth(0),
-		mHeight(0)
+		mHeight(0),
+		mCompressedStyle(0)
 	{
 		mStates.reset();
 	}
@@ -20,7 +21,8 @@ namespace tgl
 		mYPos(_Y),
 		mWidth(_W),
 		mHeight(_H),
-		mTitle(std::move(_Title))
+		mTitle(std::move(_Title)),
+		mCompressedStyle(0)
 	{
 		mStates[static_cast<size_t>(State::Center)]		= _Centered;
 		mStates[static_cast<size_t>(State::Visible)]	= _Visible;
@@ -52,6 +54,23 @@ namespace tgl
 	std::pair<int, int> Style::get_size() const noexcept
 	{
 		return std::pair<int, int>(mWidth, mHeight);
+	}
+
+	Style& Style::operator<<(StyleModifier _Mod) noexcept
+	{
+		mCompressedStyle |= static_cast<uint32_t>(_Mod);
+		return *this;
+	}
+
+	Style& Style::operator>>(StyleModifier _Mod) noexcept
+	{
+		mCompressedStyle &= ~static_cast<uint32_t>(_Mod);
+		return *this;
+	}
+
+	uint32_t Style::get_modifier() const noexcept
+	{
+		return mCompressedStyle;
 	}
 
 }

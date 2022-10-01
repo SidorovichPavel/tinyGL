@@ -67,17 +67,19 @@ namespace tgl
 			virtual float get_ratio() noexcept = 0;
 			virtual bool is_open() noexcept = 0;
 
-		protected:
-			win::HWND get_handle() noexcept;
-			void invalidate_rect() noexcept;
-			void send_message(uint32_t _Msg, uint64_t _WParam, int64_t _LParam) noexcept;
-			void post_message(uint32_t _Msg, uint64_t _WParam, int64_t _LParam) noexcept;
+			using handle_t = win::HWND;
+			handle_t get_handle() noexcept;
+			void redraw() noexcept;
 			void close() noexcept;
 			void destroy() noexcept;
+
+		private:
+			void send_message(uint32_t _Msg, uint64_t _WParam, int64_t _LParam) noexcept;
+			void post_message(uint32_t _Msg, uint64_t _WParam, int64_t _LParam) noexcept;
 		};
 	}
 	using Handler = win::WinHandler;
-#endif // __WIN32
+	#endif // __WIN32
 
 }
 
