@@ -42,12 +42,12 @@ namespace tgl
 		return *this;
 	}
 
-	void Mesh::draw(uint32_t _GLType)
+	void Mesh::draw(GlDrawObject _GLType)
 	{
 		assert(mBuffer.size() && mIndicesBuffer);
 
 		bind();
-		gl::glDrawElements(_GLType, mIndicesCount, GL_UNSIGNED_INT, nullptr);
+		gl::glDrawElements(static_cast<uint32_t>(_GLType), mIndicesCount, GL_UNSIGNED_INT, nullptr);
 		unbind();
 	}
 

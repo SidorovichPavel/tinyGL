@@ -24,6 +24,6 @@ namespace tgl
 	
 	void EditControl::draw()
 	{
-		mBackground.draw(GL_TRIANGLES);
+		mBackground.draw();
 	}
 }

@@ -45,22 +45,28 @@ namespace tgl
 
 	}
 
-	enum class GlDrawMode : uint32_t
-	{
-		Static = GL_STATIC_DRAW,
-		Dynamic = GL_DYNAMIC_DRAW,
-		Stream = GL_STREAM_DRAW
-	};
-
 	class Mesh
 	{
-		uint32_t				mVAO;
-		uint32_t				mIndicesBuffer;
-		int32_t					mIndicesCount;
-		std::vector<uint32_t>	mBuffer;
-		size_t					mVertexSize;
-
 	public:
+
+		enum class GlDrawMode : uint32_t
+		{
+			Static = GL_STATIC_DRAW,
+			Dynamic = GL_DYNAMIC_DRAW,
+			Stream = GL_STREAM_DRAW
+		};
+
+		enum class GlDrawObject : uint32_t
+		{
+			Points = GL_POINTS,
+			Lines = GL_LINES,
+			LineStrip = GL_LINE_STRIP,
+			LineLoop = GL_LINE_LOOP,
+			Triangles = GL_TRIANGLES,
+			TriangleStrip = GL_TRIANGLE_STRIP,
+			TrianglesFan = GL_TRIANGLE_FAN,
+		};
+
 		Mesh();
 		~Mesh();
 		Mesh(const Mesh&) = delete;
@@ -69,7 +75,7 @@ namespace tgl
 		Mesh& operator=(Mesh&& _Right) noexcept;
 
 		
-		void draw(uint32_t _GLType);
+		void draw(GlDrawObject _GLType = GlDrawObject::Triangles);
 		void toggle_attribut(uint32_t _Count, bool _Enable = true);
 		void bind();
 		void unbind();
@@ -131,5 +137,12 @@ namespace tgl
 		
 	private:
 		void _swap(Mesh& _Other) noexcept;
+
+		uint32_t				mVAO;
+		uint32_t				mIndicesBuffer;
+		int32_t					mIndicesCount;
+		std::vector<uint32_t>	mBuffer;
+		size_t					mVertexSize;
+
 	};
 }
