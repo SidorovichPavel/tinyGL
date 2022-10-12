@@ -28,15 +28,15 @@ namespace tgl
 			static_assert("something");
 		};
 
-		template<class Ret, class... Params>
-		struct tgl_func<Ret(_stdcall*)(Params...)>
+		template<class ReturnType, class... ArgTypes>
+		struct tgl_func<ReturnType(_stdcall*)(ArgTypes...)>
 		{
-			using func_t = std::function<Ret(Params...)>;
+			using func_t = std::function<ReturnType(ArgTypes...)>;
 
 			static func_t LoadFunction(const char* _Func_Name)
 			{
 				void* data = tgl::win::wglGetProcAddress(_Func_Name);
-				return static_cast<Ret(_stdcall*)(Params...)>(data);
+				return static_cast<ReturnType(_stdcall*)(ArgTypes...)>(data);
 			}
 		};
 		
