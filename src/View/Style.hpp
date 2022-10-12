@@ -6,6 +6,7 @@
 namespace tgl
 {
 	#ifdef _WIN32
+
 	namespace win
 	{
 		enum class WinModifier : uint32_t
@@ -39,6 +40,7 @@ namespace tgl
 			VScroll = 0x00200000u
 		};
 	}
+
 	#endif
 
 	using StyleModifier = win::WinModifier;
