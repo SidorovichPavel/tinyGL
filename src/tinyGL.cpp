@@ -19,7 +19,7 @@ namespace tgl
 		using namespace std::chrono_literals;
 
 		auto fix_particle = std::chrono::milliseconds(static_cast<int>(fps * 0.012));
-		std::chrono::nanoseconds fps_lock = 1000000000ns / fps + fix_particle;
+		std::chrono::nanoseconds fps_lock = 1000ms / fps + fix_particle;
 
 		std::chrono::milliseconds msg_wait;
 
@@ -27,20 +27,15 @@ namespace tgl
 		{
 			auto current = std::chrono::steady_clock::now().time_since_epoch();
 
-			while (tgl::win::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) &&
-					current < fti.next_update)
+			while (tgl::win::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 			{
 				tgl::win::TranslateMessage(&msg);
 				tgl::win::DispatchMessage(&msg);
-
-				current = std::chrono::steady_clock::now().time_since_epoch();
 			}
 
-			std::chrono::nanoseconds wait;
+			std::chrono::nanoseconds wait = std::min(fps_lock, std::max(fti.next_update - current, 0ns));
 
-			wait = std::min(fps_lock, std::max(fti.next_update - current, 0ns));
-
-			if (wait < 1us)
+			if (wait < 1ms)
 			{
 				fti.next_update = current + fps_lock;
 				break;
@@ -176,7 +171,7 @@ namespace tgl
 
 	namespace gl
 	{
-		#ifdef _DEBUG
+#ifdef _DEBUG
 
 		void _stdcall callback(uint32_t source, uint32_t type, uint32_t id, uint32_t severity, int32_t length, char const* message, void const* user_param)
 		{
@@ -224,9 +219,9 @@ namespace tgl
 				<< message << std::endl;
 		}
 
-		#endif
+#endif
 
 
 	}
 
-}
+	}
