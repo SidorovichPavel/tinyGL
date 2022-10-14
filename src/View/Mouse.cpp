@@ -6,23 +6,13 @@ namespace tgl
 	{
 		mUpdated = true;
 
-		lastX = x;
-		lastY = y;
+		mLastX = mX;
+		mLastY = mY;
 
-		x += _LastX;
-		y += _LastY;
+		mX += _LastX;
+		mY += _LastY;
 	}
 
-	void Mouse::move(int32_t _LastX, int32_t _LastY, int64_t _State) noexcept
-	{
-		mUpdated = true;
-
-		lastX = x;
-		lastY = y;
-
-		x = _LastX;
-		y = _LastY;
-	}
 
 	bool Mouse::get_update_state() noexcept
 	{
@@ -32,6 +22,38 @@ namespace tgl
 	std::pair<int32_t, int32_t> Mouse::get_shift() noexcept
 	{
 		mUpdated = false;
-		return { x - lastX, y - lastY };
+		return { mX - mLastX, mY - mLastY };
 	}
+
+	void Mouse::move(int32_t _LastX, int32_t _LastY, int64_t _State) noexcept
+	{
+		mUpdated = true;
+
+		mLastX = mX;
+		mLastY = mY;
+
+		mX = _LastX;
+		mY = _LastY;
+	}
+
+	void Mouse::lb_down(int64_t _State, uint16_t _X, uint16_t _Y) noexcept
+	{
+		mLBPress = true;
+	}
+
+	void Mouse::lb_up(int64_t _State, uint16_t _X, uint16_t _Y) noexcept
+	{
+		mLBPress = false;
+	}
+
+	void Mouse::rb_down(int64_t _State, uint16_t _X, uint16_t _Y) noexcept
+	{
+		mRBPress = true;
+	}
+
+	void Mouse::rb_up(int64_t _State, uint16_t _X, uint16_t _Y) noexcept
+	{
+		mRBPress = false;
+	}
+
 }

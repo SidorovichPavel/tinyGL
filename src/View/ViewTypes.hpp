@@ -85,7 +85,17 @@ namespace tgl
 				* thirt y positon
 				*/
 				Event<void(int64_t, int32_t, int32_t)> mouse_rbutton_up;
-				
+				/*desc
+				* 
+				*/
+				Event<void(int64_t _State, int32_t _X, int32_t _Y)> mouse_mbutton_down;
+				Event<void(int64_t _State, int32_t _X, int32_t _Y)> mouse_mbutton_up;
+
+				Event<void(int64_t _State, int32_t _X, int32_t _Y)> mouse_x1button_down;
+				Event<void(int64_t _State, int32_t _X, int32_t _Y)> mouse_x1button_up;
+				Event<void(int64_t _State, int32_t _X, int32_t _Y)> mouse_x2button_down;
+				Event<void(int64_t _State, int32_t _X, int32_t _Y)> mouse_x2button_up;
+
 				Event<void(void)> set_focus;
 				Event<void(void)> kill_focus;
 			};

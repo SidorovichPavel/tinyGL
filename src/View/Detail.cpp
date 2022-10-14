@@ -83,6 +83,40 @@ namespace tgl::win
 				cut_wheel_delta::get(wParam64),
 				cut_x::get(lParam32), cut_y::get(lParam32));
 			break;
+		case WM_XBUTTONDOWN:
+		{
+			auto button_num = tgl::detail::cutter<uint64_t, uint16_t, 1>::get(wParam64);
+			switch (button_num)
+			{
+			case XBUTTON1:
+				mEvents.mouse_x1button_down(wParam64, cut_x::get(lParam32), cut_y::get(lParam32));
+				break;
+			case XBUTTON2:
+				mEvents.mouse_x2button_down(wParam64, cut_x::get(lParam32), cut_y::get(lParam32));
+				break;
+			}
+		}
+			break;
+		case WM_XBUTTONUP:
+		{
+			auto button_num = tgl::detail::cutter<uint64_t, uint16_t, 1>::get(wParam64);
+			switch (button_num)
+			{
+			case XBUTTON1:
+				mEvents.mouse_x1button_up(wParam64, cut_x::get(lParam32), cut_y::get(lParam32));
+				break;
+			case XBUTTON2:
+				mEvents.mouse_x2button_up(wParam64, cut_x::get(lParam32), cut_y::get(lParam32));
+				break;
+			}
+		}
+			break;
+		case WM_MBUTTONDOWN:
+			mEvents.mouse_mbutton_down(wParam64, cut_x::get(lParam32), cut_y::get(lParam32));
+			break;
+		case WM_MBUTTONUP:
+			mEvents.mouse_mbutton_up(wParam64, cut_x::get(lParam32), cut_y::get(lParam32));
+			break;
 		case WM_LBUTTONDOWN:
 			mEvents.mouse_lbutton_down(wParam64, cut_x::get(lParam32), cut_y::get(lParam32));
 			break;
@@ -96,6 +130,7 @@ namespace tgl::win
 			mEvents.mouse_rbutton_up(wParam64, cut_x::get(lParam32), cut_y::get(lParam32));
 			break;
 		case WM_PAINT:
+		{
 			GetClientRect(hWnd, &mClientRect);
 			mDCHandle = BeginPaint(hWnd, &mPS);
 
@@ -123,6 +158,7 @@ namespace tgl::win
 			mCompatibleBitMapHandle = NULL;
 
 			EndPaint(hWnd, &mPS);
+		}
 			break;
 		case WM_INPUT:
 		{
