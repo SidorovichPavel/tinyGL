@@ -34,6 +34,9 @@ namespace tgl
 			TAB = VK_TAB,
 			Shift = VK_SHIFT,
 			Escape = VK_ESCAPE,
+			Return = VK_RETURN,
+			Back = VK_BACK,
+			Space = VK_SPACE
 		};
 
 		class WinKeyBoard
