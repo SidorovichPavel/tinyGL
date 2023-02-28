@@ -3,7 +3,7 @@
 /*
 * RayeS
 * class - callable object wraper
-* version 1.3.0
+* version 1.4.0
 */
 
 #include <type_traits>
@@ -188,13 +188,6 @@ namespace fnw
 			}
 		}
 
-		template<size_t I>
-		const invoker_ptr storage_block() const noexcept
-		{
-			static_assert(storage_size > I, "Out of storage range");
-			return *reinterpret_cast<const invoker_ptr*>(mStorage + sizeof(void*) * I);
-		}
-
 		void free_storage() noexcept
 		{
 			switch (static_cast<StoreMod>(mStorage[flags_block]))
@@ -205,14 +198,15 @@ namespace fnw
 				reinterpret_cast<invoker_ptr>(mStorage)->~function_base();
 				break;
 			case StoreMod::Pointer:
-				delete* reinterpret_cast<invoker_ptr*>(mStorage);
+				delete *reinterpret_cast<invoker_ptr*>(mStorage);
 				break;
 			}
 
 			std::fill(std::begin(mStorage), std::end(mStorage), 0ui8);
 		}
 
-		static constexpr size_t storage_size = sizeof(void*) * 3;
+		static constexpr size_t block_size = 8;//bytes
+		static constexpr size_t storage_size = block_size * 4;//fix x86 release
 		static constexpr size_t flags_block = storage_size;
 		uint8_t mStorage[storage_size + 1];
 	};

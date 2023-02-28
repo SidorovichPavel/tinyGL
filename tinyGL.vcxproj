@@ -38,6 +38,7 @@
     <ClCompile Include="src\View\Style.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Event\function.hpp" />
     <ClInclude Include="src\Logger\Logger.hpp" />
     <ClInclude Include="src\Shader\FileShader.hpp" />
     <ClInclude Include="src\Shader\StaticShader.hpp" />
