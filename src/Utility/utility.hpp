@@ -42,6 +42,24 @@ namespace tgl
 				return *(reinterpret_cast<OutType*>(&_In) + Offset);
 			}
 		};
+
+		template<class T, typename = size_t>
+		struct has_method_size : std::false_type {};
+
+		template<class T> 
+		struct has_method_size<T, std::enable_if_t<std::is_same_v<decltype(std::declval<T>.size()), size_t>, size_t>> : std::true_type {};
+
+		template<class T>
+		constexpr bool has_method_size_v = has_method_size<T>::value;
+
+		template<class T, typename = void>
+		struct has_method_length : std::false_type {};
+
+		template<class T>
+		struct has_method_length<T, std::enable_if_t<std::is_arithmetic_v<decltype(std::declval<T>().length())>, void>> : std::true_type {};
+
+		template<class T>
+		constexpr bool has_method_length_v = has_method_length<T>::value;
 	}
 
 	using hi_word = detail::cutter<unsigned int, unsigned short int, 1>;

@@ -2,7 +2,10 @@
 
 #include <vector>
 #include <array>
+#include <stdexcept>
+
 #include "../../GL/GLFuncs.hpp"
+#include "../Utility/utility.hpp"
 
 namespace tgl
 {
@@ -75,12 +78,27 @@ namespace tgl
 		Mesh& operator=(Mesh&& _Right) noexcept;
 
 		
-		void draw(GlDrawObject _GLType = GlDrawObject::Triangles);
+		void draw_elements(GlDrawObject _GLType = GlDrawObject::Triangles);
+		void draw_array(size_t _Count, GlDrawObject _GLObjType = GlDrawObject::Triangles, int _First = 0);
 		void toggle_attribut(uint32_t _Count, bool _Enable = true);
 		void bind();
 		void unbind();
 
 		void set_indices(size_t _Count, uint32_t* _Elems, GlDrawMode _DrawMode = GlDrawMode::Static);
+
+		template<class T, typename U = T::value_type>
+		void set_attribut(size_t _Idx, size_t _Count, const T* _Data, GlDrawMode _DrawMode = GlDrawMode::Static)
+		{
+			size_t number_per_vertex{};
+			if constexpr (detail::has_method_size_v<T>)
+				number_per_vertex = _Data->size();
+			else if constexpr (detail::has_method_length_v<T>)
+				number_per_vertex = static_cast<size_t>(_Data->length());
+			else
+				throw std::logic_error("[tinyGL]::The container has no size or length methods");
+
+			set_attribut(_Idx, number_per_vertex, _Count * number_per_vertex, reinterpret_cast<const U*>(_Data), _DrawMode);
+		}
 
 		template<class T>
 		void set_attribut(size_t _Idx, size_t _NumbOfElemPerVertex, size_t _Count, const T* _Data, GlDrawMode _DrawMode = GlDrawMode::Static)
@@ -106,6 +124,9 @@ namespace tgl
 
 			unbind();
 		}
+
+		
+
 
 		template<uint32_t... Args>
 		void set_attributs(size_t _Count, const float* _Data, GlDrawMode _DrawMode = GlDrawMode::Static)

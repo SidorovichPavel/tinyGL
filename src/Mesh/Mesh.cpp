@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <assert.h>
+#include <limits>
 
 namespace tgl
 {
@@ -42,12 +43,21 @@ namespace tgl
 		return *this;
 	}
 
-	void Mesh::draw(GlDrawObject _GLType)
+	void Mesh::draw_elements(GlDrawObject _GLType)
 	{
 		assert(mBuffer.size() && mIndicesBuffer);
 
 		bind();
 		gl::glDrawElements(static_cast<uint32_t>(_GLType), mIndicesCount, GL_UNSIGNED_INT, nullptr);
+		unbind();
+	}
+
+	void Mesh::draw_array(size_t _Count, GlDrawObject _GLObjType, int _First)
+	{
+		assert(mBuffer.size() && _Count <= static_cast<size_t>(std::numeric_limits<int>::max()));
+		
+		bind();
+		gl::glDrawArrays(static_cast<uint32_t>(_GLObjType), _First, static_cast<int>(_Count));
 		unbind();
 	}
 
