@@ -2,7 +2,8 @@
 
 #include <string>
 #include <stdexcept>
-#include <functional>
+
+#include "..\src\Utility\function.hpp"
 
 namespace tgl
 {
@@ -31,7 +32,7 @@ namespace tgl
 		template<class ReturnType, class... ArgTypes>
 		struct tgl_func<ReturnType(_stdcall*)(ArgTypes...)>
 		{
-			using func_t = std::function<ReturnType(ArgTypes...)>;
+			using func_t = fnw::function<ReturnType(ArgTypes...)>;
 
 			static func_t LoadFunction(const char* _Func_Name)
 			{
