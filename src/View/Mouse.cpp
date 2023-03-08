@@ -14,7 +14,7 @@ namespace tgl
 	}
 
 
-	bool Mouse::get_update_state() noexcept
+	bool Mouse::is_updated() noexcept
 	{
 		return mUpdated;
 	}
