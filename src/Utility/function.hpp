@@ -3,7 +3,7 @@
 /*
 * RayeS
 * class - callable object wraper
-* version 1.4.0
+* version 1.5.1
 */
 
 #include <type_traits>
@@ -23,7 +23,7 @@ namespace fnw
 			function_base() = default;
 			virtual ~function_base() = default;
 
-			virtual ReturnType invoke(ArgTypes&&... args) = 0;
+			virtual ReturnType invoke(ArgTypes... args) = 0;
 		};
 
 		template<class FunctionType, class ReturnType, class... ArgTypes>
@@ -37,9 +37,9 @@ namespace fnw
 
 			~func_impl() = default;
 
-			ReturnType invoke(ArgTypes&&... _Args) override
+			ReturnType invoke(ArgTypes... _Args) override
 			{
-				return mFunction(std::forward<ArgTypes>(_Args)...);
+				return mFunction(_Args...);
 			};
 			
 
@@ -59,12 +59,12 @@ namespace fnw
 
 			~method_impl() = default;
 
-			ReturnType invoke(ArgTypes&&... _Args) override
+			ReturnType invoke(ArgTypes... _Args) override
 			{
 				if constexpr (std::is_pointer_v<Class>)
-					return (mObject->*mMethod)(std::forward<ArgTypes>(_Args)...);
+					return (mObject->*mMethod)(_Args...);
 				else
-					return (mObject.*mMethod)(std::forward<ArgTypes>(_Args)...);
+					return (mObject.*mMethod)(_Args...);
 			}
 
 
@@ -146,17 +146,16 @@ namespace fnw
 			free_storage();
 		}
 
-		template<class... ParamTypes>
-		ReturnType operator()(ParamTypes&&... _Params)
+		ReturnType operator()(ArgTypes... _Params)
 		{
 			switch (static_cast<StoreMod>(mStorage[flags_block]))
 			{
 			case StoreMod::Free:
 				throw fnw_error("Function don't have callable object");
 			case StoreMod::Object:
-				return reinterpret_cast<invoker_ptr>(mStorage)->invoke(std::forward<ArgTypes>(static_cast<ArgTypes&&>(_Params))...);
+				return reinterpret_cast<invoker_ptr>(mStorage)->invoke(_Params...);
 			case StoreMod::Pointer:
-				return (*reinterpret_cast<invoker_ptr*>(mStorage))->invoke(std::forward<ArgTypes>(static_cast<ArgTypes&&>(_Params))...);
+				return (*reinterpret_cast<invoker_ptr*>(mStorage))->invoke(_Params...);
 			}
 
 			throw fnw_error("The function store has been corrupted");
@@ -206,7 +205,7 @@ namespace fnw
 		}
 
 		static constexpr size_t block_size = 8;//bytes
-		static constexpr size_t storage_size = block_size * 4;//fix x86 release
+		static constexpr size_t storage_size = block_size * 4 + 3;//fix x86 release
 		static constexpr size_t flags_block = storage_size;
 		uint8_t mStorage[storage_size + 1];
 	};
