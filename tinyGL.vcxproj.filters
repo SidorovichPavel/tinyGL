@@ -175,6 +175,6 @@
       <Filter>src\Logger</Filter>
     </ClInclude>
     <ClInclude Include="src\View\Style.hpp" />
-    <ClInclude Include="src\Event\function.hpp" />
+    <ClInclude Include="src\Utility\function.hpp" />
   </ItemGroup>
 </Project>
