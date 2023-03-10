@@ -21,7 +21,7 @@ namespace tgl
 		}
 
 #include <Windows.h>
-		enum class KeyCode
+		enum class WinKeys
 		{
 			W = 'W',
 			A = 'A',
@@ -53,7 +53,7 @@ namespace tgl
 			WinKeyBoard();
 			virtual ~WinKeyBoard();
 
-			bool operator[](KeyCode _Code) noexcept;
+			bool operator[](WinKeys _Code) noexcept;
 			uint8_t get_key_count(size_t _Idx) noexcept;
 			void clear_key_count(size_t _Idx) noexcept;
 
@@ -68,7 +68,7 @@ namespace tgl
 		};
 	}
 
-	using KeyBoard = win::WinKeyBoard;
-	using KeyCode = win::KeyCode;
+	using Keyboard = win::WinKeyBoard;
+	using Keys = win::WinKeys;
 #endif
 }

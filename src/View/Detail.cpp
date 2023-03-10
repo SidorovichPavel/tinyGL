@@ -96,7 +96,7 @@ namespace tgl::win
 				break;
 			}
 		}
-			break;
+		break;
 		case WM_XBUTTONUP:
 		{
 			auto button_num = tgl::detail::cutter<uint64_t, uint16_t, 1>::get(wParam64);
@@ -110,7 +110,7 @@ namespace tgl::win
 				break;
 			}
 		}
-			break;
+		break;
 		case WM_MBUTTONDOWN:
 			mEvents.mouse_mbutton_down(wParam64, cut_x::get(lParam32), cut_y::get(lParam32));
 			break;
@@ -159,7 +159,7 @@ namespace tgl::win
 
 			EndPaint(hWnd, &mPS);
 		}
-			break;
+		break;
 		case WM_INPUT:
 		{
 			mRawInputSize = 0;
@@ -204,8 +204,6 @@ namespace tgl::win
 	{
 		std::tie(mWidth, mHeight) = _Style_Ptr->get_size();
 		auto [width, height] = _Style_Ptr->get_size();
-		mWidth = width;
-		mHeight = height;
 		auto& s = _Style_Ptr->get_title();
 		auto temp = std::wstring(s.begin(), s.end());
 
@@ -278,6 +276,10 @@ namespace tgl::win
 
 		if (mGL_resource_content)
 			wglDeleteContext(mGL_resource_content);
+
+		if (mDevice_context)
+			ReleaseDC(mHandle, mDevice_context);
+
 		if (mIsOpen)
 			DestroyWindow(mHandle);
 	}

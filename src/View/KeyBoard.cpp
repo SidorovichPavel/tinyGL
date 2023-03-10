@@ -16,7 +16,7 @@ namespace tgl
 		WinKeyBoard::~WinKeyBoard()
 		{}
 
-		bool WinKeyBoard::operator[](KeyCode _Code) noexcept
+		bool WinKeyBoard::operator[](WinKeys _Code) noexcept
 		{
 			assert(static_cast<size_t>(_Code) < key_number);
 

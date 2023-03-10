@@ -6,6 +6,7 @@
 #include "../Event/Event.hpp"
 #include "Style.hpp"
 #include "Mouse.hpp"
+#include "ViewBase.hpp"
 #include "ViewTypes.hpp"
 
 namespace tgl
@@ -20,7 +21,7 @@ namespace tgl
 		#include <windowsx.h>
 		#include <WinUser.h>
 
-		class WinHandler
+		class WinHandler : public tgl::detail::ViewBase
 		{
 			HWND mHandle;
 			HDC mDevice_context;
@@ -43,11 +44,6 @@ namespace tgl
 			static LRESULT CALLBACK GeneralProc(HWND, UINT, WPARAM, LPARAM) noexcept;
 			LRESULT WinProc(HWND, UINT, WPARAM, LPARAM) noexcept;
 
-		protected:
-			bool mIsOpen;
-			int mWidth, mHeight;
-			int32_t mScreenWidth, mScreenHeight;
-
 		public:
 			WinHandler(const Style* _Style_Ptr);
 			virtual ~WinHandler();
@@ -62,10 +58,6 @@ namespace tgl
 
 			void show_cursor(bool _Mode) noexcept;
 			void set_title(const std::string& title) noexcept;
-
-			virtual std::pair<int32_t, int32_t> get_size() noexcept = 0;
-			virtual float get_ratio() noexcept = 0;
-			virtual bool is_open() noexcept = 0;
 
 			using handle_t = win::HWND;
 			handle_t get_handle() noexcept;

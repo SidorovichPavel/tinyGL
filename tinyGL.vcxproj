@@ -36,6 +36,7 @@
     <ClCompile Include="src\Texture\TextureAtlas.cpp" />
     <ClCompile Include="src\View\Detail.cpp" />
     <ClCompile Include="src\View\Style.cpp" />
+    <ClCompile Include="src\View\ViewBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utility\function.hpp" />
@@ -64,6 +65,7 @@
     <ClInclude Include="src\Texture\Texture.hpp" />
     <ClInclude Include="src\Texture\TextureAtlas.hpp" />
     <ClInclude Include="src\View\Detail.hpp" />
+    <ClInclude Include="src\View\ViewBase.hpp" />
     <ClInclude Include="src\View\ViewTypes.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

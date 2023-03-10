@@ -97,6 +97,9 @@
     <ClCompile Include="src\View\Style.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\View\ViewBase.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\tinyGL.hpp">
@@ -176,5 +179,6 @@
     </ClInclude>
     <ClInclude Include="src\View\Style.hpp" />
     <ClInclude Include="src\Utility\function.hpp" />
+    <ClInclude Include="src\View\ViewBase.hpp" />
   </ItemGroup>
 </Project>

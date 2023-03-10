@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 #include <map>
+#include <list>
 
 #include "..\Utility\function.hpp"
 
@@ -25,6 +26,7 @@ namespace tgl
 
 		using callable_type = fnw::function<void(ArgTypes...)>;
 		using id_type = int64_t;
+		using storage_type = std::map<id_type, callable_type>;
 
 		Event()
 			:
@@ -103,6 +105,6 @@ namespace tgl
 	private:
 
 		int64_t mIDCounter;
-		std::map<id_type, callable_type> mStorage;
+		storage_type mStorage;
 	};
 }
