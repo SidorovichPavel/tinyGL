@@ -1,4 +1,5 @@
 #include <stdexcept>
+#include <string_view>
 
 #include "Detail.hpp"
 #include <gl\GL.h>
@@ -193,7 +194,7 @@ namespace tgl::win
 		return 0;
 	}
 
-	WinHandler::WinHandler(const Style* _Style_Ptr)
+	WinHandler::WinHandler(std::unique_ptr<Style> style_ptr)
 		:
 		mGL_resource_content(0),
 		mRawInputHandle(0),
@@ -202,10 +203,14 @@ namespace tgl::win
 		mClientRect({ 0 }),
 		mCursor(0)
 	{
-		std::tie(mWidth, mHeight) = _Style_Ptr->get_size();
-		auto [width, height] = _Style_Ptr->get_size();
-		auto& s = _Style_Ptr->get_title();
-		auto temp = std::wstring(s.begin(), s.end());
+		std::tie(mWidth, mHeight) = style_ptr->get_size();
+		auto [width, height] = style_ptr->get_size();
+		auto& win_title = style_ptr->get_title();
+
+		LOGBRUSH brush;
+		brush.lbStyle = BS_SOLID;
+		brush.lbColor = 0xffffffff;
+		mBrushHandle = CreateBrushIndirect(&brush);
 
 		WNDCLASSEX wc = { sizeof(wc) };
 		wc.hbrBackground = reinterpret_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
@@ -213,7 +218,7 @@ namespace tgl::win
 		wc.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
 		wc.hIconSm = LoadIcon(nullptr, IDI_APPLICATION);
 		wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-		wc.lpszClassName = temp.c_str();
+		wc.lpszClassName = win_title.c_str();
 		wc.lpfnWndProc = WinHandler::GeneralProc;
 
 		if (!RegisterClassEx(&wc))
@@ -224,7 +229,7 @@ namespace tgl::win
 
 		auto x = 0, y = 0;
 
-		if (_Style_Ptr->get_state(Style::State::Center))
+		if (style_ptr->get_state(Style::State::Center))
 		{
 			x = mScreenWidth - mWidth;
 			x /= 2;
@@ -233,39 +238,24 @@ namespace tgl::win
 		}
 
 		mWinGlobalSize = { 0, 0, mWidth, mHeight };
-		auto win_stylee = _Style_Ptr->get_modifier();
+		auto win_stylee = style_ptr->get_modifier();
 		AdjustWindowRect(&mWinGlobalSize, win_stylee, 0);
 		mHandle = CreateWindowEx(
-			0, wc.lpszClassName, temp.c_str(), win_stylee,
+			0, wc.lpszClassName, win_title.c_str(), win_stylee,
 			x, y,
 			mWinGlobalSize.right - mWinGlobalSize.left, mWinGlobalSize.bottom - mWinGlobalSize.top,
 			0, 0, 0,
 			this);
 
 		mIsOpen = static_cast<bool>(mHandle);
-		if (mIsOpen && _Style_Ptr->get_state(Style::State::Visible))
+		if (mIsOpen && style_ptr->get_state(Style::State::Visible))
 		{
-			UpdateWindow(mHandle);
 			ShowWindow(mHandle, SW_SHOWDEFAULT);
+			UpdateWindow(mHandle);
 			mDevice_context = GetDC(mHandle);
 		}
 		else
 			throw std::runtime_error("window create failed!");
-
-		//подготовка к рисованию через WM_PAINT
-		GetClientRect(mHandle, &mClientRect);
-		mDCHandle = BeginPaint(mHandle, &mPS);
-		mCompatibleDCHandle = CreateCompatibleDC(mDCHandle);
-		mCompatibleBitMapHandle = CreateCompatibleBitmap(mDCHandle,
-			mClientRect.right - mClientRect.left,
-			mClientRect.bottom - mClientRect.top);
-		SelectObject(mCompatibleDCHandle, mCompatibleBitMapHandle);
-
-
-		LOGBRUSH brush;
-		brush.lbStyle = BS_SOLID;
-		brush.lbColor = 0xffffffff;
-		mBrushHandle = CreateBrushIndirect(&brush);
 
 		mRawInputData.reserve(100);
 	}
@@ -368,8 +358,7 @@ namespace tgl::win
 
 	void WinHandler::set_title(const std::string& title) noexcept
 	{
-		auto temp = std::wstring(title.begin(), title.end());
-		win::SetWindowText(mHandle, temp.c_str());
+		win::SetWindowText(mHandle, title.c_str());
 	}
 
 	win::HWND WinHandler::get_handle() noexcept

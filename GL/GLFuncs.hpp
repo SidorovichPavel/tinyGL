@@ -1,9 +1,9 @@
 #pragma once
 
+#include "..\src\Utility\function.hpp"
+
 #include <string>
 #include <stdexcept>
-
-#include "..\src\Utility\function.hpp"
 
 namespace tgl
 {
@@ -24,62 +24,60 @@ namespace tgl
 		#include "glext.h"
 
 		template<class>
-		struct tgl_func 
-		{
-			static_assert("something");
-		};
+		struct tgl_func
+		{	};
 
 		template<class ReturnType, class... ArgTypes>
 		struct tgl_func<ReturnType(_stdcall*)(ArgTypes...)>
 		{
 			using func_t = fnw::function<ReturnType(ArgTypes...)>;
 
-			static func_t LoadFunction(const char* _Func_Name)
+			static func_t LoadFunction(const char* func_name)
 			{
-				void* data = tgl::win::wglGetProcAddress(_Func_Name);
+				void* data = tgl::win::wglGetProcAddress(func_name);
 				return static_cast<ReturnType(_stdcall*)(ArgTypes...)>(data);
 			}
 		};
 		
 		#define GL_EXTERN_DECL(type, name) extern tgl_func<type>::func_t name
 
-		GL_EXTERN_DECL(PFNGLGENBUFFERSPROC, GenBuffers);
-		GL_EXTERN_DECL(PFNGLBINDBUFFERPROC, BindBuffer);
-		GL_EXTERN_DECL(PFNGLBUFFERDATAPROC, BufferData);
-		GL_EXTERN_DECL(PFNGLDELETEBUFFERSPROC, DeleteBuffers);
+		GL_EXTERN_DECL(PFNGLGENBUFFERSPROC, gen_buffers);
+		GL_EXTERN_DECL(PFNGLBINDBUFFERPROC, bind_buffer);
+		GL_EXTERN_DECL(PFNGLBUFFERDATAPROC, buffer_data);
+		GL_EXTERN_DECL(PFNGLDELETEBUFFERSPROC, delete_buffers);
 
-		GL_EXTERN_DECL(PFNGLGENVERTEXARRAYSPROC, GenVertexArrays);
-		GL_EXTERN_DECL(PFNGLDELETEVERTEXARRAYSPROC, DeleteVertexArrays);
-		GL_EXTERN_DECL(PFNGLVERTEXATTRIBPOINTERPROC, VertexAttribPointer);
-		GL_EXTERN_DECL(PFNGLBINDVERTEXARRAYPROC, BindVertexArray);
-		GL_EXTERN_DECL(PFNGLENABLEVERTEXATTRIBARRAYPROC, EnableVertexAttribArray);
-		GL_EXTERN_DECL(PFNGLDISABLEVERTEXATTRIBARRAYPROC, DisableVertexAttribArray);
+		GL_EXTERN_DECL(PFNGLGENVERTEXARRAYSPROC, gen_vertex_arrays);
+		GL_EXTERN_DECL(PFNGLDELETEVERTEXARRAYSPROC, delete_vertex_arrays);
+		GL_EXTERN_DECL(PFNGLVERTEXATTRIBPOINTERPROC, vertex_attrib_pointer);
+		GL_EXTERN_DECL(PFNGLBINDVERTEXARRAYPROC, bind_vertex_array);
+		GL_EXTERN_DECL(PFNGLENABLEVERTEXATTRIBARRAYPROC, enable_vertex_attrib_array);
+		GL_EXTERN_DECL(PFNGLDISABLEVERTEXATTRIBARRAYPROC, disable_vertex_attrib_array);
 
-		GL_EXTERN_DECL(PFNGLCREATEPROGRAMPROC, CreateProgram);
-		GL_EXTERN_DECL(PFNGLDELETEPROGRAMPROC, DeleteProgram);
-		GL_EXTERN_DECL(PFNGLCREATESHADERPROC, CreateShader);
-		GL_EXTERN_DECL(PFNGLSHADERSOURCEPROC, ShaderSource);
-		GL_EXTERN_DECL(PFNGLCOMPILESHADERPROC, CompileShader);
-		GL_EXTERN_DECL(PFNGLGETSHADERIVPROC, GetShaderiv);
-		GL_EXTERN_DECL(PFNGLATTACHSHADERPROC, AttachShader);
-		GL_EXTERN_DECL(PFNGLLINKPROGRAMPROC, LinkProgram);
-		GL_EXTERN_DECL(PFNGLUSEPROGRAMPROC, UseProgram);
-		GL_EXTERN_DECL(PFNGLDELETESHADERPROC, DeleteShader);
-		GL_EXTERN_DECL(PFNGLDETACHSHADERPROC, DetachShader);
-		GL_EXTERN_DECL(PFNGLGETSHADERINFOLOGPROC, GetShaderInfoLog);
-		GL_EXTERN_DECL(PFNGLBINDATTRIBLOCATIONPROC, BindAttribLocation);
-		GL_EXTERN_DECL(PFNGLGETUNIFORMLOCATIONPROC, GetUniformLocation);
+		GL_EXTERN_DECL(PFNGLCREATEPROGRAMPROC, create_program);
+		GL_EXTERN_DECL(PFNGLDELETEPROGRAMPROC, delete_program);
+		GL_EXTERN_DECL(PFNGLCREATESHADERPROC, create_shader);
+		GL_EXTERN_DECL(PFNGLSHADERSOURCEPROC, shader_source);
+		GL_EXTERN_DECL(PFNGLCOMPILESHADERPROC, compile_shader);
+		GL_EXTERN_DECL(PFNGLGETSHADERIVPROC, get_shaderiv);
+		GL_EXTERN_DECL(PFNGLATTACHSHADERPROC, attach_shader);
+		GL_EXTERN_DECL(PFNGLLINKPROGRAMPROC, link_program);
+		GL_EXTERN_DECL(PFNGLUSEPROGRAMPROC, use_program);
+		GL_EXTERN_DECL(PFNGLDELETESHADERPROC, delete_shader);
+		GL_EXTERN_DECL(PFNGLDETACHSHADERPROC, detach_shader);
+		GL_EXTERN_DECL(PFNGLGETSHADERINFOLOGPROC, get_shader_info_log);
+		GL_EXTERN_DECL(PFNGLBINDATTRIBLOCATIONPROC, bind_attrib_location);
+		GL_EXTERN_DECL(PFNGLGETUNIFORMLOCATIONPROC, get_uniform_location);
 
-		GL_EXTERN_DECL(PFNGLUNIFORMMATRIX4FVPROC, UniformMatrix4fv);
-		GL_EXTERN_DECL(PFNGLUNIFORM4FVPROC, Uniform4fv);
-		GL_EXTERN_DECL(PFNGLUNIFORM3FVPROC, Uniform3fv);
-		GL_EXTERN_DECL(PFNGLUNIFORM4FPROC, Uniform4f);
-		GL_EXTERN_DECL(PFNGLUNIFORM1IPROC, Uniform1i);
+		GL_EXTERN_DECL(PFNGLUNIFORMMATRIX4FVPROC, uniform_matrix_4fv);
+		GL_EXTERN_DECL(PFNGLUNIFORM4FVPROC, uniform_4fv);
+		GL_EXTERN_DECL(PFNGLUNIFORM3FVPROC, uniform_3fv);
+		GL_EXTERN_DECL(PFNGLUNIFORM4FPROC, uniform_4f);
+		GL_EXTERN_DECL(PFNGLUNIFORM1IPROC, uniform_1i);
 
-		GL_EXTERN_DECL(PFNGLACTIVETEXTUREPROC, ActiveTexture);
-		GL_EXTERN_DECL(PFNGLGENERATEMIPMAPPROC, GenerateMipmap);
+		GL_EXTERN_DECL(PFNGLACTIVETEXTUREPROC, active_texture);
+		GL_EXTERN_DECL(PFNGLGENERATEMIPMAPPROC, generate_mipmap);
 
-		GL_EXTERN_DECL(PFNGLDEBUGMESSAGECALLBACKPROC, DebugMessageCallback);
+		GL_EXTERN_DECL(PFNGLDEBUGMESSAGECALLBACKPROC, debug_message_callback);
 
 		#undef GL_EXTERN_DECL
 	}

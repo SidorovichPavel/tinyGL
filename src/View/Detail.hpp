@@ -45,7 +45,7 @@ namespace tgl
 			LRESULT WinProc(HWND, UINT, WPARAM, LPARAM) noexcept;
 
 		public:
-			WinHandler(const Style* _Style_Ptr);
+			WinHandler(std::unique_ptr<Style> style_ptr);
 			virtual ~WinHandler();
 			
 			detail::Events& get_events() noexcept;

@@ -30,7 +30,7 @@ namespace tgl
 
 		Event()
 			:
-			mIDCounter(0)
+			id_counter_(0)
 		{		}
 
 		~Event()
@@ -42,41 +42,41 @@ namespace tgl
 		Event& operator=(Event&&) = delete;
 
 		[[nodiscard]]
-		id_type attach(callable_type&& _CallBack)
+		id_type attach(callable_type&& callback)
 		{
-			auto res = mIDCounter++;
+			auto res = id_counter_++;
 
-			mStorage.insert({ res, std::move(_CallBack) });
+			storage_.insert({ res, std::move(callback) });
 
 			return res;
 		}
 
 		template<class Class, class Method>
 		[[nodiscard]]
-		id_type attach(Class _Object, Method _Method)
+		id_type attach(Class object, Method method)
 		{
-			auto res = mIDCounter++;
+			auto res = id_counter_++;
 
-			mStorage.insert({ res, callable_type(_Object, _Method) });
+			storage_.insert({ res, callable_type(object, method) });
 
 			return res;
 		}
 
 		void detach(id_type _Id)
 		{
-			mStorage.erase(_Id);
+			storage_.erase(_Id);
 		}
 
 		void detach_all()
 		{
-			mStorage.clear();
+			storage_.clear();
 		}
 
 		auto operator()(ArgTypes... _Args)
 		{
 			std::vector<int64_t> except_ids;
 
-			for (auto& callback : mStorage)
+			for (auto& callback : storage_)
 			{
 				try
 				{
@@ -92,7 +92,7 @@ namespace tgl
 			if (!except_ids.empty())
 			{
 				for (auto& var : except_ids)
-					mStorage.erase(var);
+					storage_.erase(var);
 				logger << flush;
 			}
 		}
@@ -104,7 +104,7 @@ namespace tgl
 
 	private:
 
-		int64_t mIDCounter;
-		storage_type mStorage;
+		int64_t id_counter_;
+		storage_type storage_;
 	};
 }
